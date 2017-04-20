@@ -78,14 +78,21 @@ body .ace_scrollbar-h {
 				setupFileTree(obj.nodes, path);
 				console.log(obj);
 				
-				
-				
 				w2ui.sidebar.add(obj);
 			});
 			
 			$('#sidebar').w2sidebar({
 				name : 'sidebar',
-				img  : 'icon-page'
+				img  : 'icon-page',
+				onDblClick: function(event){
+					var stats = fs.statSync(event.target);
+					
+					if(stats.isFile() && event.target.indexOf(".lua") != -1){
+						var fileContents = fs.readFileSync(event.target, "utf8");
+//						alert(fileContents);
+						$("#editor").text(fileContents);
+					}
+				}
 			});
 		});
 		
