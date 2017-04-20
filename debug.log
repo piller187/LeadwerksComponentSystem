@@ -28,3 +28,53 @@
 [0418/215247.203:WARNING:chrome_main_delegate.cc(565)] final extension: 
 [0418/215449.049:WARNING:chrome_main_delegate.cc(565)] final extension: 
 [0418/215515.245:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/181314.550:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/181336.282:ERROR:process_info.cc(625)] range at 0x1e24278800000000, size 0x1cf fully unreadable
+[0419/181336.282:ERROR:process_info.cc(625)] range at 0x1e2427a800000000, size 0x1cf fully unreadable
+[0419/181336.282:ERROR:process_info.cc(625)] range at 0x0, size 0x1cf fully unreadable
+[0419/181336.374:ERROR:http_transport_win.cc(50)] WinHttpCrackUrl: The URL does not use a recognized protocol  (0x2EE6)
+[0419/181502.332:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/181603.101:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/181711.270:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/181743.805:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/181753.421:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/181857.905:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/182040.974:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/182059.488:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/182214.549:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/182223.658:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/182244.597:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/182312.474:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/182924.031:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/182939.387:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/183247.081:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/183303.009:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/183404.479:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/183439.816:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/183529.222:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/183544.547:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/184252.578:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/184331.580:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/184541.068:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/191156.506:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/191300.507:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/191354.009:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/191455.721:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/191543.879:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/191548.201:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/191833.211:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/191842.436:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/193548.366:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/193614.082:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/193636.918:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/193847.153:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/193927.794:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/194033.021:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/194051.139:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/200124.992:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/200237.750:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/200245.544:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/200253.275:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/200303.642:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/200424.169:WARNING:chrome_main_delegate.cc(565)] final extension: 
+[0419/201431.464:WARNING:chrome_main_delegate.cc(565)] final extension: 

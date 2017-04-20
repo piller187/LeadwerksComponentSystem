@@ -32,18 +32,25 @@ body .ace_scrollbar-h {
 	<script src="libs/jquery/jquery-3.2.1.min.js"></script>
 	<script src="libs/ace/ace.js"></script>
 	<script src="libs/w2ui/w2ui-1.5.rc1.min.js"></script>
+	<script src="libs/thenby/thenBy.min.js"></script>
   </head>
   <body>
+	<input id="fileDialog" type="file" accept=".werk" style="display: none;">
+	
 	<div id="layout"></div>
 	
 	<script>
+		var fs = require("fs");
+				
 		$(function(){
+			setupMenu();
+			
 			var pstyle = 'border: 1px solid #dfdfdf; padding: 5px;';
 			$('#layout').w2layout({
 				name: 'layout',
 				panels: [
 					{ type: 'top', size: 50, style: pstyle, content: 'top', resizable: true },
-					{ type: 'left', size: 300, style: pstyle, content: 'left', resizable: true },
+					{ type: 'left', size: 300, style: pstyle, content: '<div id="sidebar" style="height: 100%; width: 100%;"></div>', resizable: true },
 					{ type: 'main', style: pstyle, content: '<div id="editor"></div>' }
 				]
 			});
@@ -57,7 +64,113 @@ body .ace_scrollbar-h {
 				maxLines: Infinity
 			});
 			
+			$("#fileDialog").change(function(e){			
+				var path = e.target.files[0].path.replace(e.target.files[0].name, "");
+				
+				var obj = {
+					id: path.replace(/\\/g, "/"),
+					text: e.target.files[0].name.replace(".werk", ""),
+					img: 'icon-folder',
+					expanded: true,
+					nodes: []
+				};
+				
+				setupFileTree(obj.nodes, path);
+				console.log(obj);
+				
+				
+				
+				w2ui.sidebar.add(obj);
+			});
+			
+			$('#sidebar').w2sidebar({
+				name : 'sidebar',
+				img  : 'icon-page'
+			});
 		});
+		
+		function setupFileTree(node, path){
+			var files = fs.readdirSync(path);
+			
+			for(var i = 0; i < files.length; i++){
+				var file = path + files[i];
+				var stats = fs.statSync(file);
+				
+				// adding directories
+				if(stats.isDirectory()){
+					file += "/";
+					
+					var obj = {
+						id: file.replace(/\\/g, "/"),
+						text: files[i],
+						img: 'icon-folder',
+						nodes: []
+					};
+					
+					node.push(obj);
+					
+					// recursive into this folder
+					setupFileTree(obj.nodes, file);
+					
+					// this makes it so folders are listed first in alphabetical order then files are listed next in alphabetical order
+					obj.nodes.sort(
+						firstBy(function(v) { return v.img })
+						.thenBy("text")
+					);
+					
+					var nodes = obj.nodes.filter(function(el){
+						return el.text.indexOf(".lua") != -1;
+					});
+					
+					//obj.nodes = nodes;
+				}
+				
+				// adding files
+				if(stats.isFile()){
+					 if(file.indexOf(".lua") != -1){
+						var obj = {
+							id: file.replace(/\\/g, "/"),
+							text: files[i],
+							img: 'icon-page'
+						};
+					
+						node.push(obj);
+					}
+				}
+			}
+		}
+			
+		function setupMenu(){
+			var menubar = new nw.Menu({
+				type: 'menubar'
+			});
+
+			var fileMenu = new nw.Menu();
+
+			fileMenu.append(new nw.MenuItem({
+				label: 'Open Project',
+				click: function() {
+					$("#fileDialog").trigger("click");
+				}
+			}));
+
+			/*
+			var openRecentMenu = new nw.Menu();
+
+			openRecentMenu.append(new nw.MenuItem({
+				label: 'Recente File X',
+				click: function() {
+					alert('Clicked to open a recent file');
+				}
+			}));
+			*/
+
+			menubar.append(new nw.MenuItem({ label: 'File', submenu: fileMenu}));
+			//fileMenu.append(new nw.MenuItem({ label: 'Open Recent File', submenu: openRecentMenu}));
+
+			var win = nw.Window.get();
+			win.menu = menubar;
+		}
 	</script>
   </body>
 </html>
