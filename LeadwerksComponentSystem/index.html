@@ -3,16 +3,93 @@
   <head>
     <title>Hello World!</title>
 	<style type="text/css" media="screen">
-		html, body {
-			width: 100%;
-			height: 100%;
-			margin: 0;
-		}
-		
-		#layout {
-			width: 100%;
-			height: 100%;
-		}
+.editor {
+  /** Setting height is also important, otherwise editor wont showup**/
+  height: 400px;
+}
+
+.ui-tabs .ui-tabs-panel {
+  padding: 0;
+}
+
+.ui-tabs-anchor:active,
+.ui-tabs-anchor:focus {
+  outline: none;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background-color: moccasin;
+}
+
+.wrapper {
+  position: absolute;
+  top: 41px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: fuchsia;
+}
+
+.inner-wrapper,
+.center.pane .inner {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  height: 100%;
+}
+
+.pane {
+  display: table-cell;
+}
+
+.left.pane {
+  background-color: olivedrab;
+  width: 25%;
+}
+
+.center.pane {
+  background-color: lightblue;
+}
+
+.center.pane .inner .top,
+.center.pane .inner .bottom {
+  display: table-row;
+}
+
+.center.pane .inner .top {
+  background-color: lightcoral;
+}
+
+.center.pane .inner .bottom {
+  background-color: orange;
+  height: 100%;
+  width: 100%;
+}
+
+.right.pane {
+  background-color: #999;
+  width: 25%;
+}
+
+.top-content {
+  width: 100%;
+  height: 100%;
+}
+
+.inner-wrapper {
+  padding: 0;
+}
+}
 		
 		.editor {
             height: 100%;
@@ -29,21 +106,37 @@ body .ace_scrollbar-h {
     overflow-x: auto;
 }
 	</style>
-	<link rel="stylesheet" type="text/css" href="libs/w2ui/w2ui-1.5.rc1.min.css" />
 	<link rel="stylesheet" type="text/css" href="libs/jquery-ui/jquery-ui.min.css" />
 	<link rel="stylesheet" type="text/css" href="libs/jquery-ui/jquery-ui.theme.min.css" />
+	<link rel="stylesheet" type="text/css" href="libs/jstree/themes/default/style.min.css" />
 	
 	<script src="libs/jquery/jquery-3.2.1.min.js"></script>
 	<script src="libs/jquery-ui/jquery-ui.min.js"></script>
 	
 	<script src="libs/ace/ace.js"></script>
-	<script src="libs/w2ui/w2ui-1.5.rc1.min.js"></script>
+	<script src="libs/jstree/jstree.js"></script>
 	<script src="libs/thenby/thenBy.min.js"></script>
   </head>
   <body>
 	<input id="fileDialog" type="file" accept=".werk" style="display: none;">
 	
-	<div id="layout"></div>
+	<div class="header">
+		Toolbar area
+	</div>
+	<div class="wrapper">
+	<div class="inner-wrapper">
+		<div class="left pane">
+			<div id="projectTree"></div>
+		</div>
+		<div class="center pane">
+			<div id="fileTabs">
+				<ul>
+				</ul>
+			</div>
+		</div>
+	</div>
+	</div>
+
 	
 	<script>
 		var fs = require("fs");
@@ -78,6 +171,7 @@ body .ace_scrollbar-h {
 		
 		// main starting point
 		$(function(){
+		
 			// close tabs
 			tabs.on("click", "span.ui-icon-close", function() {
 				var panelId = $(this).closest("li").remove().attr("aria-controls");
@@ -94,21 +188,7 @@ body .ace_scrollbar-h {
 		
 			setupMenu();
 			
-			var pstyle = 'border: 1px solid #dfdfdf; padding: 5px;';
-			$('#layout').w2layout({
-				name: 'layout',
-				panels: [
-					{ type: 'top', size: 50, style: pstyle, content: 'top', resizable: true },
-					{ type: 'left', size: 300, style: pstyle, content: '<div id="sidebar" style="height: 100%; width: 100%;"></div>', resizable: true },
-					//{ type: 'main', style: pstyle, content: '<div id="editor"></div>' }
-					{ type: 'main', style: pstyle, content: '<div id="fileTabs"><ul></ul></div>' }
-				]
-			});
-	
-			//var editor = ace.edit("editor");
-			//editor.setTheme("ace/theme/monokai")
-			//editor.getSession().setMode("ace/mode/lua")
-			//editor.renderer.setShowPrintMargin(false);
+			setupLayout();
 			
 			// setting up the folder structure of the sidebar
 			$("#fileDialog").change(function(e){			
@@ -117,18 +197,39 @@ body .ace_scrollbar-h {
 				var obj = {
 					id: path.replace(/\\/g, "/"),
 					text: e.target.files[0].name.replace(".werk", ""),
-					img: 'icon-folder',
-					expanded: true,
-					nodes: []
+					type: 'directory',
+					icon: 'js-treefolder',
+					//img: 'icon-folder',
+					children: []
 				};
 				
-				setupFileTree(obj.nodes, path);
+				setupFileTree(obj.children, path);
 				//console.log(obj);
 				
-				w2ui.sidebar.add(obj);
+				//w2ui.sidebar.add(obj);
+				$('#projectTree').jstree({
+					core: {
+						data: obj
+					}
+				});
 			});
 			
 			// opening a file from the sidebar
+			$('#projectTree').on("changed.jstree", function (e, data) {
+				var file = data.selected[0]
+				var stats = fs.statSync(file);
+					
+				if(stats.isFile() && file.indexOf(".lua") != -1){
+					var fileContents = fs.readFileSync(file, "utf8");
+					var fileName = file.split('/').pop();
+					console.log(fileContents);
+					console.log(fileName);
+					
+					editors[event.target] = tabs.addEditorTab(file, fileName, fileContents);
+				}
+			});
+
+			/*
 			$('#sidebar').w2sidebar({
 				name : 'sidebar',
 				img  : 'icon-page',
@@ -145,6 +246,7 @@ body .ace_scrollbar-h {
 					}
 				}
 			});
+			*/
 		});
 		
 		function setupFileTree(node, path){
@@ -161,22 +263,23 @@ body .ace_scrollbar-h {
 					var obj = {
 						id: file.replace(/\\/g, "/"),
 						text: files[i],
-						img: 'icon-folder',
-						nodes: []
+						type: 'directory',
+						icon: 'jstree-folder',
+						children: []
 					};
 					
 					node.push(obj);
 					
 					// recursive into this folder
-					setupFileTree(obj.nodes, file);
+					setupFileTree(obj.children, file);
 					
 					// this makes it so folders are listed first in alphabetical order then files are listed next in alphabetical order
-					obj.nodes.sort(
-						firstBy(function(v) { return v.img })
+					obj.children.sort(
+						firstBy(function(v) { return v.type })
 						.thenBy("text")
 					);
 					
-					var nodes = obj.nodes.filter(function(el){
+					var nodes = obj.children.filter(function(el){
 						return el.text.indexOf(".lua") != -1;
 					});
 					
@@ -189,7 +292,8 @@ body .ace_scrollbar-h {
 						var obj = {
 							id: file.replace(/\\/g, "/"),
 							text: files[i],
-							img: 'icon-page'
+							type: 'file',
+							icon: 'jstree-file',
 						};
 					
 						node.push(obj);
@@ -229,6 +333,38 @@ body .ace_scrollbar-h {
 			var win = nw.Window.get();
 			win.menu = menubar;
 		}
+		
+		function setupLayout(){
+			$(".left.pane").resizable({
+				handles: "e, w",
+				stop: function(event, ui) {
+					setWidthInPercent(ui.element);
+				}
+			});
+			
+			$(".right.pane").resizable({
+				handles: "e, w",
+				resize: function(event, ui) {
+					ui.position.left = 0;
+				},
+				stop: function(event, ui) {
+					setWidthInPercent(ui.element);
+				}
+			});
+			
+			$(".top-content").resizable({
+				handles: "s",
+				stop: function(event, ui) {
+				ui.element.width("");
+				}
+			});
+		}
+		
+		function setWidthInPercent(element) {
+			var percentageWidth = (element.width() / element.parent().width()) * 100;
+			element.width(percentageWidth + '%');
+		}
+  
 	</script>
   </body>
 </html>
