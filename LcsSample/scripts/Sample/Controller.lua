@@ -52,7 +52,7 @@ function Controller:create(entity)
 	self.onStartedMoving=EventManager:create()
 
 	self:doStop()
-
+	
 	for k, v in pairs(Controller) do
 		obj[k] = v
 	end
@@ -61,8 +61,9 @@ end
 
 function Controller:update()
 	if 	self.moveTimeout > 0 
-	and self.move <= 0 then
-		self:doStop()
+	and Time:Millisecs() > self.moveTimeout 
+	and self.move > 0 then
+		self:doStop() 
 		return
 	end
 
