@@ -27,6 +27,8 @@ function MapHook(entity,obj)
 
 	-- first time setup
 	if jsonSource == nil then
+		FileSystem:CreateDir( "Scripts/LCS/temp" )
+		
 		jsonSource = JsonSource:create()
 		Debug:Assert( jsonSource ~= nil, "Failed to create JsonSource" )
 		jsonSource:process(LCS_SOURCE)

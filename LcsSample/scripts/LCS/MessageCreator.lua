@@ -105,7 +105,7 @@ function MessageCreator:processMessage(message)
 	-- save to temp so it can be checked 
 	self:save(code)
 	
-	import("LCS/temp/message.lua")
+	import("Scripts/LCS/temp/message.lua")
 	local a = _G[message.name]
 	if a ~= nil then
 		a:create()
@@ -114,7 +114,7 @@ function MessageCreator:processMessage(message)
 end
 
 function MessageCreator:save(code)
-	local file = io.open( "LCS/temp/message.lua", "w" )
+	local file = io.open( "Scripts/LCS/temp/message.lua", "w" )
 	Debug:Assert( file ~= nil, "Faild to create 'LCS/temp/message.lua'")
 	file:write(code)
 	file:close()
