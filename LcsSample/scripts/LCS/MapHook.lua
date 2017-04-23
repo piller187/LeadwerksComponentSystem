@@ -11,42 +11,45 @@
 -----------------------------------------------
 
 import "Scripts/LCS/JsonSource.lua"
-import "Scripts/LCS/EntityCreator.lua"
-import "Scripts/LCS/ComponentCreator.lua"
-import "Scripts/LCS/MessageCreator.lua"
-
-LCS_SOURCE = ""
+import "Scripts/LCS/SharedCreator.lua"
+import "Scripts/LCS/MapCreator.lua"
 
 local jsonSource = nil
-local entCreator = nil
-local messageCreator = nil
-local componentCreator = nil
-		
+local mapCreator = nil
+local sharedCreator = nil
+local currentMap = ""
+local currentJsonfile = ""
+
 --called when map is loaded
 function MapHook(entity,obj)
+	
+	Debug:Assert( currentMap ~= "", "Use LcsLoadMap(mapfile) to load maps. !!!NOT!!! Map:Load(mapfile)" )
 
 	-- first time setup
 	if jsonSource == nil then
-		FileSystem:CreateDir( "Scripts/LCS/temp" )
-		
+		FileSystem:CreateDir( "Scripts/LCS/temp" ) -- for temporay lua files
+
 		jsonSource = JsonSource:create()
 		Debug:Assert( jsonSource ~= nil, "Failed to create JsonSource" )
-		jsonSource:process(LCS_SOURCE)
-		
-		entCreator = EntityCreator:create(jsonSource:getEntitys())
-		Debug:Assert( entCreator ~= nil, "Failed to create EntityCreator" )
-		
-		messageCreator = MessageCreator:create()
-		Debug:Assert( messageCreator ~= nil, "Failed to create MessageCreator" )
-		messageCreator:process(jsonSource:getMessages())
+		jsonSource:process(currentJsonfile)
 
-		componentCreator = ComponentCreator:create()
-		Debug:Assert( componentCreator ~= nil, "Failed to create ComponentCreator" )
-		componentCreator:process(jsonSource:getComponents())
+		sharedCreator = SharedCreator:create(jsonSource)
+		Debug:Assert( sharedCreator ~= nil, "Failed to create SharedCreator" )
+		sharedCreator:process()
+
+		mapCreator = MapCreator:create(jsonSource,currentMap)
+		Debug:Assert( mapCreator ~= nil, "Failed to create MapCreator" )
+		mapCreator:process()
+		
 	end
 
-	entCreator:process(	entity,
-						jsonSource:getEntitys(),
-						jsonSource:getComponents(), 
-						messageCreator:getMessagePool() )
+	sharedCreator:processEntity(entity)
+	mapCreator:processEntity(entity)
+end
+
+function LcsLoadMap( mapfile, jsonSource  )
+	currentMap = mapfile
+	currentJsonfile = jsonSource
+	local wasLoaded = Map:Load(mapfile, "MapHook")
+	Debug:Assert( wasLoaded, "Failed to load map " .. mapfile ) 
 end

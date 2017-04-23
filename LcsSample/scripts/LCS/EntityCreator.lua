@@ -46,6 +46,12 @@ end
 --
 function EntityCreator:processEntity(entity, jent, components, msgpool)
 	
+	if  jent.name == nil
+	or	jent.name == "null" 
+	or 	jent.name == "" then
+		return
+	end
+	
 	local entname = entity:GetKeyValue("name")
 	
 	-- add template script

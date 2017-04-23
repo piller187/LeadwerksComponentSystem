@@ -41,6 +41,13 @@ end
 
 function MessageCreator:processMessage(message)
 
+	if  message.name == nil
+	or	message.name == "null" 
+	or 	message.name == "" then
+		return
+	end
+	
+
 	-- add template script
 	Debug:Assert(message.name ~= nil and message.name ~= "", "'name' is missing in JSON Message" )
 

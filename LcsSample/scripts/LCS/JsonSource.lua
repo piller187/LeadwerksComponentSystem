@@ -51,20 +51,55 @@ function JsonSource:process(file)
 	Debug:Assert( stream ~= nil, "JsonSource " .. file .. " was empty" )
 	self.jsonTable = JSON:decode(jstring)
 	stream:close()
+
+	Debug:Assert( 	self.jsonTable.maps ~= nil
+				or	#self.jsonTable.maps == 0, "maps are missing in " .. file )
 	
-	Debug:Assert( self.jsonTable.entitys ~= nil, "entitys are missing in " .. file )
-	Debug:Assert( self.jsonTable.components ~= nil, "components are missing in " .. file )
-	Debug:Assert( self.jsonTable.messages ~= nil, "messages are missing in " .. file )
+	Debug:Assert( 	self.jsonTable.shared_entitys ~= nil
+				or  #self.jsonTable.shared_entitys == 0 , "shared entitys are missing in " .. file )
+	
+	Debug:Assert( 	self.jsonTable.shared_components ~= nil
+				or	#self.jsonTable.shared_components == 0 , "shared components are missing in " .. file )
+	
+	Debug:Assert( 	self.jsonTable.shared_messages ~= nil
+				or	#self.jsonTable.shared_messages, "shared messages are missing in " .. file )
 end
 
-function JsonSource:getEntitys()
-	return self.jsonTable.entitys
+function JsonSource:getSharedEntitys()
+	return self.jsonTable.shared_entitys
 end
 
-function JsonSource:getComponents()
-	return self.jsonTable.components
+function JsonSource:getSharedComponents()
+	return self.jsonTable.shared_components
 end
 
-function JsonSource:getMessages()
-	return self.jsonTable.messages
+function JsonSource:getSharedMessages()
+	return self.jsonTable.shared_messages
+end
+
+function JsonSource:getMapEntitys(map)
+	for k,v in pairs(self.jsonTable.maps) do
+		if v.name == map then
+			return v.entitys
+		end
+	end
+	return nil
+end
+
+function JsonSource:getMapComponents(map)
+	for k,v in pairs(self.jsonTable.maps) do
+		if v.name == map then
+			return v.components
+		end
+	end
+	return nil
+end
+
+function JsonSource:getMapMessages(map)
+	for k,v in pairs(self.jsonTable.maps) do
+		if v.name == map then
+			return v.messages
+		end
+	end
+	return nil
 end

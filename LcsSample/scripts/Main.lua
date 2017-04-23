@@ -1,5 +1,6 @@
+--- LCS end ---------------------------------------
 import "Scripts/LCS/MapHook.lua"
-LCS_SOURCE = "LcsSample.json"
+--- LCS end ---------------------------------------
 
 --Initialize Steamworks (optional)
 Steamworks:Initialize()
@@ -29,7 +30,11 @@ world:SetLightQuality((System:GetProperty("lightquality","1")))
 
 --Load a map
 local mapfile = System:GetProperty("map","Maps/start.map")
-if Map:Load(mapfile,"MapHook")==false then return end
+
+--- LCS begin -------------------------------------
+LcsLoadMap(mapfile,"LcsSample.json")
+--- LCS end ---------------------------------------
+
 prevmapname = FileSystem:StripAll(changemapname)
 
 --Send analytics event
@@ -56,7 +61,11 @@ while window:KeyDown(Key.Escape)==false do
 		Analytics:SendProgressEvent("Complete",prevmapname)
 		
 		--Load the next map
-		if Map:Load("Maps/"..changemapname..".map","MapHook")==false then return end
+		
+		--- LCS begin -------------------------------------
+		LcsLoadMap(changemapname,"LcsSample.json") 
+		--- LCS end ---------------------------------------
+		
 		prevmapname = changemapname
 		
 		--Send analytics event

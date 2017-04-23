@@ -1,5 +1,5 @@
 {
-	"components": 
+	"shared_components": 
 	[
 		{
 			"name": "Input",
@@ -138,7 +138,7 @@
 			]
 		}
 	],
-	"entitys": 
+	"shared_entitys": 
 	[
 		{
 			"name": "Player",
@@ -283,7 +283,7 @@
 			]
 		}
 	],
-	"messages": 
+	"shared_messages": 
 	[
 		{
 			"name": "EnergyMessage",
@@ -304,6 +304,87 @@
 				{
 					"name": "EnergyRecovered",
 					"arg": "null"
+				}
+			]
+		}
+	],
+	"maps": 
+	[
+		{
+			"name": "start",
+			"components": 
+			[
+				{
+					"name": "null",
+					"path": "null",
+					"values": 
+					[
+						{
+							"key": "null",
+							"value": "null"
+						}
+					],
+					"events": 
+					[
+						{
+							"name": "null",
+							"arg": "null"
+						}
+					],
+					"actions": 
+					[
+						{
+							"name": "null",
+							"arg": "null"
+						}
+					]
+				}
+			],
+			"entitys": 
+			[
+				{
+					"name": "null",
+					"key_values": 
+					[
+						{
+							"key": "null",
+							"value": "null"
+						}
+					],
+					"messages": 
+					[
+						{
+							"name": "null"
+						}
+					],
+					"components": 
+					[
+						{
+							"name": "null"
+						}
+					],
+					"hookups": 
+					[
+						{
+							"source": "null",
+							"source_event": "null",
+							"destination": "null",
+							"destination_action": "v"
+						}
+					]
+				}
+			],
+			"messages": 
+			[
+				{
+					"name": "null",
+					"events": 
+					[
+						{
+							"name": "null",
+							"arg": "null"
+						}
+					]
 				}
 			]
 		}

@@ -39,7 +39,14 @@ function ComponentCreator:process(components)
 end
 
 function ComponentCreator:processComponent(component)
-
+	
+	if  component.name == nil
+	or	component.name == "null" 
+	or 	component.name == "" then
+		return
+	end
+	
+	
 	-- add template script
 	Debug:Assert(component.name ~= nil and component.name ~= "", "'name' is missing in JSON Message" )
 
