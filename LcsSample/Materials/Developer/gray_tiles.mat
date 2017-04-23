@@ -1,0 +1,21 @@
+//Leadwerks Material File
+
+blendmode=0
+castshadows=1
+zsort=0
+cullbackfaces=0
+depthtest=1
+pickmode=1
+depthmask=1
+diffuse=1.00000000,1.00000000,1.00000000,1.00000000
+specular=0.501960814,0.501960814,0.501960814,0.501960814
+alwaysuseshader=0
+roughness=0.00000000000000000
+mappingscale=1.00000000,1.00000000,1.00000000
+drawmode=-1
+
+shader="Shaders/Model/diffuse+normal+specular.shader"
+shader1="Shaders/Model/Shadow/shadow.shader"
+texture0="./gray_tiles256.tex"
+texture1="./tiles256_n.tex"
+texture2="./tiles256_s.tex"

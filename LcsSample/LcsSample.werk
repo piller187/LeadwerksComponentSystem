@@ -1,0 +1,13 @@
+Author=Roland Strålberg"
+MainSourceFile=""
+MultiLineCommentOpenToken="//"
+SingleLineCommentToken="//"
+CommandLine=""
+Copyright="Rimfrost Software"
+WindowsPublishPath=""
+AndroidPublishPath=""
+iOSPublishPath=""
+MacOSPublishPath=""
+Template="Blank Project"
+AppID=0
+DepotID=0

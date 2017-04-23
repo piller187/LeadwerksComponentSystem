@@ -1,0 +1,311 @@
+{
+	"components": 
+	[
+		{
+			"name": "Input",
+			"path": "scripts/Sample/Input.lua",
+			"values": 
+			[
+				{
+					"key": "doubleClickTime",
+					"value": "300"
+				}
+			],
+			"events": 
+			[
+				{
+					"name": "Move"
+				},
+				{
+					"name": "Jump"
+				}
+			],
+			"actions": 
+			[
+
+			]
+		},
+		{
+			"name": "FpsCamera",
+			"path": "scripts/Sample/FpsCamera.lua",
+			"values": 
+			[
+				{
+					"key": "rotationSpeed",
+					"value": "2"
+				},
+				{
+					"key": "mouseSensitivity",
+					"value": "15"
+				}
+			],
+			"events": 
+			[
+				{
+					"name": "Turn",
+					"arg": "angle"
+				}
+			],
+			"actions": 
+			[
+				{
+					"name": "Move",
+					"arg": "newPosition"
+				}
+			]
+		},
+		{
+			"name": "Controller",
+			"path": "Scripts/Sample/Controller.lua",
+			"values": 
+			[
+				{
+					"key": "moveSpeed",
+					"value": "4"
+				},
+				{
+					"key": "jumpForce",
+					"value": "8"
+				},
+				{
+					"key": "eyePos",
+					"value": "0.8"
+				}
+			],
+			"events": 
+			[
+				{
+					"name": "StoppedMoving",
+					"arg": "null"
+				},
+				{
+					"name": "StartedMoving",
+					"arg": "null"
+				},
+				{
+					"name": "Moving",
+					"arg": "pos"
+				}
+			],
+			"actions": 
+			[
+				{
+					"name": "Move",
+					"arg": "null"
+				},
+				{
+					"name": "Jump",
+					"arg": "null"
+				},
+				{
+					"name": "Turn",
+					"arg": "angle"
+				},
+				{
+					"name": "Stop",
+					"arg": "null"
+				}
+			]
+		},
+		{
+			"name": "EnergyMeter",
+			"path": "scripts/Sample/EnergyMeter.lua",
+			"values": 
+			[
+				{
+					"key": "addSpeed",
+					"value": "4"
+				},
+				{
+					"key": "subtractSpeed",
+					"value": "6"
+				}
+			],
+			"events": 
+			[
+				{
+					"name": "OutOfEnergy"
+				},
+				{
+					"name": "EnergyRecovered"
+				},
+				{
+					"name": "StartAddingEnergy"
+				},
+				{
+					"name": "StartSubtractingEnergy"
+				}
+			]
+		}
+	],
+	"entitys": 
+	[
+		{
+			"name": "Player",
+			"key_values": 
+			[
+				{
+					"key": "moveSpeed",
+					"value": "4"
+				},
+				{
+					"key": "jumpForce",
+					"value": "8"
+				},
+				{
+					"key": "eyePos",
+					"value": "0.8"
+				}
+			],
+			"messages": 
+			[
+				{
+					"name": "EnergyMessage"
+				}
+			],
+			"components": 
+			[
+				{
+					"name": "Controller"
+				},
+				{
+					"name": "Input"
+				},
+				{
+					"name": "FpsCamera"
+				}
+			],
+			"hookups": 
+			[
+				{
+					"source": "EnergyMessage",
+					"source_event": "OutOfEnergy",
+					"destination": "Controller",
+					"destination_action": "Stop"
+				},
+				{
+					"source": "Controller",
+					"source_event": "StoppedMoving",
+					"destination": "EnergyMessage",
+					"destination_action": "StartAddingEnergy"
+				},
+				{
+					"source": "Controller",
+					"source_event": "StartedMoving",
+					"destination": "EnergyMessage",
+					"destination_action": "StartSubtractingEnergy"
+				},
+				{
+					"source": "Input",
+					"source_event": "Move",
+					"destination": "Controller",
+					"destination_action": "Move"
+				},
+				{
+					"source": "Input",
+					"source_event": "Jump",
+					"destination": "Controller",
+					"destination_action": "Jump"
+				},
+				{
+					"source": "FpsCamera",
+					"source_event": "Turn",
+					"destination": "Controller",
+					"destination_action": "Turn"
+				},
+				{
+					"source": "Controller",
+					"source_event": "Moving",
+					"destination": "FpsCamera",
+					"destination_action": "Move"
+				}
+			]
+		},
+		{
+			"name": "EnergyGui",
+			"key_values": 
+			[
+				{
+					"key": "position",
+					"value": "10,-10"
+				},
+				{
+					"key": "width",
+					"value": "20"
+				},
+				{
+					"key": "height",
+					"value": "400"
+				},
+				{
+					"key": "color",
+					"value": "1,0,0,1"
+				}
+			],
+			"messages": 
+			[
+				{
+					"name": "EnergyMessage"
+				}
+			],
+			"components": 
+			[
+				{
+					"name": "EnergyMeter"
+				}
+			],
+			"hookups": 
+			[
+				{
+					"source": "EnergyMeter",
+					"source_event": "OutOfEnergy",
+					"destination": "EnergyMessage",
+					"destination_action": "OutOfEnergy"
+				},
+				{
+					"source": "EnergyMeter",
+					"source_event": "EnergyRecovered",
+					"destination": "EnergyMessage",
+					"destination_action": "EnergyRecovered"
+				},
+				{
+					"source": "EnergyMessage",
+					"source_event": "StartAddingEnergy",
+					"destination": "EnergyMeter",
+					"destination_action": "StartAddingEnergy"
+				},
+				{
+					"source": "EnergyMessage",
+					"source_event": "StartSubtractingEnergy",
+					"destination": "EnergyMeter",
+					"destination_action": "StartSubtractingEnergy"
+				}
+			]
+		}
+	],
+	"messages": 
+	[
+		{
+			"name": "EnergyMessage",
+			"events": 
+			[
+				{
+					"name": "StartAddingEnergy",
+					"arg": "null"
+				},
+				{
+					"name": "StartSubtractingEnergy",
+					"arg": "null"
+				},
+				{
+					"name": "OutOfEnergy",
+					"arg": "null"
+				},
+				{
+					"name": "EnergyRecovered",
+					"arg": "null"
+				}
+			]
+		}
+	]
+}
