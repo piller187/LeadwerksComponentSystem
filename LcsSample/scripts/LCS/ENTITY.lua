@@ -18,7 +18,32 @@ end
 
 function Script:UpdatePhysics()
 	for k,v in pairs(self.components) do
-		if v.physUpdate ~= nil then v:physUpdate() end
+		if v.updatePhysics ~= nil then v:updatePhysics() end
+	end
+end
+
+function Script:Overlap(entity)
+	for k,v in pairs(self.components) do
+		if v.updatePhysics ~= nil then v:updatePhysics() end
+	end
+	return Collision.Collide
+end
+
+function Script:Collision(entity, position, normal, speed)
+	for k,v in pairs(self.components) do
+		if v.collision ~= nil then v:collision(entity, position, normal, speed) end
+	end
+end
+
+function Script:Draw()
+	for k,v in pairs(self.components) do
+		if v.draw ~= nil then v:draw() end
+	end
+end
+
+function Script:DrawEach(camera)
+	for k,v in pairs(self.components) do
+		if v.drawEach ~= nil then v:drawEach(camera) end
 	end
 end
 
@@ -27,20 +52,20 @@ function Script:PostRender(context)
 	context:SetBlendMode(Blend.Alpha)
 	
 	for k,v in pairs(self.components) do
-		if v.draw ~= nil then v:draw(context) end
+		if v.postRender ~= nil then v:postRender(context) end
 	end
 	
 	context:SetBlendMode(bm)
 end
 
-function Script:Cleanup()
+function Script:Detach()
 	for k,v in pairs(self.components) do
-		if v.destroy ~= nil then v:destroy() end
+		if v.detach ~= nil then v:detach() end
 	end
 end
 
-function Script:Collision(entity, position, normal, speed)
+function Script:Cleanup()
 	for k,v in pairs(self.components) do
-		if v.onCollision ~= nil then v:onCollision(entity, position, normal, speed) end
+		if v.cleanup ~= nil then v:cleanup() end
 	end
 end

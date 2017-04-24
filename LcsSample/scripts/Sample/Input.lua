@@ -74,18 +74,6 @@ function Input:update()
 	end
 end
 
-function Input:physUpdate()
-end
-
-function Input:draw(context)
-end
-
-function Input:destroy()
-end
-
-function Input:onCollision(entity, position, normal, speed)
-end
-
 --
 -- Actions
 --

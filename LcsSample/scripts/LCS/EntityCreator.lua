@@ -10,6 +10,7 @@
 -- Rick & Roland                       	
 -----------------------------------------------
 
+import "Scripts/LCS/LcsUtils.lua"
 
 if EntityCreator ~= nil then return end
 EntityCreator = {}
@@ -34,9 +35,11 @@ function EntityCreator:create()
 end
 
 function EntityCreator:process(entity, entitys, components, msgpool )
-	for k,v in pairs(entitys) do
-		if v.name == entity:GetKeyValue("name") then
-			self:processEntity(entity, v, components, msgpool)
+	if entitys ~= nil and #entitys > 0 then
+		for k,v in pairs(entitys) do
+			if v.name == entity:GetKeyValue("name") then
+				self:processEntity(entity, v, components, msgpool)
+			end
 		end
 	end
 end
@@ -46,65 +49,71 @@ end
 --
 function EntityCreator:processEntity(entity, jent, components, msgpool)
 	
-	if  jent.name == nil
-	or	jent.name == "null" 
-	or 	jent.name == "" then
-		return
-	end
-	
 	local entname = entity:GetKeyValue("name")
 	
 	-- add template script
 	entity:SetScript( "scripts/LCS/ENTITY.lua" )
 
 	-- key values
-	Debug:Assert(jent.key_values ~= nil, "'key_values' are missing in JSON '" .. jent.name .. "'" )
-	for k,key in pairs(jent.key_values) do
-		entity:SetKeyValue( key.key, key.value )
-		Debug:Assert( entity:GetKeyValue(key.key) ~= "", "Failed to register value " .. key.key .. " in " .. entname )
+	if jent.key_values ~= nil and #jent.key_values > 0 then
+		for k,v in pairs(jent.key_values) do
+			if 	v.key ~= nil and v.key ~= "" 
+			and v.value ~= nil and v.value ~= ""
+			and v.type ~= nil and v.type ~= "" then
+				entity:SetKeyValue(v.key, jvalueToStr(v.type,v.value))
+			end
+		end
 	end
-
+	
 	local script = entity.script
 	Debug:Assert( script ~= nil, "Failed to add script to " .. entname )
+
+	-- values
+	if jent.values ~= nil and #jent.values > 0 then
+		for k,v in pairs(jent.values) do
+			if 	v.name ~= nil and v.name ~= "" 
+			and v.value ~= nil and v.value ~= "" 
+			and v.type ~= nil and v.type ~= "" then
+				script[v.name]=jvalueToValue(v.type,v.value)
+			end
+		end
+	end
 	
+	-- components list
 	if script.components == nil then
 		script.components = {}
 	end
 	Debug:Assert( script.components ~= nil, "Failed to add components to script " .. entname )
 	
 	-- messages
-	Debug:Assert(jent.messages ~= nil, "'messages' are missing in JSON '" .. jent.name .. "' for " .. entname )
-	for k,msg in pairs(jent.messages) do
-		Debug:Assert( msg.name ~= nil and msg.name ~= "", "'name' not defined in JSON messages for " .. entname )
-		local name = msg.name
-		Debug:Assert( msgpool[name] ~= nil , "Message '" .. name .. " is missing in " .. entname )		
-		script.components[name] = msgpool[name]
+	if jent.messages ~= nil and #jent.messages >  0 then
+		for k,v in pairs(jent.messages) do
+			if v.name ~= nil and v.name ~= "" then
+				if msgpool[v.name] then
+					script.components[v.name] = msgpool[v.name]
+				end
+			end
+		end
 	end
 	
 	-- components
-	Debug:Assert(jent.components ~= nil, "'components' are missing in JSON '" .. jent.name .. "' for " .. entname )
-	for k,comp in pairs(jent.components) do
-		Debug:Assert( comp.name ~= nil and comp.name ~= "", "'name' not defined in JSON components for " .. entname )
-		for k,c in pairs(components) do
-			if c.name == comp.name then 
-				import(c.path)
-				break
+	if jent.components ~= nil and #jent.components >  0 then
+		for k,comp in pairs(jent.components) do
+			if comp.name ~= nil and comp.name ~= "" then
+				for k,c in pairs(components) do
+					if c.name == comp.name then 
+						import(c.path)
+						break
+					end
+				end
+				script.components[comp.name] = _G[comp.name]:create(entity)
 			end
-		end
-		script.components[comp.name] = _G[comp.name]:create(entity)
-		Debug:Assert(script.components[comp.name] ~= nil , "Failed to create component '" .. comp.name .. "'" )		
-	end
-	
-	-- debug 
-	for k,v in pairs(entity.script.components) do
-		if v == nil then 
-			System:Print( k )
 		end
 	end
 	
 	-- hookups
-	Debug:Assert(jent.hookups ~= nil, "'hookups' are missing in JSON '" .. jent.name .. "' for " .. entname ) 
-	for k,hooks in pairs(jent.hookups) do
+	if jent.hookups ~= nil and #jent.hookups > 0 then 
+		for k,hooks in pairs(jent.hookups) do
 			Debug:Assert( hooks.source ~= nil and hooks.source ~= "", "'source' not defined in JSON hookups for " .. entname )
 			Debug:Assert( hooks.destination ~= nil and hooks.destination ~= "", "'destination' not defined in JSON hookups for " .. entname )
 			Debug:Assert( hooks.source_event ~= nil and hooks.source_event ~= "", "'source_event' not defined in JSON hookups for " .. entname )
@@ -132,6 +141,6 @@ function EntityCreator:processEntity(entity, jent, components, msgpool)
 			Debug:Assert( dst[ac] ~= nil,  ac .. " action not found in " .. hooks.destination .. " when processing hookups in " .. entname  )
 			
 			src[ev]:subscribe( dst, dst[ac])
+		end
 	end
-
 end

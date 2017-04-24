@@ -10,6 +10,8 @@
 -- Rick & Roland                       	
 -----------------------------------------------
 
+import "Scripts/LCS/LcsUtils.lua"
+
 if ComponentCreator ~= nil then return end
 ComponentCreator = {}
 
@@ -39,17 +41,15 @@ function ComponentCreator:process(components)
 end
 
 function ComponentCreator:processComponent(component)
-	
-	if  component.name == nil
-	or	component.name == "null" 
+
+	-- validation
+	if  component == nil
+	or	component.name == nil 
 	or 	component.name == "" then
 		return
 	end
 	
-	
 	-- add template script
-	Debug:Assert(component.name ~= nil and component.name ~= "", "'name' is missing in JSON Message" )
-
 	-- declaration
 	local code = "" ..
 	"import \"Scripts/LCS/EventManager.lua\"\n" ..
@@ -58,28 +58,36 @@ function ComponentCreator:processComponent(component)
 	"\n"
 	
 	-- values
-	Debug:Assert(component.values ~= nil, "'values' are missing in JSON " .. component.name )
-	for k,v in pairs(component.values) do
-		code = code ..
-		component.name .. "." .. v.key .. " = " .. v.value .. "\n"
+	if component.values ~= nil and #component.values > 0 then
+		for k,v in pairs(component.values) do
+			if 	v.name ~= nil and v.name ~= "" 
+			and	v.value ~= nil and v.value ~= ""  
+			and	v.type ~= nil and v.type ~= "" then 
+				code = code ..
+				component.name .. "." .. v.name .. " = " .. jvalueToStr(v.type,v.value) .. "\n"
+			end
+		end
+		code = code .. component.name .. ".owner = nil\n"
+		code = code .. "\n"
 	end
-	code = code .. component.name .. ".entity = nil\n"
-	code = code .. "\n"
 	
 	-- events declaration
-	Debug:Assert(component.events ~= nil, "Events are missing in JSON for '" ..component.name .. "'" )
-	for k,v in pairs(component.events) do
-		code = code .. component.name .. ".on" .. v.name .. " = nil\n"
+	if component.events ~= nil and #component.events > 0 then
+		for k,v in pairs(component.events) do
+			if 	v.name ~= nil and v.name ~= "" then 
+				code = code .. component.name .. ".on" .. v.name .. " = nil\n"
+			end
+		end
+		code = code .. "\n"
 	end
-	code = code .. "\n"
 	
 	-- create
 	code = code .. 
-	"function " .. component.name .. ":create(entity)\n" ..
+	"function " .. component.name .. ":create(owner)\n" ..
 	"\tlocal obj = {}\n" ..
     "\tsetmetatable(obj, self)\n" ..
     "\tself.__index = self\n\n" ..
-	"\tself.entity = entity\n\n"
+	"\tself.owner = owner\n\n"
 	
 	-- events creation inside create function
 	for k,v in pairs(component.events) do
@@ -101,34 +109,47 @@ function ComponentCreator:processComponent(component)
 	"function " .. component.name .. ":update()\n" ..
 	"end\n" ..
 	"\n" ..
-	"function " .. component.name .. ":physUpdate()\n" ..
+	"function " .. component.name .. ":updatePhysics()\n" ..
 	"end\n" ..
 	"\n" ..
-	"function " .. component.name .. ":draw(context)\n" ..
+	"function " .. component.name .. ":overlap(entity)\n" ..
 	"end\n" ..
 	"\n" ..
-	"function " .. component.name .. ":destroy()\n" ..
-	"end\n" ..
-	"\n" ..
-	"function " .. component.name .. ":onCollision(entity, position, normal, speed)\n" ..
+	"function " .. component.name .. ":collision(entity, position, normal, speed)\n" ..
 	"end\n"  ..
+	"\n" ..
+	"function " .. component.name .. ":draw()\n" ..
+	"end\n" ..
+	"\n" ..
+	"function " .. component.name .. ":drawEach(camera)\n" ..
+	"end\n" ..
+	"\n" ..
+	"function " .. component.name .. ":postRender(context)\n" ..
+	"end\n" ..
+	"\n" ..
+	"function " .. component.name .. ":detach()\n" ..
+	"end\n" ..
+	"\n" ..
+	"function " .. component.name .. ":cleanup(context)\n" ..
+	"end\n" ..
 	"\n"
 	
 	-- actions
-	if component.actions ~= nil then
+	if component.actions ~= nil and #component.actions > 0 then
 		for k,v in pairs(component.actions) do
-			code = code .. "function " .. component.name .. ":do" .. v.name .. "("
-			if 	v.arg ~= nil 
-			and v.arg ~= ""
-			and v.arg ~= "null" then
-				code = code .. v.arg
+			if v.name ~= nil and v.name ~= "" then 
+				code = code .. "function " .. component.name .. ":do" .. v.name .. "("
+				if 	v.arg ~= nil and v.arg ~= "" then
+					code = code .. v.arg
+				end
+				code = code .. 
+				")\n" ..
+				"end\n" ..
+				"\n"
 			end
-			code = code .. 
-			")\n" ..
-			"end\n" ..
-			"\n"
 		end
 	end
+
 	-- save if not existing already
 	local f= io.open(component.path,"r")
 	if f==nil then

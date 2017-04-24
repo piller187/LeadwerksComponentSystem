@@ -73,18 +73,9 @@ function FpsCamera:update()
 	end
 end
 
-function FpsCamera:physUpdate()
-end
-
-function FpsCamera:draw(context)
-end
-
-function FpsCamera:destroy()
+function FpsCamera:cleanup()
 	self.camera:Release()
 	self.camera = nil
-end
-
-function FpsCamera:onCollision(entity, position, normal, speed)
 end
 
 --

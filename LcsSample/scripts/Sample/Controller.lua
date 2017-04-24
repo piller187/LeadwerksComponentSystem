@@ -75,18 +75,9 @@ function Controller:update()
 	end
 end
 
-function Controller:physUpdate()
+function Controller:updatePhysics()
 	self.entity:SetInput( self.angle, self.move, 0, self.jump )
 	self.jump = 0 --or else we will jump forever
-end
-
-function Controller:draw(context)
-end
-
-function Controller:destroy()
-end
-
-function Controller:onCollision(entity, position, normal, speed)
 end
 
 --

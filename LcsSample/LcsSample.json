@@ -7,22 +7,33 @@
 			"values": 
 			[
 				{
-					"key": "doubleClickTime",
-					"value": "300"
+					"name": "doubleClickTime",
+					"value": "300",
+					"type": "int"
+				},
+				{
+					"name": "test",
+					"value": "nil",
+					"type": "nil"
 				}
 			],
 			"events": 
 			[
 				{
-					"name": "Move"
+					"name": "Move",
+					"arg": ""
 				},
 				{
-					"name": "Jump"
+					"name": "Jump",
+					"arg": ""
 				}
 			],
 			"actions": 
 			[
-
+				{
+					"name": "",
+					"arg": ""
+				}
 			]
 		},
 		{
@@ -31,12 +42,14 @@
 			"values": 
 			[
 				{
-					"key": "rotationSpeed",
-					"value": "2"
+					"name": "rotationSpeed",
+					"value": "2",
+					"type": "int"
 				},
 				{
-					"key": "mouseSensitivity",
-					"value": "15"
+					"name": "mouseSensitivity",
+					"value": "15",
+					"type": "int"
 				}
 			],
 			"events": 
@@ -60,27 +73,30 @@
 			"values": 
 			[
 				{
-					"key": "moveSpeed",
-					"value": "4"
+					"name": "moveSpeed",
+					"value": "4",
+					"type": "int"
 				},
 				{
-					"key": "jumpForce",
-					"value": "8"
+					"name": "jumpForce",
+					"value": "8",
+					"type": "int"
 				},
 				{
-					"key": "eyePos",
-					"value": "0.8"
+					"name": "eyePos",
+					"value": "0.8",
+					"type": "float"
 				}
 			],
 			"events": 
 			[
 				{
 					"name": "StoppedMoving",
-					"arg": "null"
+					"arg": ""
 				},
 				{
 					"name": "StartedMoving",
-					"arg": "null"
+					"arg": ""
 				},
 				{
 					"name": "Moving",
@@ -91,11 +107,11 @@
 			[
 				{
 					"name": "Move",
-					"arg": "null"
+					"arg": ""
 				},
 				{
 					"name": "Jump",
-					"arg": "null"
+					"arg": ""
 				},
 				{
 					"name": "Turn",
@@ -103,7 +119,7 @@
 				},
 				{
 					"name": "Stop",
-					"arg": "null"
+					"arg": ""
 				}
 			]
 		},
@@ -113,12 +129,14 @@
 			"values": 
 			[
 				{
-					"key": "addSpeed",
-					"value": "4"
+					"name": "addSpeed",
+					"value": "4",
+					"type": "int"
 				},
 				{
-					"key": "subtractSpeed",
-					"value": "6"
+					"name": "subtractSpeed",
+					"value": "6",
+					"type": "int"
 				}
 			],
 			"events": 
@@ -146,15 +164,21 @@
 			[
 				{
 					"key": "moveSpeed",
-					"value": "4"
+					"value": "4",
+					"type": "int"
 				},
 				{
 					"key": "jumpForce",
-					"value": "8"
-				},
+					"value": "8",
+					"type": "int"
+				}
+			],
+			"values": 
+			[
 				{
-					"key": "eyePos",
-					"value": "0.8"
+					"name": "eyePos",
+					"value": "0.8",
+					"type": "float"
 				}
 			],
 			"messages": 
@@ -225,21 +249,29 @@
 			"name": "EnergyGui",
 			"key_values": 
 			[
+
+			],
+			"values": 
+			[
 				{
 					"key": "position",
-					"value": "10,-10"
+					"value": "10,-10",
+					"type": "vec2"
 				},
 				{
 					"key": "width",
-					"value": "20"
+					"value": "20",
+					"type": "int"
 				},
 				{
 					"key": "height",
-					"value": "400"
+					"value": "400",
+					"type": "int"
 				},
 				{
 					"key": "color",
-					"value": "1,0,0,1"
+					"value": "1,0,0,1",
+					"type": "vec4"
 				}
 			],
 			"messages": 
@@ -291,19 +323,19 @@
 			[
 				{
 					"name": "StartAddingEnergy",
-					"arg": "null"
+					"arg": ""
 				},
 				{
 					"name": "StartSubtractingEnergy",
-					"arg": "null"
+					"arg": ""
 				},
 				{
 					"name": "OutOfEnergy",
-					"arg": "null"
+					"arg": ""
 				},
 				{
 					"name": "EnergyRecovered",
-					"arg": "null"
+					"arg": ""
 				}
 			]
 		}
@@ -315,27 +347,28 @@
 			"components": 
 			[
 				{
-					"name": "null",
-					"path": "null",
+					"name": "",
+					"path": "",
 					"values": 
 					[
 						{
-							"key": "null",
-							"value": "null"
+							"name": "",
+							"value": "",
+							"type": ""
 						}
 					],
 					"events": 
 					[
 						{
-							"name": "null",
-							"arg": "null"
+							"name": "",
+							"arg": ""
 						}
 					],
 					"actions": 
 					[
 						{
-							"name": "null",
-							"arg": "null"
+							"name": "",
+							"arg": ""
 						}
 					]
 				}
@@ -343,32 +376,41 @@
 			"entitys": 
 			[
 				{
-					"name": "null",
+					"name": "",
 					"key_values": 
 					[
 						{
-							"key": "null",
-							"value": "null"
+							"key": "",
+							"value": "",
+							"type": ""
+						}
+					],
+					"values": 
+					[
+						{
+							"name": "",
+							"value": "",
+							"type": ""
 						}
 					],
 					"messages": 
 					[
 						{
-							"name": "null"
+							"name": ""
 						}
 					],
 					"components": 
 					[
 						{
-							"name": "null"
+							"name": ""
 						}
 					],
 					"hookups": 
 					[
 						{
-							"source": "null",
-							"source_event": "null",
-							"destination": "null",
+							"source": "",
+							"source_event": "",
+							"destination": "",
 							"destination_action": "v"
 						}
 					]
@@ -377,12 +419,12 @@
 			"messages": 
 			[
 				{
-					"name": "null",
+					"name": "",
 					"events": 
 					[
 						{
-							"name": "null",
-							"arg": "null"
+							"name": "",
+							"arg": ""
 						}
 					]
 				}

@@ -42,15 +42,10 @@ end
 function MessageCreator:processMessage(message)
 
 	if  message.name == nil
-	or	message.name == "null" 
 	or 	message.name == "" then
 		return
 	end
 	
-
-	-- add template script
-	Debug:Assert(message.name ~= nil and message.name ~= "", "'name' is missing in JSON Message" )
-
 	-- declaration
 	local code = "" ..
 	"import \"Scripts/LCS/EventManager.lua\"\n" ..
@@ -61,7 +56,9 @@ function MessageCreator:processMessage(message)
 	-- events declaration
 	Debug:Assert(message.events ~= nil, "Events are missing in JSON for '" ..message.name .. "'" )
 	for k,v in pairs(message.events) do
-		code = code .. message.name .. ".on" .. v.name .. " = nil\n"
+		if v.name ~= nil and v.name ~= "" then
+			code = code .. message.name .. ".on" .. v.name .. " = nil\n"
+		end
 	end
 	code = code .. "\n"
 	
@@ -73,8 +70,10 @@ function MessageCreator:processMessage(message)
     "\tself.__index = self\n\n"
 	
 	-- events creation inside create function
-	for k,v in pairs(message.events) do
-		code = code .. "\tself.on" .. v.name .. "=EventManager:create()\n"
+	if message.events ~= nil and #message.events > 0 then 
+		for k,v in pairs(message.events) do
+			code = code .. "\tself.on" .. v.name .. "=EventManager:create()\n"
+		end
 	end
 	code = code .. "\n"
 	
@@ -88,27 +87,26 @@ function MessageCreator:processMessage(message)
 	"\n"
 	
 	-- actions
-	for k,v in pairs(message.events) do
-		code = code .. "function " .. message.name .. ":do" .. v.name .. "("
-		if 	v.arg ~= nil 
-		and v.arg ~= "" 
-		and v.arg ~= "null" then
-			code = code .. v.argument 
+	if message.events ~= nil and #message.events >  0 then
+		for k,v in pairs(message.events) do
+			if v.name ~= nil and v.name ~= "" then
+				code = code .. "function " .. message.name .. ":do" .. v.name .. "("
+				if 	v.arg ~= nil and v.arg ~= ""  then
+					code = code .. v.argument 
+				end
+				code = code .. 
+				")\n" ..
+				"\tself.on" .. v.name .. ":raise(" 
+				if 	v.arg ~= nil and v.arg ~= "" then 
+						code = code .. v.argument 
+				end
+				code = code .. 
+				")\n" ..
+				"end\n" ..
+				"\n"
+			end
 		end
-		code = code .. 
-		")\n" ..
-		"\tself.on" .. v.name .. ":raise(" 
-		if 	v.arg ~= nil 
-		and v.arg ~= "" 
-		and v.arg ~= "null" then 
-				code = code .. v.argument 
-		end
-		code = code .. 
-		")\n" ..
-		"end\n" ..
-		"\n"
 	end
-	 
 	-- save to temp so it can be checked 
 	self:save(code)
 	

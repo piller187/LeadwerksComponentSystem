@@ -73,10 +73,7 @@ function EnergyMeter:update()
 	end
 end
 
-function EnergyMeter:physUpdate()
-end
-
-function EnergyMeter:draw(context)
+function EnergyMeter:postRender(context)
 
 	-- size
 	local hmax = self.maxEnergy * self.valueSize
@@ -100,13 +97,6 @@ function EnergyMeter:draw(context)
 	context:SetColor(Vec4(1,1,1,1))
 	context:DrawRect(self.xpos, y, self.width, hmax, 1)
 	
-end
-
-
-function EnergyMeter:destroy()
-end
-
-function EnergyMeter:onCollision(entity, position, normal, speed)
 end
 
 --

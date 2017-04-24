@@ -2,27 +2,28 @@
 	"shared_components": 
 	[
 		{
-			"name": "null",
-			"path": "null",
+			"name": "",
+			"path": "",
 			"values": 
 			[
 				{
-					"key": "null",
-					"value": "null"
+					"name": "",
+					"value": "",
+					"type": ""
 				}
 			],
 			"events": 
 			[
 				{
-					"name": "null",
-					"arg": "null"
+					"name": "",
+					"arg": ""
 				}
 			],
 			"actions": 
 			[
 				{
-					"name": "null",
-					"arg": "null"
+					"name": "",
+					"arg": ""
 				}
 			]
 		}
@@ -30,33 +31,42 @@
 	"shared_entitys": 
 	[
 		{
-			"name": "null",
+			"name": "",
 			"key_values": 
 			[
 				{
-					"key": "null",
-					"value": "null"
+					"key": "",
+					"value": "",
+					"type": ""
+				}
+			],
+			"values": 
+			[
+				{
+					"name": "",
+					"value": "",
+					"type": ""
 				}
 			],
 			"messages": 
 			[
 				{
-					"name": "null"
+					"name": ""
 				}
 			],
 			"components": 
 			[
 				{
-					"name": "null"
+					"name": ""
 				}
 			],
 			"hookups": 
 			[
 				{
-					"source": "null",
-					"source_event": "null",
-					"destination": "null",
-					"destination_action": "null"
+					"source": "",
+					"source_event": "",
+					"destination": "",
+					"destination_action": ""
 				}
 			]
 		}
@@ -64,12 +74,12 @@
 	"shared_messages": 
 	[
 		{
-			"name": "null",
+			"name": "",
 			"events": 
 			[
 				{
-					"name": "null",
-					"arg": "null"
+					"name": "StartAddingEnergy",
+					"arg": ""
 				}
 			]
 		}
@@ -77,31 +87,32 @@
 	"maps": 
 	[
 		{
-			"name": "null",
+			"name": "",
 			"components": 
 			[
 				{
-					"name": "null",
-					"path": "null",
+					"name": "",
+					"path": "",
 					"values": 
 					[
 						{
-							"key": "null",
-							"value": "null"
+							"name": "",
+							"value": "",
+							"type": ""
 						}
 					],
 					"events": 
 					[
 						{
-							"name": "null",
-							"arg": "null"
+							"name": "",
+							"arg": ""
 						}
 					],
 					"actions": 
 					[
 						{
-							"name": "null",
-							"arg": "null"
+							"name": "",
+							"arg": ""
 						}
 					]
 				}
@@ -109,33 +120,42 @@
 			"entitys": 
 			[
 				{
-					"name": "null",
+					"name": "",
 					"key_values": 
 					[
 						{
-							"key": "null",
-							"value": "null"
+							"key": "",
+							"value": "",
+							"type": ""
+						}
+					],
+					"values": 
+					[
+						{
+							"name": "",
+							"value": "",
+							"type": ""
 						}
 					],
 					"messages": 
 					[
 						{
-							"name": "null"
+							"name": ""
 						}
 					],
 					"components": 
 					[
 						{
-							"name": "null"
+							"name": ""
 						}
 					],
 					"hookups": 
 					[
 						{
-							"source": "null",
-							"source_event": "null",
-							"destination": "null",
-							"destination_action": "v"
+							"source": "",
+							"source_event": "",
+							"destination": "",
+							"destination_action": ""
 						}
 					]
 				}
@@ -143,12 +163,12 @@
 			"messages": 
 			[
 				{
-					"name": "null",
+					"name": "",
 					"events": 
 					[
 						{
-							"name": "null",
-							"arg": "null"
+							"name": "",
+							"arg": ""
 						}
 					]
 				}

@@ -47,13 +47,18 @@ function SharedCreator:create(jsonSource)
 end
 
 function SharedCreator:process()
-	self.messageCreator:process(self.jsonSource:getSharedMessages())
-	self.componentCreator:process(self.jsonSource:getSharedComponents())
+	local messages = self.jsonSource:getSharedMessages() 
+	if messages ~= nil then self.messageCreator:process(messages) end
+	
+	local components = self.jsonSource:getSharedComponents() 
+	if components ~= nil then self.componentCreator:process(components) end
 end
 
 function SharedCreator:processEntity(entity)
-	self.entCreator:process(	entity,
-						self.jsonSource:getSharedEntitys(),
-						self.jsonSource:getSharedComponents(), 
-						self.messageCreator:getMessagePool() )
+	local entitys = self.jsonSource:getSharedEntitys()
+	if entitys ~= nil then
+		self.entCreator:process(entity, entitys,
+							self.jsonSource:getSharedComponents(), 
+							self.messageCreator:getMessagePool() )
+	end
 end

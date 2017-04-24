@@ -48,13 +48,18 @@ function MapCreator:create(jsonSource,map)
 end
 
 function MapCreator:process()
-	self.messageCreator:process(self.jsonSource:getMapMessages(self.map))
-	self.componentCreator:process(self.jsonSource:getMapComponents(self.map))
+	local messages = self.jsonSource:getMapMessages(self.map)
+	if messages ~= nil then self.messageCreator:process(messages) end
+	
+	local components = self.jsonSource:getMapComponents(self.map)
+	if components ~= nil then self.componentCreator:process(components) end
 end
 
 function MapCreator:processEntity(entity)
-	self.entCreator:process(	entity,
-						self.jsonSource:getMapEntitys(self.map),
+	local entitys = self.jsonSource:getMapEntitys(self.map)
+	if entitys ~= nil then
+		self.entCreator:process( entity, entitys,
 						self.jsonSource:getMapComponents(self.map), 
 						self.messageCreator:getMessagePool() )
+	end
 end
