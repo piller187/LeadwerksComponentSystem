@@ -40,6 +40,14 @@ function ComponentCreator:process(components)
 	end
 end
 
+function ComponentCreator:paragraph(title)
+	return
+	"---\n" ..
+	"--- " .. title .. "\n" ..
+	"---\n" ..
+	"\n"
+end
+
 function ComponentCreator:processComponent(component)
 
 	-- validation
@@ -51,13 +59,16 @@ function ComponentCreator:processComponent(component)
 	
 	-- add template script
 	-- declaration
-	local code = "" ..
-	"import \"Scripts/LCS/EventManager.lua\"\n" ..
+	local code = self:paragraph( "Created by Leadwerks Component System")
+	code = code .. 
+	"import \"Scripts/LCS/EventManager.lua\"\n\n" ..
 	"if " .. component.name .. " ~= nil then return end\n" ..
 	component.name .. " = {}\n" ..
 	"\n"
 	
+	
 	-- values
+	code = code .. self:paragraph("Values")
 	if component.values ~= nil and #component.values > 0 then
 		for k,v in pairs(component.values) do
 			if 	v.name ~= nil and v.name ~= "" 
@@ -72,6 +83,7 @@ function ComponentCreator:processComponent(component)
 	end
 	
 	-- events declaration
+	code = code .. self:paragraph("Events")
 	if component.events ~= nil and #component.events > 0 then
 		for k,v in pairs(component.events) do
 			if 	v.name ~= nil and v.name ~= "" then 
@@ -82,6 +94,7 @@ function ComponentCreator:processComponent(component)
 	end
 	
 	-- create
+	code = code .. self:paragraph("Public")
 	code = code .. 
 	"function " .. component.name .. ":create(owner)\n" ..
 	"\tlocal obj = {}\n" ..
@@ -90,8 +103,10 @@ function ComponentCreator:processComponent(component)
 	"\tself.owner = owner\n\n"
 	
 	-- events creation inside create function
-	for k,v in pairs(component.events) do
-		code = code .. "\tself.on" .. v.name .. "=EventManager:create()\n"
+	if component.events ~= nil and #component.events > 0 then
+		for k,v in pairs(component.events) do
+			code = code .. "\tself.on" .. v.name .. "=EventManager:create()\n"
+		end
 	end
 	code = code .. "\n"
 	
@@ -135,6 +150,7 @@ function ComponentCreator:processComponent(component)
 	"\n"
 	
 	-- actions
+	code = code .. self:paragraph("Actions")
 	if component.actions ~= nil and #component.actions > 0 then
 		for k,v in pairs(component.actions) do
 			if v.name ~= nil and v.name ~= "" then 
@@ -149,6 +165,8 @@ function ComponentCreator:processComponent(component)
 			end
 		end
 	end
+	code = code .. self:paragraph("Private")
+	
 
 	-- save if not existing already
 	local f= io.open(component.path,"r")
