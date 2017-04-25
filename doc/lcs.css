@@ -43,15 +43,19 @@ body {
 
 .link a {
     color: #ffffff;
-}
+	text-decoration: none;
+} 
 .link a:visited {
     color: #ffffff;
+	text-decoration: none;
 }
 .link a:hover {
     color: #000000;
+	text-decoration: none;
 }
 .link a:focus {
     color: #ffffff;
+	text-decoration: none;
 }
 .link a:active {
     color: #000000;
