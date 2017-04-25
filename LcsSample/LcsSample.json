@@ -160,6 +160,7 @@
 	[
 		{
 			"name": "Player",
+			"type": "player",
 			"key_values": 
 			[
 				{
@@ -247,6 +248,7 @@
 		},
 		{
 			"name": "EnergyGui",
+			"type": "",
 			"key_values": 
 			[
 

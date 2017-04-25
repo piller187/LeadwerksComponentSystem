@@ -54,6 +54,11 @@ function EntityCreator:processEntity(entity, jent, components, msgpool)
 	-- add template script
 	entity:SetScript( "scripts/LCS/ENTITY.lua" )
 
+	-- type
+	if jent.type ~= nil and jent.type ~= "" then
+		entity:SetKeyValue("type",jent.type)
+	end
+	
 	-- key values
 	if jent.key_values ~= nil and #jent.key_values > 0 then
 		for k,v in pairs(jent.key_values) do
