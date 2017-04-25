@@ -141,7 +141,7 @@ body .ace_scrollbar-h {
 	<script>
 		var fs = require("fs");
 		var tabs = $("#fileTabs").tabs();
-		var editors = {};
+		var aceEditors = {};
 		
 		$(document).tooltip({
 			position: {
@@ -150,8 +150,45 @@ body .ace_scrollbar-h {
 			}
 		});
 		
+		// saving
+		$(document).keydown(function(e){
+			if((e.which == '115' || e.which == '83') && (e.ctrlKey || e.metaKey))
+			{
+				e.preventDefault();
+				
+				saveCurrentTab();
+				
+				return false;
+			}
+			
+			return true;
+		});
+		
+		function saveCurrentTab(){
+			// get the file that needs to be saved
+			var selected = $("#fileTabs").tabs("option", "active");
+			var file = $($("#fileTabs li")[selected]).attr("title");
+			console.log(aceEditors);
+			var editor = aceEditors[file];
+			var editorText = editor.getSession().getValue();
+			
+			// only save if the editor has changed
+			if(!editor.session.getUndoManager().isClean()){
+				try	{
+					fs.writeFileSync(file.replace(/\//g, "\\"), editorText, { flag: 'w' });
+					console.log("file saved");
+				
+					var selectedTabTitle = $("#fileTabs .ui-tabs-active").text();
+					var selectedTabHtml = $("#fileTabs .ui-tabs-active").html();
+					$("#fileTabs .ui-tabs-active").html(selectedTabHtml.replace(selectedTabTitle, selectedTabTitle.substring(1)));
+				}
+				catch(err) {
+					console.log("error");
+				}
+			}
+		}
+		
 		$.fn.addEditorTab = function(name, tabName, contents) {
-			console.log("1");
 			$('ul', this).append('<li title="' + name + '"><a href="#tab-' + name + '">' + tabName + '</a><span class="ui-icon ui-icon-close" role="presentation"></li>');
 			$(this).append("<div id='tab-" + name + "'><div id='editor-" + name + "' class='editor'></div></div>");
 			$(this).tabs("refresh");
@@ -166,6 +203,19 @@ body .ace_scrollbar-h {
 			});
 			editor.getSession().setValue(contents);
 			
+			// mark as edited and needs saving
+			editor.on("input", function(){
+				if(!editor.session.getUndoManager().isClean()){
+					var selectedTabTitle = $("#fileTabs .ui-tabs-active").text();
+					
+					// if we've already added an asterisk then don't add more
+					if(selectedTabTitle.indexOf("*") == -1){
+						var selectedTabHtml = $("#fileTabs .ui-tabs-active").html();
+						$("#fileTabs .ui-tabs-active").html(selectedTabHtml.replace(">" + selectedTabTitle, ">*" + selectedTabTitle));
+					}
+				}
+			});
+			
 			return editor;
 		};
 		
@@ -179,12 +229,10 @@ body .ace_scrollbar-h {
 
 				$("div[id='" + editorId + "']").remove();
 				$("div[id='" + panelId + "']").remove();
-				editors[editorId.replace("editor-", "")].destroy();
+				aceEditors[editorId.replace("editor-", "")].destroy();
 
 				tabs.tabs("refresh");
 			});
-			
-			//tabs.addEditorTab("test", "test", "test");
 		
 			setupMenu();
 			
@@ -198,15 +246,12 @@ body .ace_scrollbar-h {
 					id: path.replace(/\\/g, "/"),
 					text: e.target.files[0].name.replace(".werk", ""),
 					type: 'directory',
-					icon: 'js-treefolder',
-					//img: 'icon-folder',
+					icon: 'js-tree-folder',
 					children: []
 				};
 				
 				setupFileTree(obj.children, path);
-				//console.log(obj);
 				
-				//w2ui.sidebar.add(obj);
 				$('#projectTree').jstree({
 					core: {
 						data: obj
@@ -222,31 +267,13 @@ body .ace_scrollbar-h {
 				if(stats.isFile() && file.indexOf(".lua") != -1){
 					var fileContents = fs.readFileSync(file, "utf8");
 					var fileName = file.split('/').pop();
-					console.log(fileContents);
-					console.log(fileName);
+					//console.log(fileContents);
+					//console.log(fileName);
 					
-					editors[event.target] = tabs.addEditorTab(file, fileName, fileContents);
+					aceEditors[file] = tabs.addEditorTab(file, fileName, fileContents);
+					console.log(aceEditors);
 				}
 			});
-
-			/*
-			$('#sidebar').w2sidebar({
-				name : 'sidebar',
-				img  : 'icon-page',
-				onDblClick: function(event){
-					var stats = fs.statSync(event.target);
-					
-					if(stats.isFile() && event.target.indexOf(".lua") != -1){
-						var fileContents = fs.readFileSync(event.target, "utf8");
-						var fileName = event.target.split('/').pop();
-						console.log(fileContents);
-						console.log(fileName);
-
-						editors[event.target] = tabs.addEditorTab(event.target, fileName, fileContents);
-					}
-				}
-			});
-			*/
 		});
 		
 		function setupFileTree(node, path){
