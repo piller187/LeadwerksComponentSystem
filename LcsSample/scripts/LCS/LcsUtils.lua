@@ -90,6 +90,7 @@ function jvalueToStr(vtype,val)
 	elseif vtype == "vec2" then return jvec2ToStr(val)
 	elseif vtype == "vec3" then return jvec3ToStr(val)
 	elseif vtype == "vec4" then return jvec4ToStr(val)
+	elseif vtype == "string" then return "\""..val.."\""
 	else return "nil" end
 end
 
@@ -101,6 +102,6 @@ function jvalueToValue(vtype,val)
 	elseif vtype == "vec2" then return strToVec2(jvalueToStr(val))
 	elseif vtype == "vec3" then return strToVec3(jvalueToStr(val))
 	elseif vtype == "vec4" then return strToVec4(jvalueToStr(val))
+	elseif vtype == "string" then return val
 	else return nil end
 end
-
