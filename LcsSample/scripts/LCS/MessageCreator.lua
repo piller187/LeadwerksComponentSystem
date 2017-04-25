@@ -92,13 +92,13 @@ function MessageCreator:processMessage(message)
 			if v.name ~= nil and v.name ~= "" then
 				code = code .. "function " .. message.name .. ":do" .. v.name .. "("
 				if 	v.arg ~= nil and v.arg ~= ""  then
-					code = code .. v.argument 
+					code = code .. v.arg 
 				end
 				code = code .. 
 				")\n" ..
 				"\tself.on" .. v.name .. ":raise(" 
 				if 	v.arg ~= nil and v.arg ~= "" then 
-						code = code .. v.argument 
+						code = code .. v.arg 
 				end
 				code = code .. 
 				")\n" ..
