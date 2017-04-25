@@ -31,10 +31,6 @@ function NAME:create(owner)
 	self.owner = owner
 
 	self.onEvent=EventManager:create()
-	self.onLostView=EventManager:create()
-	self.onViewItem=EventManager:create()
-	self.onTurn=EventManager:create()
-	self.onMessage=EventManager:create()
 
 	for k, v in pairs(NAME) do
 		obj[k] = v
