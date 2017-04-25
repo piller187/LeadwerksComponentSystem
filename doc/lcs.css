@@ -27,6 +27,20 @@ html {
 	font-family: "Lucida Sans", sans-serif;
 }
 
+body {
+	width:760px;
+}
+
+.blackbox {
+	border: 1px solid gray ;
+	background-color: #000000;
+} 
+
+.graybox {
+	border: 1px solid black ;
+	background-color: gray;
+} 
+
 .link a {
     color: #ffffff;
 }
@@ -46,6 +60,8 @@ html {
 .header {
 	background-color: #000000;
 	color: #ffffff;
+	width: 960px;
+	height: 70px;
 	padding: 2px;
 }
 .menu ul {
