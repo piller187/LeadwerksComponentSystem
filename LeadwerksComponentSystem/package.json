@@ -1,4 +1,10 @@
 {
-  "name": "helloworld",
-  "main": "index.html"
+  "name": "LCP",
+  "title": "LCP",
+  "main": "index.html",
+  "version":"0.0.5",
+  "window": {
+	"width": 1280,
+	"height": 720
+  }
 }

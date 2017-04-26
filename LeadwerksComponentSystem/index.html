@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Hello World!</title>
+    <title>LCP</title>
 	<style type="text/css" media="screen">
 .editor {
   /** Setting height is also important, otherwise editor wont showup**/
@@ -124,24 +124,32 @@ body .ace_scrollbar-h {
 		Toolbar area
 	</div>
 	<div class="wrapper">
-	<div class="inner-wrapper">
-		<div class="left pane">
-			<div id="projectTree"></div>
-		</div>
-		<div class="center pane">
-			<div id="fileTabs">
-				<ul>
-				</ul>
+		<div class="inner-wrapper">
+			<div class="left pane">
+				<div id="projectTree"></div>
+			</div>
+			<div class="center pane">
+				<div id="fileTabs">
+					<ul>
+					</ul>
+				</div>
 			</div>
 		</div>
 	</div>
-	</div>
 
+	<div id="dlgCreateNewItem" title="">
+		<label for="name">Name</label>
+		<input type="text" name="name" id="name" class="text ui-widget-content ui-corner-all" />
+		<button id="btnCreateItem">OK</button>
+	</div>
 	
 	<script>
 		var fs = require("fs");
 		var tabs = $("#fileTabs").tabs();
 		var aceEditors = {};
+		
+		var path = require('path');
+		var nwDir = path.dirname(process.execPath);
 		
 		$(document).tooltip({
 			position: {
@@ -150,7 +158,7 @@ body .ace_scrollbar-h {
 			}
 		});
 		
-		// saving
+		// ctrl-s for saving
 		$(document).keydown(function(e){
 			if((e.which == '115' || e.which == '83') && (e.ctrlKey || e.metaKey))
 			{
@@ -164,11 +172,88 @@ body .ace_scrollbar-h {
 			return true;
 		});
 		
+		$("#btnCreateItem").click(function(e){
+			var fileName = $("#name").val();
+			var path = $(this).attr("path");
+			var template = $(this).attr("template");
+			
+			// if the file doesn't have .lua then add it
+			if(fileName.indexOf(".lua") == -1){
+				fileName = fileName + ".lua";
+			}
+			
+			var finalFile = path + fileName;
+			finalFile = finalFile.replace(/\//g, "\\");
+			
+			var stats;
+			try{
+				stats = fs.statSync(finalFile);
+				alert("File already exists.");
+			}
+			catch(e){
+				// file does not exist so create it
+				var templateFile = nwDir + "\\LeadwerksComponentSystem\\templates\\" + template;
+				var fileContents = fs.readFileSync(templateFile, "utf8");
+				var className = fileName.replace(".lua", "");
+				var alteredFileContents = fileContents.replace(/NAME/g, className);
+				
+				//alert(alteredFileContents);
+				fs.writeFileSync(file.replace(/\//g, "\\"), editorText, { flag: 'w' });
+				//alert("Creating file. " + templateFile);
+			}
+			
+			//alert(path + fileName);
+		});
+		
+		function reportMenu(node) {
+			//alert('Node id ' + node.id);
+			var path = node.id.replace(/\//g, "\\");
+			var stats = fs.statSync(path);
+			
+			// if file then rename and other options, but if folder different options
+			if(stats.isFile()){
+				
+			}else{
+				return {
+					createItem : {
+						"label" : "New Component",
+						"action" : function(obj) { 
+							$("#btnCreateItem").attr("path", path);
+							$("#btnCreateItem").attr("template", "COMPONENT.lua");
+							$("#dlgCreateNewItem").dialog("open"); 
+						},
+						"_class" : "class"
+					},
+					renameItem : {
+						"label" : "New Class",
+						"action" : function(obj) { alert(path); }
+					},
+					deleteItem : {
+						"label" : "New World Message",
+						"action" : function(obj) { alert(path); }
+					}
+				}; 
+			}
+		}
+		
+		function isTabOpen(name){
+			var tabNameExists = false;
+					
+			$('#fileTabs .ui-tabs-nav li').each(function(i){
+				//console.log($(this).attr("title") + " vs " + name);
+				if($(this).attr("title") == name){
+					tabNameExists = true;
+				}
+			});
+			
+			return tabNameExists;
+		}
+		
 		function saveCurrentTab(){
 			// get the file that needs to be saved
 			var selected = $("#fileTabs").tabs("option", "active");
 			var file = $($("#fileTabs li")[selected]).attr("title");
-			console.log(aceEditors);
+			//console.log(aceEditors);
 			var editor = aceEditors[file];
 			var editorText = editor.getSession().getValue();
 			
@@ -176,7 +261,7 @@ body .ace_scrollbar-h {
 			if(!editor.session.getUndoManager().isClean()){
 				try	{
 					fs.writeFileSync(file.replace(/\//g, "\\"), editorText, { flag: 'w' });
-					console.log("file saved");
+					//console.log("file saved");
 				
 					var selectedTabTitle = $("#fileTabs .ui-tabs-active").text();
 					var selectedTabHtml = $("#fileTabs .ui-tabs-active").html();
@@ -188,14 +273,24 @@ body .ace_scrollbar-h {
 			}
 		}
 		
+		// jquery lib for tabs to add a tab with an editor inside of it
 		$.fn.addEditorTab = function(name, tabName, contents) {
+			if(isTabOpen(name)){
+				//BUG: not selecting the tab that's already open. index is always -1 why?
+				// activate the tab that's already open
+				var index = $('#fileTabs a[href="#' + name + '"]').parent().index();
+				$("#fileTabs").tabs("option", "active", index);
+				
+				console.log("Activating " + name + " " + index);
+				
+				return;
+			}
+			
 			$('ul', this).append('<li title="' + name + '"><a href="#tab-' + name + '">' + tabName + '</a><span class="ui-icon ui-icon-close" role="presentation"></li>');
 			$(this).append("<div id='tab-" + name + "'><div id='editor-" + name + "' class='editor'></div></div>");
 			$(this).tabs("refresh");
-			console.log("2");
 			
 			var editor = ace.edit("editor-" + name);
-			console.log("3");
 			editor.setTheme("ace/theme/monokai");
 			editor.getSession().setMode("ace/mode/lua");
 			editor.setOptions({
@@ -203,7 +298,11 @@ body .ace_scrollbar-h {
 			});
 			editor.getSession().setValue(contents);
 			
-			// mark as edited and needs saving
+			// activate the new tab
+			var index = $('#fileTabs a[href="#' + name + '"]').parent().index();
+			$("#fileTabs").tabs("option", "active", index);
+			
+			// when the user changes anything in the editor mark as edited and needs saving
 			editor.on("input", function(){
 				if(!editor.session.getUndoManager().isClean()){
 					var selectedTabTitle = $("#fileTabs .ui-tabs-active").text();
@@ -221,6 +320,18 @@ body .ace_scrollbar-h {
 		
 		// main starting point
 		$(function(){
+		
+			$("#dlgCreateNewItem").dialog({
+				autoOpen: false
+			});
+		
+			var menu = [{
+				name: "create_component",
+				title: "Create Component",
+				fun: function(){
+					alert("Create component here!");
+				}
+			}];
 		
 			// close tabs
 			tabs.on("click", "span.ui-icon-close", function() {
@@ -255,8 +366,16 @@ body .ace_scrollbar-h {
 				$('#projectTree').jstree({
 					core: {
 						data: obj
+					},
+					'plugins': ["contextmenu"],
+						'contextmenu': {
+						'select_node': false,
+						'items': reportMenu
 					}
 				});
+				
+				// only allow right click menu on folders and not files (files have jstree-leaf class on them and folders don't but both are jstree-node)
+				$(".jstree-node:not(.jstree-leaf)").contextMenu(menu);
 			});
 			
 			// opening a file from the sidebar
@@ -271,7 +390,7 @@ body .ace_scrollbar-h {
 					//console.log(fileName);
 					
 					aceEditors[file] = tabs.addEditorTab(file, fileName, fileContents);
-					console.log(aceEditors);
+					//console.log(aceEditors);
 				}
 			});
 		});
