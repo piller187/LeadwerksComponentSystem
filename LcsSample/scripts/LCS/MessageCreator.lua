@@ -108,19 +108,21 @@ function MessageCreator:processMessage(message)
 		end
 	end
 	-- save to temp so it can be checked 
-	self:save(code)
+	self:save(code,message.name)
 	
-	import("Scripts/LCS/temp/message.lua")
+	import("Scripts/LCS/temp/"..message.name..".lua") 
 	local a = _G[message.name]
+	Debug:Assert(a~=nil,"Failed to register Message " .. message.name )
 	if a ~= nil then
 		a:create()
 		self.shared[message.name] = a
 	end
+	--os.remove("Scripts/LCS/temp/message.lua")
 end
 
-function MessageCreator:save(code)
-	local file = io.open( "Scripts/LCS/temp/message.lua", "w" )
-	Debug:Assert( file ~= nil, "Faild to create 'LCS/temp/message.lua'")
+function MessageCreator:save(code,name)
+	local file = io.open( "Scripts/LCS/temp/"..name..".lua", "w" )
+	Debug:Assert( file ~= nil, "Faild to create 'LCS/temp/"..name..".lua'")
 	file:write(code)
 	file:close()
 end
