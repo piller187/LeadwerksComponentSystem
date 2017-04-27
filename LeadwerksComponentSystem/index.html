@@ -197,18 +197,34 @@ body .ace_scrollbar-h {
 				var className = fileName.replace(".lua", "");
 				var alteredFileContents = fileContents.replace(/NAME/g, className);
 				
-				//alert(alteredFileContents);
-				fs.writeFileSync(file.replace(/\//g, "\\"), editorText, { flag: 'w' });
-				//alert("Creating file. " + templateFile);
+				// write the file
+				fs.writeFileSync(finalFile, alteredFileContents, { flag: 'w' });
+				
+				// insert the new file into the the treeview
+				var newNode = {
+					id: finalFile.replace(/\\/g, "/"),
+					text: fileName,
+					type: 'file',
+					icon: 'jstree-file',
+					children: []
+				};
+				
+				var parent = $('#projectTree').jstree('get_selected');
+				
+				// add this new node to the tree view and open it by simulating a click
+				$("#projectTree").jstree().create_node(parent, newNode, 'inside', function(){ console.log("created"); $("#projectTree").jstree("activate_node", finalFile.replace(/\\/g, "/")); });
+				
+				$("#dlgCreateNewItem").dialog("close"); 
 			}
-			
-			//alert(path + fileName);
 		});
 		
 		function reportMenu(node) {
 			//alert('Node id ' + node.id);
 			var path = node.id.replace(/\//g, "\\");
 			var stats = fs.statSync(path);
+			
+			// make this the selected node, because we use the selected node when deciding what parent to place this under
+			$("#projectTree").jstree("activate_node", node.id);
 			
 			// if file then rename and other options, but if folder different options
 			if(stats.isFile()){
@@ -318,20 +334,14 @@ body .ace_scrollbar-h {
 			return editor;
 		};
 		
+		// =================================================================
 		// main starting point
+		// =================================================================
 		$(function(){
 		
 			$("#dlgCreateNewItem").dialog({
 				autoOpen: false
 			});
-		
-			var menu = [{
-				name: "create_component",
-				title: "Create Component",
-				fun: function(){
-					alert("Create component here!");
-				}
-			}];
 		
 			// close tabs
 			tabs.on("click", "span.ui-icon-close", function() {
@@ -357,37 +367,49 @@ body .ace_scrollbar-h {
 					id: path.replace(/\\/g, "/"),
 					text: e.target.files[0].name.replace(".werk", ""),
 					type: 'directory',
-					icon: 'js-tree-folder',
+					icon: 'jstree-folder',
 					children: []
 				};
 				
 				setupFileTree(obj.children, path);
 				
+				// create the tree view
 				$('#projectTree').jstree({
 					core: {
-						data: obj
+						data: obj,
+						check_callback: true
 					},
-					'plugins': ["contextmenu"],
-						'contextmenu': {
-						'select_node': false,
-						'items': reportMenu
-					}
+					sort: function(a, b){
+						// we are sorting on icon (folders vs files) and the case insensitive name
+						a1 = this.get_node(a);
+						b1 = this.get_node(b);
+						if (a1.icon == b1.icon){
+							return (a1.text.toLowerCase() > b1.text.toLowerCase()) ? 1 : -1;
+						} else {
+							return (a1.icon > b1.icon) ? -1 : 1;
+						}
+					},
+					contextmenu: {
+						select_node: false,
+						items: reportMenu
+					},
+					plugins: ["contextmenu", "sort"]
 				});
-				
-				// only allow right click menu on folders and not files (files have jstree-leaf class on them and folders don't but both are jstree-node)
-				$(".jstree-node:not(.jstree-leaf)").contextMenu(menu);
 			});
 			
 			// opening a file from the sidebar
 			$('#projectTree').on("changed.jstree", function (e, data) {
+				console.log("Changed");
+				
 				var file = data.selected[0]
+				console.log(file);
 				var stats = fs.statSync(file);
-					
+				console.log("Is file " + stats.isFile());
 				if(stats.isFile() && file.indexOf(".lua") != -1){
 					var fileContents = fs.readFileSync(file, "utf8");
 					var fileName = file.split('/').pop();
 					//console.log(fileContents);
-					//console.log(fileName);
+					console.log(fileName);
 					
 					aceEditors[file] = tabs.addEditorTab(file, fileName, fileContents);
 					//console.log(aceEditors);
