@@ -2,19 +2,14 @@
 	"shared_components": 
 	[
 		{
-			"name": "Input",
-			"path": "scripts/Sample/Input.lua",
+			"name": "MouseInput",
+			"path": "scripts/Sample/MouseInput.lua",
 			"values": 
 			[
 				{
 					"name": "doubleClickTime",
 					"value": "300",
 					"type": "int"
-				},
-				{
-					"name": "test",
-					"value": "nil",
-					"type": "nil"
 				}
 			],
 			"events": 
@@ -161,6 +156,7 @@
 		{
 			"name": "Player",
 			"type": "player",
+			"poststart": "",
 			"key_values": 
 			[
 				{
@@ -194,7 +190,7 @@
 					"name": "Controller"
 				},
 				{
-					"name": "Input"
+					"name": "MouseInput"
 				},
 				{
 					"name": "FpsCamera"
@@ -221,13 +217,13 @@
 					"destination_action": "StartSubtractingEnergy"
 				},
 				{
-					"source": "Input",
+					"source": "MouseInput",
 					"source_event": "Move",
 					"destination": "Controller",
 					"destination_action": "Move"
 				},
 				{
-					"source": "Input",
+					"source": "MouseInput",
 					"source_event": "Jump",
 					"destination": "Controller",
 					"destination_action": "Jump"
@@ -249,6 +245,7 @@
 		{
 			"name": "EnergyGui",
 			"type": "",
+			"poststart": "",
 			"key_values": 
 			[
 
@@ -379,6 +376,8 @@
 			[
 				{
 					"name": "",
+					"type": "",
+					"poststart": "",
 					"key_values": 
 					[
 						{

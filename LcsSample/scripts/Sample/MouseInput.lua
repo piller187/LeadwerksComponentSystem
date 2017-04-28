@@ -1,5 +1,5 @@
 --
--- User Input
+-- User MouseInput
 --
 -- Left mouse click 	-> Move
 -- Leff double click 	-> Jump
@@ -7,25 +7,25 @@
 
 import "Scripts/LCS/EventManager.lua"
 
-if Input ~= nil then return end
-Input = {}
+if MouseInput ~= nil then return end
+MouseInput = {}
 
 --
 -- Variables
 --
-Input.doubleClickTime = 300
-Input.clickTimeout = 0
-Input.entity = nil
+MouseInput.doubleClickTime = 300
+MouseInput.clickTimeout = 0
+MouseInput.entity = nil
 --
 -- Events
 --
-Input.onMove = nil
-Input.onJump = nil
+MouseInput.onMove = nil
+MouseInput.onJump = nil
 
 --
 -- Public
 --
-function Input:create(entity)
+function MouseInput:create(entity)
 	local obj = {}
 	setmetatable(obj, self)
 	self.__index = self
@@ -34,13 +34,13 @@ function Input:create(entity)
 	self.onMove=EventManager:create()
 	self.onJump=EventManager:create()
 
-	for k, v in pairs(Input) do
+	for k, v in pairs(MouseInput) do
 		obj[k] = v
 	end
 	return obj
 end
 
-function Input:update()
+function MouseInput:update()
 
 	local now = Time:Millisecs()
 	local hit = Window:GetCurrent():MouseHit(1)

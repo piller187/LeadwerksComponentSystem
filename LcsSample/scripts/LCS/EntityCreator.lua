@@ -73,6 +73,7 @@ function EntityCreator:processEntity(entity, jent, components, msgpool)
 	local script = entity.script
 	Debug:Assert( script ~= nil, "Failed to add script to " .. entname )
 
+	
 	-- values
 	if jent.values ~= nil and #jent.values > 0 then
 		for k,v in pairs(jent.values) do
@@ -112,6 +113,7 @@ function EntityCreator:processEntity(entity, jent, components, msgpool)
 					end
 				end
 				script.components[comp.name] = _G[comp.name]:create(entity)
+				script[comp.name] = script.components[comp.name] 
 			end
 		end
 	end
@@ -147,5 +149,11 @@ function EntityCreator:processEntity(entity, jent, components, msgpool)
 			
 			src[ev]:subscribe( dst, dst[ac])
 		end
+	end
+	
+		-- PostStart code
+	if jent.poststart ~= nil and jent.poststart ~= "" then
+		entity.script.PostStart = loadstring("return function(self) " .. jent.poststart .. " end")(entity.script)
+		entity.script.PostStart(entity.script)
 	end
 end

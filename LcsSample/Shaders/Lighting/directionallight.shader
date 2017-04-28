@@ -325,11 +325,19 @@ void main(void)
 				}
 			}
 #endif			
+			vec4 ambience = ambientlight;
+			
+			//Simple shading
+			if ((1 & materialflags)!=0) {
+				vec4 lightdir = vec4(-0.4,-0.45,0.5,1.0);
+				float intensity = abs(dot(normalize(normaldata.xyz),lightdir.xyz))*0.5+0.75;
+				ambience *= intensity;
+			}
 
 			//----------------------------------------------------------------------
 			//Final light calculation
 			//----------------------------------------------------------------------
-			sampleoutput = (diffuse * lightcolor + specular) * attenuation + emission + diffuse * ambientlight;
+			sampleoutput = (diffuse * lightcolor + specular) * attenuation + emission + diffuse * ambience;
 			//sampleoutput = (sampleoutput + stagecolor) / 2.0;
 		}
 		//Blend with red if selected

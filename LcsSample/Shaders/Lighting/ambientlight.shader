@@ -64,6 +64,7 @@ uniform vec4 ambientlight;
 uniform vec2 buffersize;
 uniform vec2 camerarange;
 uniform bool isbackbuffer;
+uniform mat4 cameramatrix;
 
 in vec2 vTexCoord;
 
@@ -113,9 +114,19 @@ void main(void)
 		{
 			samplediffuse = (samplediffuse + vec4(1.0,0.0,0.0,0.0))/2.0;
 		}
+		
+		//Simple shading
+		if ((1 & materialflags)!=0) {
+			vec4 lightdir = vec4(-0.4,-0.45,0.5,1.0);
+			float intensity = abs(dot(normalize(samplenormal.xyz),lightdir.xyz))*0.5+0.75;
+			samplediffuse *= intensity;
+		}
+		
 		fragData0 += samplediffuse + emission;
 	}
 	
+	//fragData0 = vec4(10.0f);
+
 	//----------------------------------------------------------------------
 	//Calculate lighting
 	//----------------------------------------------------------------------	
