@@ -2,117 +2,15 @@
 <html>
   <head>
     <title>LCP</title>
-	<style type="text/css" media="screen">
-.editor {
-  /** Setting height is also important, otherwise editor wont showup**/
-  height: 400px;
-}
-
-.ui-tabs .ui-tabs-panel {
-  padding: 0;
-}
-
-.ui-tabs-anchor:active,
-.ui-tabs-anchor:focus {
-  outline: none;
-}
-
-html,
-body {
-  height: 100%;
-}
-
-.header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 40px;
-  background-color: moccasin;
-}
-
-.wrapper {
-  position: absolute;
-  top: 41px;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background-color: fuchsia;
-}
-
-.inner-wrapper,
-.center.pane .inner {
-  display: table;
-  table-layout: fixed;
-  width: 100%;
-  height: 100%;
-}
-
-.pane {
-  display: table-cell;
-}
-
-.left.pane {
-  background-color: olivedrab;
-  width: 25%;
-}
-
-.center.pane {
-  background-color: lightblue;
-}
-
-.center.pane .inner .top,
-.center.pane .inner .bottom {
-  display: table-row;
-}
-
-.center.pane .inner .top {
-  background-color: lightcoral;
-}
-
-.center.pane .inner .bottom {
-  background-color: orange;
-  height: 100%;
-  width: 100%;
-}
-
-.right.pane {
-  background-color: #999;
-  width: 25%;
-}
-
-.top-content {
-  width: 100%;
-  height: 100%;
-}
-
-.inner-wrapper {
-  padding: 0;
-}
-}
-		
-		.editor {
-            height: 100%;
-			width: 100%;
-            display: block;
-            position:relative;
-	    }
-		
-body .ace_scrollbar-v {
-    overflow-y: auto;
-}
-
-body .ace_scrollbar-h {
-    overflow-x: auto;
-}
-	</style>
 	<link rel="stylesheet" type="text/css" href="libs/jquery-ui/jquery-ui.min.css" />
 	<link rel="stylesheet" type="text/css" href="libs/jquery-ui/jquery-ui.theme.min.css" />
 	<link rel="stylesheet" type="text/css" href="libs/jstree/themes/default/style.min.css" />
+	<link rel="stylesheet" type="text/css" href="site.css" />
 	
 	<script src="libs/jquery/jquery-3.2.1.min.js"></script>
 	<script src="libs/jquery-ui/jquery-ui.min.js"></script>
 	
+	<script src="libs/split-layout/splitLayout-min.js"></script>
 	<script src="libs/ace/ace.js"></script>
 	<script src="libs/jstree/jstree.js"></script>
 	<script src="libs/thenby/thenBy.min.js"></script>
@@ -120,19 +18,25 @@ body .ace_scrollbar-h {
   <body>
 	<input id="fileDialog" type="file" accept=".werk" style="display: none;">
 	
-	<div class="header">
-		Toolbar area
-	</div>
-	<div class="wrapper">
-		<div class="inner-wrapper">
-			<div class="left pane">
-				<div id="projectTree"></div>
-			</div>
-			<div class="center pane">
-				<div id="fileTabs">
-					<ul>
-					</ul>
+	<div id="container" class="container">
+		<div id="nav">
+			<div id="projectTabs">
+				<ul>
+					<li><a href="#tab-projectTree">Source Code</a></li>
+					<li><a href="#tab-gameObjectTree">Game Objects</a></li>
+				</ul>
+				<div id="tab-projectTree">
+					<div id="projectTree"></div>
 				</div>
+					<div id="tab-gameObjectTree">
+					<div id="gameObjectTree"></div>
+				</div>
+			</div>
+		</div>
+		<div id="content" class="content">
+			<div id="fileTabs">
+				<ul>
+				</ul>
 			</div>
 		</div>
 	</div>
@@ -146,10 +50,24 @@ body .ace_scrollbar-h {
 	<script>
 		var fs = require("fs");
 		var tabs = $("#fileTabs").tabs();
+		$("#projectTabs").tabs();
 		var aceEditors = {};
 		
 		var path = require('path');
 		var nwDir = path.dirname(process.execPath);
+		
+		var myLayout = new SplitLayout(500,200,{
+				"background-color":"#F0F0F0",
+				"padding":"0px",
+				"font-family":"Arial,sans-serif",
+				"font-size":"10pt"
+			},
+			{
+				"background-color":"#F0F0F0",
+				"padding":"0px",
+				"font-family":"Arial,sans-serif",
+				"font-size":"10pt"
+		});
 		
 		$(document).tooltip({
 			position: {
@@ -172,6 +90,7 @@ body .ace_scrollbar-h {
 			return true;
 		});
 		
+		// create a new item dialog button clicked
 		$("#btnCreateItem").click(function(e){
 			var fileName = $("#name").val();
 			var path = $(this).attr("path");
@@ -242,11 +161,19 @@ body .ace_scrollbar-h {
 					},
 					renameItem : {
 						"label" : "New Class",
-						"action" : function(obj) { alert(path); }
+						"action" : function(obj) {
+							$("#btnCreateItem").attr("path", path);
+							$("#btnCreateItem").attr("template", "GENERAL.lua");
+							$("#dlgCreateNewItem").dialog("open"); 
+						}
 					},
 					deleteItem : {
 						"label" : "New World Message",
-						"action" : function(obj) { alert(path); }
+						"action" : function(obj) {
+							$("#btnCreateItem").attr("path", path);
+							$("#btnCreateItem").attr("template", "MESSAGE.lua");
+							$("#dlgCreateNewItem").dialog("open"); 
+						}
 					}
 				}; 
 			}
@@ -303,15 +230,15 @@ body .ace_scrollbar-h {
 			}
 			
 			$('ul', this).append('<li title="' + name + '"><a href="#tab-' + name + '">' + tabName + '</a><span class="ui-icon ui-icon-close" role="presentation"></li>');
-			$(this).append("<div id='tab-" + name + "'><div id='editor-" + name + "' class='editor'></div></div>");
+			$(this).append("<div id='tab-" + name + "' class='editor-div'><div id='editor-" + name + "' class='editor'></div></div>");
 			$(this).tabs("refresh");
 			
 			var editor = ace.edit("editor-" + name);
-			editor.setTheme("ace/theme/monokai");
+			editor.setTheme("ace/theme/chrome");
 			editor.getSession().setMode("ace/mode/lua");
-			editor.setOptions({
+			/*editor.setOptions({
 				maxLines: Infinity
-			});
+			});*/
 			editor.getSession().setValue(contents);
 			
 			// activate the new tab

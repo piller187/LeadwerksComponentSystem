@@ -1,0 +1,83 @@
+
+.ui-tabs .ui-tabs-panel {
+	padding: 0 3px;
+}
+
+.ui-tabs-anchor:active,
+.ui-tabs-anchor:focus {
+	outline: none;
+}
+
+html,
+body {
+	height: 100%;
+}
+
+.header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 40px;
+	background-color: moccasin;
+}
+
+.editor {
+    height: 100%;
+	width: 100%;
+    display: block;
+	position: absolute;
+	padding: 0px;
+	top: 0px;
+	bottom: 0px;
+	right: 0px;
+}
+
+.editor, .ace_scrollbar-v {
+	overflow-y: auto;
+}
+
+.editor, .ace_scrollbar-h {
+	overflow-x: auto;
+}
+
+#tab-projectTree {
+	background-color: #F0F0F0;
+}
+
+#projectTabs {
+	background-color: #F0F0F0;
+	border: none;
+}
+
+#fileTabs {
+	background-color: #F0F0F0;
+	border: none;
+	width: 100%;
+	height: 100%;
+}
+
+.editor-div {
+	background-color: red;
+	padding: 0px;
+	height: 100%;
+	width: 100%;
+	top: 0px;
+	bottom: 0px;
+	right: 0px;
+}
+
+.content {
+	background-color: orange;
+	padding: 0px;
+	height: 100%;
+	width: 100%;
+	top: 0px;
+	bottom: 0px;
+	right: 0px;
+}
+
+.container {
+	width: 100%;
+	height: 100%;
+}
