@@ -1,0 +1,25 @@
+-------------------------------------------------------------------------------
+Notes for LCS
+-------------------------------------------------------------------------------
+
+--- PROBLEMS
+Saving edits
+	Does not work.
+	
+Mouse scrolling in code panel
+	Does not show last 3 line's when scrolled to end of document
+	
+Open Project
+	Does not open a new project if a project is already open. The current
+	project remains loaded
+
+--- WISHES
+Select theme
+	Dark / Light
+
+Select font
+	Font and font size
+	
+
+
+	
