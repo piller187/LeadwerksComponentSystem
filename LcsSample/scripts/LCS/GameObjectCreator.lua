@@ -18,14 +18,19 @@ GameObjectCreator = {}
 --
 -- Variables used
 --
+GameObjectCreator.peristant = {}
+GameObjectCreator.messages = {}
+GameObjectCreator.gameobjects = nil
 
 --
 -- Public methods
 --
-function GameObjectCreator:create()
+function GameObjectCreator:create(json)
 	local obj = {}
     setmetatable(obj, self)
     self.__index = self
+	
+	self.gameobjects = json:getGameObjects()
 	
 	for k, v in pairs(GameObjectCreator) do
 		obj[k] = v
@@ -34,37 +39,28 @@ function GameObjectCreator:create()
     return obj
 end
 
-function GameObjectCreator:process(entity, entitys, components, msgpool )
-	if entitys ~= nil and #entitys > 0 then
-		for k,v in pairs(entitys) do
-			if v.name == entity:GetKeyValue("name") then
-				self:processEntity(entity, v, components, msgpool)
-			end
-		end
-	end
-end
-
---
--- Internals
---
-function GameObjectCreator:processEntity(entity, gameobject, components, msgpool)
+function GameObjectCreator:process(entity)
 	
 	local entname = entity:GetKeyValue("name")
 	
-	-- add template script
-	entity:SetScript( "scripts/LCS/GAMEOBJECT.lua" )
+	for k,v in pairs(self.gameobjects) do
+		if v.name == entname then self:createObject(entity,v) end
+	end
+end
+	
+function GameObjectCreator:createObject(entity,gameobject)
+	
+	local entname = entity:GetKeyValue("name")
 
-	-- key values
-	if gameobject.key_values ~= nil and #gameobject.key_values > 0 then
-		for k,v in pairs(gameobject.key_values) do
-			if 	v.key ~= nil and v.key ~= "" 
-			and v.value ~= nil and v.value ~= ""
-			and v.type ~= nil and v.type ~= "" then
-				entity:SetKeyValue(v.key, jvalueToStr(v.type,v.value))
-			end
-		end
+	-- persistant?
+	if 	gameobject.peristant  
+	and self.peristant[gameobject.name] ~= nil then
+		entity = self.peristant[gameobject.name]
+		return
 	end
 	
+	-- add template script
+	entity:SetScript( "scripts/LCS/GAMEOBJECT.lua" )
 	local script = entity.script
 	Debug:Assert( script ~= nil, "Failed to add script to " .. entname )
 
@@ -81,18 +77,19 @@ function GameObjectCreator:processEntity(entity, gameobject, components, msgpool
 	end
 	
 	-- components list
-	if script.components == nil then
-		script.components = {}
-	end
+	script.components = {}
 	Debug:Assert( script.components ~= nil, "Failed to add components to script " .. entname )
 	
 	-- messages
 	if gameobject.messages ~= nil and #gameobject.messages >  0 then
 		for k,v in pairs(gameobject.messages) do
 			if v.name ~= nil and v.name ~= "" then
-				if msgpool[v.name] then
-					script.components[v.name] = msgpool[v.name]
+				if self.messages[v.name] == nil then
+					import(v.path)
+					self.messages[v.name] = _G[v.name]:create()
 				end
+				script.components[v.name] = self.messages[v.name]
+				script[v.name] = script.components[v.name] 
 			end
 		end
 	end
@@ -101,12 +98,7 @@ function GameObjectCreator:processEntity(entity, gameobject, components, msgpool
 	if gameobject.components ~= nil and #gameobject.components >  0 then
 		for k,comp in pairs(gameobject.components) do
 			if comp.name ~= nil and comp.name ~= "" then
-				for k,c in pairs(components) do
-					if c.name == comp.name then 
-						import(c.path)
-						break
-					end
-				end
+				import(comp.path)
 				script.components[comp.name] = _G[comp.name]:create(entity)
 				script[comp.name] = script.components[comp.name] 
 			end
@@ -138,9 +130,17 @@ function GameObjectCreator:processEntity(entity, gameobject, components, msgpool
 		end
 	end
 	
-		-- PostStart code
+	-- PostStart code
 	if gameobject.poststart ~= nil and gameobject.poststart ~= "" then
 		entity.script.PostStart = loadstring("return function(self) " .. gameobject.poststart .. " end")(entity.script)
 		entity.script.PostStart(entity.script)
+	end
+	
+	-- persistant?
+	if 	gameobject.peristant  
+	and self.peristant[gameobject.name] == nil then
+		self.peristant[gameobject.name] = entity
+		self.peristant[gameobject.name]:AddRef()
+		return
 	end
 end

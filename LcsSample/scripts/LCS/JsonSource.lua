@@ -52,54 +52,10 @@ function JsonSource:process(file)
 	self.jsonTable = JSON:decode(jstring)
 	stream:close()
 
-	Debug:Assert( 	self.jsonTable.maps ~= nil
-				or	#self.jsonTable.maps == 0, "maps are missing in " .. file )
-	
-	Debug:Assert( 	self.jsonTable.shared_gameobjects ~= nil
-				or  #self.jsonTable.shared_gameobjects == 0 , "shared game_objects are missing in " .. file )
-	
-	Debug:Assert( 	self.jsonTable.shared_components ~= nil
-				or	#self.jsonTable.shared_components == 0 , "shared components are missing in " .. file )
-	
-	Debug:Assert( 	self.jsonTable.shared_messages ~= nil
-				or	#self.jsonTable.shared_messages, "shared messages are missing in " .. file )
+	Debug:Assert( 	self.jsonTable.gameobjects ~= nil
+				or  #self.jsonTable.gameobjects == 0 , "game_objects are missing in " .. file )
 end
 
-function JsonSource:getSharedGameObjects()
-	return self.jsonTable.shared_gameobjects
-end
-
-function JsonSource:getSharedComponents()
-	return self.jsonTable.shared_components
-end
-
-function JsonSource:getSharedMessages()
-	return self.jsonTable.shared_messages
-end
-
-function JsonSource:getMapGameObjects(map)
-	for k,v in pairs(self.jsonTable.maps) do
-		if v.name == map then
-			return v.game_objects
-		end
-	end
-	return nil
-end
-
-function JsonSource:getMapComponents(map)
-	for k,v in pairs(self.jsonTable.maps) do
-		if v.name == map then
-			return v.components
-		end
-	end
-	return nil
-end
-
-function JsonSource:getMapMessages(map)
-	for k,v in pairs(self.jsonTable.maps) do
-		if v.name == map then
-			return v.messages
-		end
-	end
-	return nil
+function JsonSource:getGameObjects()
+	return self.jsonTable.gameobjects
 end

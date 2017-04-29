@@ -11,14 +11,10 @@
 -----------------------------------------------
 
 import "Scripts/LCS/JsonSource.lua"
-import "Scripts/LCS/SharedCreator.lua"
-import "Scripts/LCS/MapCreator.lua"
+import "Scripts/LCS/GameObjectCreator.lua"
 
 local jsonSource = nil
-local mapCreator = nil
-local sharedCreator = nil
-local currentMap = ""
-local currentJsonfile = ""
+local creator = nil
 
 --called when map is loaded
 function MapHook(entity,obj)
@@ -27,28 +23,18 @@ function MapHook(entity,obj)
 
 	-- first time setup
 	if jsonSource == nil then
-		FileSystem:CreateDir( "Scripts/LCS/temp" ) -- for temporay lua files
-
+		
 		jsonSource = JsonSource:create()
 		Debug:Assert( jsonSource ~= nil, "Failed to create JsonSource" )
 		jsonSource:process(currentJsonfile)
 
-		sharedCreator = SharedCreator:create(jsonSource)
-		Debug:Assert( sharedCreator ~= nil, "Failed to create SharedCreator" )
-		sharedCreator:process()
-
-		mapCreator = MapCreator:create(jsonSource,currentMap)
-		Debug:Assert( mapCreator ~= nil, "Failed to create MapCreator" )
-		mapCreator:process()
-		
+		creator = GameObjectCreator:create(jsonSource)
 	end
 
-	sharedCreator:processEntity(entity)
-	mapCreator:processEntity(entity)
+	creator:process(entity)
 end
 
 function LcsLoadMap( mapfile, jsonSource  )
-	currentMap = mapfile
 	currentJsonfile = jsonSource
 	local wasLoaded = Map:Load(mapfile, "MapHook")
 	Debug:Assert( wasLoaded, "Failed to load map " .. mapfile ) 

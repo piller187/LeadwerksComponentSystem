@@ -1,176 +1,23 @@
 {
-	"shared_components": 
-	[
-		{
-			"name": "MouseInput",
-			"path": "scripts/Sample/MouseInput.lua",
-			"values": 
-			[
-				{
-					"name": "doubleClickTime",
-					"value": "300",
-					"type": "int"
-				}
-			],
-			"events": 
-			[
-				{
-					"name": "Move",
-					"arg": ""
-				},
-				{
-					"name": "Jump",
-					"arg": ""
-				}
-			],
-			"actions": 
-			[
-				{
-					"name": "",
-					"arg": ""
-				}
-			]
-		},
-		{
-			"name": "FpsCamera",
-			"path": "scripts/Sample/FpsCamera.lua",
-			"values": 
-			[
-				{
-					"name": "rotationSpeed",
-					"value": "2",
-					"type": "int"
-				},
-				{
-					"name": "mouseSensitivity",
-					"value": "15",
-					"type": "int"
-				}
-			],
-			"events": 
-			[
-				{
-					"name": "Turn",
-					"arg": "angle"
-				}
-			],
-			"actions": 
-			[
-				{
-					"name": "Move",
-					"arg": "newPosition"
-				}
-			]
-		},
-		{
-			"name": "Controller",
-			"path": "Scripts/Sample/Controller.lua",
-			"values": 
-			[
-				{
-					"name": "moveSpeed",
-					"value": "4",
-					"type": "int"
-				},
-				{
-					"name": "jumpForce",
-					"value": "8",
-					"type": "int"
-				},
-				{
-					"name": "eyePos",
-					"value": "0.8",
-					"type": "float"
-				}
-			],
-			"events": 
-			[
-				{
-					"name": "StoppedMoving",
-					"arg": ""
-				},
-				{
-					"name": "StartedMoving",
-					"arg": ""
-				},
-				{
-					"name": "Moving",
-					"arg": "pos"
-				}
-			],
-			"actions": 
-			[
-				{
-					"name": "Move",
-					"arg": ""
-				},
-				{
-					"name": "Jump",
-					"arg": ""
-				},
-				{
-					"name": "Turn",
-					"arg": "angle"
-				},
-				{
-					"name": "Stop",
-					"arg": ""
-				}
-			]
-		},
-		{
-			"name": "EnergyMeter",
-			"path": "scripts/Sample/EnergyMeter.lua",
-			"values": 
-			[
-				{
-					"name": "addSpeed",
-					"value": "4",
-					"type": "int"
-				},
-				{
-					"name": "subtractSpeed",
-					"value": "6",
-					"type": "int"
-				}
-			],
-			"events": 
-			[
-				{
-					"name": "OutOfEnergy"
-				},
-				{
-					"name": "EnergyRecovered"
-				},
-				{
-					"name": "StartAddingEnergy"
-				},
-				{
-					"name": "StartSubtractingEnergy"
-				}
-			]
-		}
-	],
-	"shared_gameobjects": 
+	"gameobjects": 
 	[
 		{
 			"name": "Player",
 			"poststart": "",
-			"key_values": 
+			"persistant": "true",
+			"folder": "",
+			"values": 
 			[
+				{
+					"key": "jumpForce",
+					"value": "8",
+					"type": "int"
+				},
 				{
 					"key": "moveSpeed",
 					"value": "4",
 					"type": "int"
 				},
-				{
-					"key": "jumpForce",
-					"value": "8",
-					"type": "int"
-				}
-			],
-			"values": 
-			[
 				{
 					"name": "eyePos",
 					"value": "0.8",
@@ -180,19 +27,23 @@
 			"messages": 
 			[
 				{
-					"name": "EnergyMessage"
+					"name": "EnergyMessage",
+					"path": "Scripts/Sample/EnergyMessage.lua"
 				}
 			],
 			"components": 
 			[
 				{
-					"name": "Controller"
+					"name": "Controller",
+					"path": "Scripts/Sample/Controller.lua"
 				},
 				{
-					"name": "MouseInput"
+					"name": "MouseInput",
+					"path": "Scripts/Sample/MouseInput.lua"
 				},
 				{
-					"name": "FpsCamera"
+					"name": "FpsCamera",
+					"path": "Scripts/Sample/FpsCamera.lua"
 				}
 			],
 			"hookups": 
@@ -244,10 +95,8 @@
 		{
 			"name": "EnergyGui",
 			"poststart": "",
-			"key_values": 
-			[
-
-			],
+			"persistant": "",
+			"folder": "",
 			"values": 
 			[
 				{
@@ -274,13 +123,15 @@
 			"messages": 
 			[
 				{
-					"name": "EnergyMessage"
+					"name": "EnergyMessage",
+					"path": "Scripts/Sample/EnergyMessage.lua"
 				}
 			],
 			"components": 
 			[
 				{
-					"name": "EnergyMeter"
+					"name": "EnergyMeter",
+					"path": "Scripts/Sample/EnergyMeter.lua"
 				}
 			],
 			"hookups": 
@@ -308,123 +159,6 @@
 					"source_event": "StartSubtractingEnergy",
 					"destination": "EnergyMeter",
 					"destination_action": "StartSubtractingEnergy"
-				}
-			]
-		}
-	],
-	"shared_messages": 
-	[
-		{
-			"name": "EnergyMessage",
-			"events": 
-			[
-				{
-					"name": "StartAddingEnergy",
-					"arg": ""
-				},
-				{
-					"name": "StartSubtractingEnergy",
-					"arg": ""
-				},
-				{
-					"name": "OutOfEnergy",
-					"arg": ""
-				},
-				{
-					"name": "EnergyRecovered",
-					"arg": ""
-				}
-			]
-		}
-	],
-	"maps": 
-	[
-		{
-			"name": "start",
-			"components": 
-			[
-				{
-					"name": "",
-					"path": "",
-					"values": 
-					[
-						{
-							"name": "",
-							"value": "",
-							"type": ""
-						}
-					],
-					"events": 
-					[
-						{
-							"name": "",
-							"arg": ""
-						}
-					],
-					"actions": 
-					[
-						{
-							"name": "",
-							"arg": ""
-						}
-					]
-				}
-			],
-			"gameobjects": 
-			[
-				{
-					"name": "",
-					"poststart": "",
-					"key_values": 
-					[
-						{
-							"key": "",
-							"value": "",
-							"type": ""
-						}
-					],
-					"values": 
-					[
-						{
-							"name": "",
-							"value": "",
-							"type": ""
-						}
-					],
-					"messages": 
-					[
-						{
-							"name": ""
-						}
-					],
-					"components": 
-					[
-						{
-							"name": ""
-						}
-					],
-					"hookups": 
-					[
-						{
-							"source": "",
-							"source_event": "",
-							"destination": "",
-							"destination_action": "v"
-						}
-					]
-				}
-			],
-			"messages": 
-			[
-				{
-					"name": "",
-					"events": 
-					[
-						{
-							"name": "",
-							"arg": ""
-						}
-					]
 				}
 			]
 		}
