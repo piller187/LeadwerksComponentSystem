@@ -1,38 +1,11 @@
 {
-	"shared_components": 
-	[
-		{
-			"name": "",
-			"path": "",
-			"values": 
-			[
-				{
-					"name": "",
-					"value": "",
-					"type": ""
-				}
-			],
-			"events": 
-			[
-				{
-					"name": "",
-					"arg": ""
-				}
-			],
-			"actions": 
-			[
-				{
-					"name": "",
-					"arg": ""
-				}
-			]
-		}
-	],
-	"shared_gameobjects": 
+	"gameobjects": 
 	[
 		{
 			"name": "",
 			"poststart": "",
+			"persistant": "",
+			"folder": "",
 			"key_values": 
 			[
 				{
@@ -52,13 +25,15 @@
 			"messages": 
 			[
 				{
-					"name": ""
+					"name": "",
+					"path": ""
 				}
 			],
 			"components": 
 			[
 				{
-					"name": ""
+					"name": "",
+					"path": ""
 				}
 			],
 			"hookups": 
@@ -68,111 +43,6 @@
 					"source_event": "",
 					"destination": "",
 					"destination_action": ""
-				}
-			]
-		}
-	],
-	"shared_messages": 
-	[
-		{
-			"name": "",
-			"events": 
-			[
-				{
-					"name": "",
-					"arg": ""
-				}
-			]
-		}
-	],
-	"maps": 
-	[
-		{
-			"name": "",
-			"components": 
-			[
-				{
-					"name": "",
-					"path": "",
-					"values": 
-					[
-						{
-							"name": "",
-							"value": "",
-							"type": ""
-						}
-					],
-					"events": 
-					[
-						{
-							"name": "",
-							"arg": ""
-						}
-					],
-					"actions": 
-					[
-						{
-							"name": "",
-							"arg": ""
-						}s
-					]
-				}
-			],
-			"gameobjects": 
-			[
-				{
-					"name": "",
-					"poststart": "",
-					"key_values": 
-					[
-						{
-							"key": "",
-							"value": "",
-							"type": ""
-						}
-					],
-					"values": 
-					[
-						{
-							"name": "",
-							"value": "",
-							"type": ""
-						}
-					],
-					"messages": 
-					[
-						{
-							"name": ""
-						}
-					],
-					"components": 
-					[
-						{
-							"name": ""
-						}
-					],
-					"hookups": 
-					[
-						{
-							"source": "",
-							"source_event": "",
-							"destination": "",
-							"destination_action": ""
-						}
-					]
-				}
-			],
-			"messages": 
-			[
-				{
-					"name": "",
-					"events": 
-					[
-						{
-							"name": "",
-							"arg": ""
-						}
-					]
 				}
 			]
 		}
