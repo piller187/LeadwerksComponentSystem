@@ -151,11 +151,10 @@
 			]
 		}
 	],
-	"shared_entitys": 
+	"shared_gameobjects": 
 	[
 		{
 			"name": "Player",
-			"type": "player",
 			"poststart": "",
 			"key_values": 
 			[
@@ -244,7 +243,6 @@
 		},
 		{
 			"name": "EnergyGui",
-			"type": "",
 			"poststart": "",
 			"key_values": 
 			[
@@ -372,11 +370,10 @@
 					]
 				}
 			],
-			"entitys": 
+			"gameobjects": 
 			[
 				{
 					"name": "",
-					"type": "",
 					"poststart": "",
 					"key_values": 
 					[

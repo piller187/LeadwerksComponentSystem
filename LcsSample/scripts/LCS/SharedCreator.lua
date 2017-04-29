@@ -11,14 +11,14 @@
 -----------------------------------------------
 
 import "Scripts/LCS/JsonSource.lua"
-import "Scripts/LCS/EntityCreator.lua"
+import "Scripts/LCS/GameObjectCreator.lua"
 import "Scripts/LCS/ComponentCreator.lua"
 import "Scripts/LCS/MessageCreator.lua"
 
 if SharedCreator ~= nil then return end
 SharedCreator = {}
 
-SharedCreator.entCreator = nil
+SharedCreator.gameObjectCreator = nil
 SharedCreator.messageCreator = nil
 SharedCreator.componentCreator = nil
 SharedCreator.jsonSource = nil
@@ -30,8 +30,8 @@ function SharedCreator:create(jsonSource)
 	
 	self.jsonSource = jsonSource
 	
-	self.entCreator = EntityCreator:create()
-	Debug:Assert( self.entCreator ~= nil, "SharedCreator failed to create EntityCreator" )
+	self.gameObjectCreator = GameObjectCreator:create()
+	Debug:Assert( self.gameObjectCreator ~= nil, "SharedCreator failed to create GameObjectCreator" )
 	
 	self.messageCreator = MessageCreator:create()
 	Debug:Assert( self.messageCreator ~= nil, "SharedCreator failed to create MessageCreator" )
@@ -55,9 +55,9 @@ function SharedCreator:process()
 end
 
 function SharedCreator:processEntity(entity)
-	local entitys = self.jsonSource:getSharedEntitys()
-	if entitys ~= nil then
-		self.entCreator:process(entity, entitys,
+	local gameobjects = self.jsonSource:getSharedGameObjects()
+	if gameobjects ~= nil then
+		self.gameObjectCreator:process(entity, gameobjects,
 							self.jsonSource:getSharedComponents(), 
 							self.messageCreator:getMessagePool() )
 	end

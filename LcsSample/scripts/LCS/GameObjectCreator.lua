@@ -12,8 +12,8 @@
 
 import "Scripts/LCS/LcsUtils.lua"
 
-if EntityCreator ~= nil then return end
-EntityCreator = {}
+if GameObjectCreator ~= nil then return end
+GameObjectCreator = {}
 
 --
 -- Variables used
@@ -22,19 +22,19 @@ EntityCreator = {}
 --
 -- Public methods
 --
-function EntityCreator:create()
+function GameObjectCreator:create()
 	local obj = {}
     setmetatable(obj, self)
     self.__index = self
 	
-	for k, v in pairs(EntityCreator) do
+	for k, v in pairs(GameObjectCreator) do
 		obj[k] = v
 	end
 
     return obj
 end
 
-function EntityCreator:process(entity, entitys, components, msgpool )
+function GameObjectCreator:process(entity, entitys, components, msgpool )
 	if entitys ~= nil and #entitys > 0 then
 		for k,v in pairs(entitys) do
 			if v.name == entity:GetKeyValue("name") then
@@ -47,21 +47,16 @@ end
 --
 -- Internals
 --
-function EntityCreator:processEntity(entity, jent, components, msgpool)
+function GameObjectCreator:processEntity(entity, gameobject, components, msgpool)
 	
 	local entname = entity:GetKeyValue("name")
 	
 	-- add template script
-	entity:SetScript( "scripts/LCS/ENTITY.lua" )
+	entity:SetScript( "scripts/LCS/GAMEOBJECT.lua" )
 
-	-- type
-	if jent.type ~= nil and jent.type ~= "" then
-		entity:SetKeyValue("type",jent.type)
-	end
-	
 	-- key values
-	if jent.key_values ~= nil and #jent.key_values > 0 then
-		for k,v in pairs(jent.key_values) do
+	if gameobject.key_values ~= nil and #gameobject.key_values > 0 then
+		for k,v in pairs(gameobject.key_values) do
 			if 	v.key ~= nil and v.key ~= "" 
 			and v.value ~= nil and v.value ~= ""
 			and v.type ~= nil and v.type ~= "" then
@@ -75,8 +70,8 @@ function EntityCreator:processEntity(entity, jent, components, msgpool)
 
 	
 	-- values
-	if jent.values ~= nil and #jent.values > 0 then
-		for k,v in pairs(jent.values) do
+	if gameobject.values ~= nil and #gameobject.values > 0 then
+		for k,v in pairs(gameobject.values) do
 			if 	v.name ~= nil and v.name ~= "" 
 			and v.value ~= nil and v.value ~= "" 
 			and v.type ~= nil and v.type ~= "" then
@@ -92,8 +87,8 @@ function EntityCreator:processEntity(entity, jent, components, msgpool)
 	Debug:Assert( script.components ~= nil, "Failed to add components to script " .. entname )
 	
 	-- messages
-	if jent.messages ~= nil and #jent.messages >  0 then
-		for k,v in pairs(jent.messages) do
+	if gameobject.messages ~= nil and #gameobject.messages >  0 then
+		for k,v in pairs(gameobject.messages) do
 			if v.name ~= nil and v.name ~= "" then
 				if msgpool[v.name] then
 					script.components[v.name] = msgpool[v.name]
@@ -103,8 +98,8 @@ function EntityCreator:processEntity(entity, jent, components, msgpool)
 	end
 	
 	-- components
-	if jent.components ~= nil and #jent.components >  0 then
-		for k,comp in pairs(jent.components) do
+	if gameobject.components ~= nil and #gameobject.components >  0 then
+		for k,comp in pairs(gameobject.components) do
 			if comp.name ~= nil and comp.name ~= "" then
 				for k,c in pairs(components) do
 					if c.name == comp.name then 
@@ -119,27 +114,19 @@ function EntityCreator:processEntity(entity, jent, components, msgpool)
 	end
 	
 	-- hookups
-	if jent.hookups ~= nil and #jent.hookups > 0 then 
-		for k,hooks in pairs(jent.hookups) do
+	if gameobject.hookups ~= nil and #gameobject.hookups > 0 then 
+		for k,hooks in pairs(gameobject.hookups) do
 			Debug:Assert( hooks.source ~= nil and hooks.source ~= "", "'source' not defined in JSON hookups for " .. entname )
 			Debug:Assert( hooks.destination ~= nil and hooks.destination ~= "", "'destination' not defined in JSON hookups for " .. entname )
 			Debug:Assert( hooks.source_event ~= nil and hooks.source_event ~= "", "'source_event' not defined in JSON hookups for " .. entname )
 			Debug:Assert( hooks.destination_action ~= nil and hooks.destination_action ~= "", "'destination_action' not defined in JSON hookups for " .. entname )
+			Debug:Assert( hooks.source ~= "self", "source='self' is not supported in hookups")
+			Debug:Assert( hooks.destination  ~= "self", "destination='self' is not supported in hookups")
 			
-			local src = nil
-			if hooks.source == "self" then
-				src = entity.script
-			else
-				src = script.components[hooks.source]
-			end
+			local src = script.components[hooks.source]
 			Debug:Assert( src ~= nil, hooks.source .. " is missing as source hookup for " .. entname )
 			
-			local dst = nil
-			if hooks.destination == "self" then
-				dst = entity.script
-			else 
-				dst = script.components[hooks.destination]
-			end
+			local dst = script.components[hooks.destination]
 			Debug:Assert( dst ~= nil, hooks.destination .. " is missing as destination hookup for " .. entname )
 
 			local ev = "on"..hooks.source_event
@@ -152,8 +139,8 @@ function EntityCreator:processEntity(entity, jent, components, msgpool)
 	end
 	
 		-- PostStart code
-	if jent.poststart ~= nil and jent.poststart ~= "" then
-		entity.script.PostStart = loadstring("return function(self) " .. jent.poststart .. " end")(entity.script)
+	if gameobject.poststart ~= nil and gameobject.poststart ~= "" then
+		entity.script.PostStart = loadstring("return function(self) " .. gameobject.poststart .. " end")(entity.script)
 		entity.script.PostStart(entity.script)
 	end
 end

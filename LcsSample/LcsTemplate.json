@@ -28,11 +28,10 @@
 			]
 		}
 	],
-	"shared_entitys": 
+	"shared_gameobjects": 
 	[
 		{
 			"name": "",
-			"type": "",
 			"poststart": "",
 			"key_values": 
 			[
@@ -115,15 +114,14 @@
 						{
 							"name": "",
 							"arg": ""
-						}
+						}s
 					]
 				}
 			],
-			"entitys": 
+			"gameobjects": 
 			[
 				{
 					"name": "",
-					"type": "",
 					"poststart": "",
 					"key_values": 
 					[

@@ -11,14 +11,14 @@
 -----------------------------------------------
 
 import "Scripts/LCS/JsonSource.lua"
-import "Scripts/LCS/EntityCreator.lua"
+import "Scripts/LCS/GameObjectCreator.lua"
 import "Scripts/LCS/ComponentCreator.lua"
 import "Scripts/LCS/MessageCreator.lua"
 
 if MapCreator ~= nil then return end
 MapCreator = {}
 
-MapCreator.entCreator = nil
+MapCreator.gameObjectCreator = nil
 MapCreator.messageCreator = nil
 MapCreator.componentCreator = nil
 MapCreator.jsonSource = nil
@@ -31,8 +31,8 @@ function MapCreator:create(jsonSource,map)
 	self.jsonSource = jsonSource
 	self.map = FileSystem:StripAll(map)
 	
-	self.entCreator = EntityCreator:create()
-	Debug:Assert( self.entCreator ~= nil, "MapCreator failed to create EntityCreator" )
+	self.gameObjectCreator = GameObjectCreator:create()
+	Debug:Assert( self.gameObjectCreator ~= nil, "MapCreator failed to create GameObjectCreator" )
 	
 	self.messageCreator = MessageCreator:create()
 	Debug:Assert( self.messageCreator ~= nil, "MapCreator failed to create MessageCreator" )
@@ -56,9 +56,9 @@ function MapCreator:process()
 end
 
 function MapCreator:processEntity(entity)
-	local entitys = self.jsonSource:getMapEntitys(self.map)
-	if entitys ~= nil then
-		self.entCreator:process( entity, entitys,
+	local gameobjects = self.jsonSource:getMapGameObjects(self.map)
+	if gameobjects ~= nil then
+		self.gameObjectCreator:process( entity, gameobjects,
 						self.jsonSource:getMapComponents(self.map), 
 						self.messageCreator:getMessagePool() )
 	end
