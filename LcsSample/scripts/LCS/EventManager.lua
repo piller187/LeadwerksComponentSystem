@@ -50,7 +50,7 @@ end
 function EventManager:raise(args)
 	for i = 1, #self.handlers do
 		if self.handlers[i] ~= nil then
-			if if self.handlers[i].FilterFunction ~= nil then
+			if self.handlers[i].FilterFunction ~= nil then
 				if self.handlers[i].FilterFunction(args) then
 					self.handlers[i].Method(self.handlers[i].Owner, args)
 				end
