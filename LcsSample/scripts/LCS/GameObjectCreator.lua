@@ -60,7 +60,7 @@ function GameObjectCreator:createObject(entity,gameobject)
 	end
 	
 	-- add template script
-	entity:SetScript( "scripts/LCS/Templates/GAMEOBJECT.lua" )
+	entity:SetScript( "scripts/LCS/Templates/ENTITY.lua" )
 	local script = entity.script
 	Debug:Assert( script ~= nil, "Failed to add script to " .. entname )
 	
