@@ -52,6 +52,33 @@
 		var tabs = $("#fileTabs").tabs();
 		$("#projectTabs").tabs();
 		var aceEditors = {};
+		var werkFile = "";
+		
+		// the main lcsObject that mimics the export/import
+		var lcsObject = {
+			shared_components: [],
+			shared_entitys: [],
+			shared_messages: [],
+			maps: []
+		};
+		
+		// may not need this here but placing it here as a template
+		var mapObject = {
+			name: "start",
+			components: [
+				name: "",
+				path: "",
+				values: [
+					{ name: "", type: "", value: "" }
+				],
+				events: [
+					{ name: "", arg: "" }
+				],
+				actions: [
+					{ name: "", arg: "" }
+				]
+			]
+		}
 		
 		var path = require('path');
 		var nwDir = path.dirname(process.execPath);
@@ -147,7 +174,7 @@
 			
 			// if file then rename and other options, but if folder different options
 			if(stats.isFile()){
-				
+				// todo: rename
 			}else{
 				return {
 					createItem : {
@@ -177,6 +204,23 @@
 					}
 				}; 
 			}
+		}
+		
+		function gameObjectMenu(node){
+			return {
+				createGameObject : {
+					label : "New Game Object",
+					action : function(obj) { 
+						alert("New game object");
+					}/*,
+					"_class" : "class"*/
+				},
+				createFilter: {
+					label : "New Filter",
+					action : function(obj){
+					}
+				}
+			}; 
 		}
 		
 		function isTabOpen(name){
@@ -236,9 +280,9 @@
 			var editor = ace.edit("editor-" + name);
 			editor.setTheme("ace/theme/chrome");
 			editor.getSession().setMode("ace/mode/lua");
-			/*editor.setOptions({
-				maxLines: Infinity
-			});*/
+			editor.setOptions({
+				autoScrollEditorIntoView: true
+			});
 			editor.getSession().setValue(contents);
 			
 			// activate the new tab
@@ -290,6 +334,8 @@
 			$("#fileDialog").change(function(e){			
 				var path = e.target.files[0].path.replace(e.target.files[0].name, "");
 				
+				werkFile = e.target.files[0].name;
+				
 				var obj = {
 					id: path.replace(/\\/g, "/"),
 					text: e.target.files[0].name.replace(".werk", ""),
@@ -322,6 +368,36 @@
 					},
 					plugins: ["contextmenu", "sort"]
 				});
+				
+				// todo: look for e.target.files[0].name.replace(".werk", "") + ".lcp" file and if there load this tree else create the lcp file and load this tree view based on that empty lcp file
+				
+				// create or load the tree view the tree view
+				$('#gameObjectTree').jstree({
+					core: {
+						data: {
+							id: 'game_object_root',
+							text: e.target.files[0].name.replace(".werk", ""),
+							icon: 'jstree-folder',
+							children: []
+						},
+						check_callback: true
+					},
+					sort: function(a, b){
+						// we are sorting on icon (folders vs files) and the case insensitive name
+						a1 = this.get_node(a);
+						b1 = this.get_node(b);
+						if (a1.icon == b1.icon){
+							return (a1.text.toLowerCase() > b1.text.toLowerCase()) ? 1 : -1;
+						} else {
+							return (a1.icon > b1.icon) ? -1 : 1;
+						}
+					},
+					contextmenu: {
+						select_node: false,
+						items: gameObjectMenu
+					},
+					plugins: ["contextmenu", "sort"]
+				});
 			});
 			
 			// opening a file from the sidebar
@@ -335,11 +411,8 @@
 				if(stats.isFile() && file.indexOf(".lua") != -1){
 					var fileContents = fs.readFileSync(file, "utf8");
 					var fileName = file.split('/').pop();
-					//console.log(fileContents);
-					console.log(fileName);
 					
 					aceEditors[file] = tabs.addEditorTab(file, fileName, fileContents);
-					//console.log(aceEditors);
 				}
 			});
 		});

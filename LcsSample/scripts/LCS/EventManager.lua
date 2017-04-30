@@ -29,12 +29,12 @@ function EventManager:create()
 end
 
 -- returns an ID that can be use for unsubsribing
-function EventManager:subscribe(owner, method)
+function EventManager:subscribe(owner, method, filterFunction)
 	if method == nil then System:Print( debug.traceback() ) end
 	Debug:Assert( owner ~= nil, "Calling EventManager:subscribe with Null-Owner" )
 	Debug:Assert( method ~= nil, "Calling EventManager:subscribe with Null-Method")
 	EventManagerID = EventManagerID+1
-	table.insert(self.handlers, { Id = EventManagerID, Owner = owner, Method = method })
+	table.insert(self.handlers, { Id = EventManagerID, Owner = owner, Method = method, FilterFunction = filterFunction })
 	return EventManagerID
 end
 
@@ -50,7 +50,13 @@ end
 function EventManager:raise(args)
 	for i = 1, #self.handlers do
 		if self.handlers[i] ~= nil then
-			self.handlers[i].Method(self.handlers[i].Owner, args)
+			if if self.handlers[i].FilterFunction ~= nil then
+				if self.handlers[i].FilterFunction(args) then
+					self.handlers[i].Method(self.handlers[i].Owner, args)
+				end
+			else
+				self.handlers[i].Method(self.handlers[i].Owner, args)
+			end
 		end
 	end
 end
