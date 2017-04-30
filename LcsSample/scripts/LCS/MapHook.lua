@@ -15,27 +15,38 @@ import "Scripts/LCS/GameObjectCreator.lua"
 
 local jsonSource = nil
 local creator = nil
+local currentJsonfile = ""
 
---called when map is loaded
-function MapHook(entity,obj)
-	
-	Debug:Assert( currentMap ~= "", "Use LcsLoadMap(mapfile) to load maps. !!!NOT!!! Map:Load(mapfile)" )
-
-	-- first time setup
-	if jsonSource == nil then
-		
-		jsonSource = JsonSource:create()
-		Debug:Assert( jsonSource ~= nil, "Failed to create JsonSource" )
-		jsonSource:process(currentJsonfile)
-
-		creator = GameObjectCreator:create(jsonSource)
-	end
-
-	creator:process(entity)
-end
-
+------------------------------------------------------
+-- CALL THIS INSTEAD OF CALLING 'Map:Load' DIRECTLY --
+------------------------------------------------------
 function LcsLoadMap( mapfile, jsonSource  )
 	currentJsonfile = jsonSource
 	local wasLoaded = Map:Load(mapfile, "MapHook")
 	Debug:Assert( wasLoaded, "Failed to load map " .. mapfile ) 
+end
+
+--called when map is loaded
+function MapHook(entity,obj)
+	
+	Debug:Assert( currentJsonfile ~= "", "Use LcsLoadMap(mapfile,jsonSource) to load maps. !!!NOT!!! Map:Load(mapfile)" )
+
+	-- first time setup
+	if jsonSource == nil then
+		
+		-- create and decode the json file
+		jsonSource = JsonSource:create()
+		Debug:Assert( jsonSource ~= nil, "Failed to create JsonSource" )
+		
+		jsonSource:process(currentJsonfile)
+		
+		-- initialize the game creation object
+		creator = GameObjectCreator:create(jsonSource)
+	end
+
+	-- process this entity
+	-- must have at least a name!
+	if entity:GetKeyValue("name") ~= "" then
+		creator:process(entity)
+	end
 end

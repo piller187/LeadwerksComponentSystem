@@ -24,7 +24,8 @@ JSON = nil -- GLOBAL JSON
 --
 -- Public methods
 --
--- source:string: path to JSON source file
+
+-- Initalizes the Global JSON object 
 function JsonSource:create()
 	local obj = {}
     setmetatable(obj, self)
@@ -45,11 +46,16 @@ end
 function JsonSource:process(file)
 	
 	local stream = io.open(file, "r")
-	
 	Debug:Assert( stream ~= nil, "JsonSource failed to read " .. file )
+	--
+
 	local jstring = stream:read("*a")
 	Debug:Assert( stream ~= nil, "JsonSource " .. file .. " was empty" )
+
 	self.jsonTable = JSON:decode(jstring)
+	Debug:Assert( self.jsonTable ~= nil, "Failed to create jsonTable while decoding " .. file )
+
+	--
 	stream:close()
 
 	Debug:Assert( 	self.jsonTable.gameobjects ~= nil
