@@ -29,6 +29,7 @@ end
 
 function NAME:attach(entity)
 	-- Init entity related things here
+	self.entity = entity
 end
 
 function NAME:update()
