@@ -4,7 +4,7 @@
 		{
 			"name": "Player",
 			"poststart": "",
-			"persistant": "true",
+			"persistent": "true",
 			"folder": "",
 			"values": 
 			[
@@ -95,7 +95,7 @@
 		{
 			"name": "EnergyGui",
 			"poststart": "",
-			"persistant": "",
+			"persistent": "true",
 			"folder": "",
 			"values": 
 			[

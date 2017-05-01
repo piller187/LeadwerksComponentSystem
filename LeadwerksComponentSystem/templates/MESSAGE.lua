@@ -8,21 +8,14 @@ if NAME ~= nil then return end
 NAME = {}
 
 ---
---- Events
----
-
-NAME.onEvent = nil
-
----
 --- Public
 ---
-
-function NAME:create()
+function NAME:init()
 	local obj = {}
-	setmetatable(obj, self)
 	self.__index = self
 
-	self.onEvent=EventManager:create()
+	-- create events here 
+	-- self.onEvent=EventManager:create()
 
 	for k, v in pairs(NAME) do
 		obj[k] = v
@@ -34,6 +27,8 @@ end
 --- Actions
 ---
 
+--[[
 function NAME:doEvent()
 	self.onEvent:raise()
 end
+]]

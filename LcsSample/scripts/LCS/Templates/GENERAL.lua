@@ -17,7 +17,6 @@ NAME.value = 0
 
 function NAME:create()
 	local obj = {}
-	setmetatable(obj, self)
 	self.__index = self
 
 	for k, v in pairs(NAME) do

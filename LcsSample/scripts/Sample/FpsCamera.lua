@@ -6,43 +6,35 @@ if FpsCamera ~= nil then return end
 FpsCamera = {}
 
 --
--- Variables
---
-FpsCamera.rotationSpeed = 2
-FpsCamera.mouseDifference = Vec2(0,0)
-FpsCamera.currentMousePos = Vec3(0,0)
-FpsCamera.camRotation = Vec3(0,0)
-FpsCamera.mouseSensitivity = 15
-FpsCamera.limitUpDown = Vec2(-60,80)
-FpsCamera.camera = nil
-FpsCamera.entity = nil
-
---
--- Events
---
-FpsCamera.onTurn = nil
-
---
 -- Public
 --
-function FpsCamera:create(entity)
+function FpsCamera:init()
 	local obj = {}
 	setmetatable(obj, self)
 	self.__index = self
-	self.entity = entity
+
+	self.rotationSpeed = 2
+	self.mouseDifference = Vec2(0,0)
+	self.currentMousePos = Vec3(0,0)
+	self.camRotation = Vec3(0,0)
+	self.mouseSensitivity = 15
+	self.limitUpDown = Vec2(-60,80)
 	
 	self.onTurn=EventManager:create()
-	
-	self.camera = Camera:Create()
-	self.camera:SetFOV(60)
-	self.camera:SetRange(0.1, 300)
-	self.camera:SetZoom(1.0)
-	self.camera:SetPosition(Vec3(0))
 	
 	for k, v in pairs(FpsCamera) do
 		obj[k] = v
 	end
 	return obj
+end
+
+function FpsCamera:attach(entity)
+	self.entity = entity
+	self.camera = Camera:Create()
+	self.camera:SetFOV(60)
+	self.camera:SetRange(0.1, 300)
+	self.camera:SetZoom(1.0)
+	self.camera:SetPosition(Vec3(0))
 end
 
 function FpsCamera:update()

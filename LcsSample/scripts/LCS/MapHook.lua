@@ -11,7 +11,7 @@
 -----------------------------------------------
 
 import "Scripts/LCS/JsonSource.lua"
-import "Scripts/LCS/GameObjectCreator.lua"
+import "Scripts/LCS/EntityCreator.lua"
 
 local jsonSource = nil
 local creator = nil
@@ -41,7 +41,7 @@ function MapHook(entity,obj)
 		jsonSource:process(currentJsonfile)
 		
 		-- initialize the game creation object
-		creator = GameObjectCreator:create(jsonSource)
+		creator = EntityCreator:create(jsonSource)
 	end
 
 	-- process this entity

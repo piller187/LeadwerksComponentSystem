@@ -7,52 +7,43 @@ if EnergyMeter ~= nil then return end
 EnergyMeter = {}
 
 --
--- Variables
---
-EnergyMeter.addSpeed = 4
-EnergyMeter.subtractSpeed = 6
-EnergyMeter.entity = nil
-EnergyMeter.energy = 50
-EnergyMeter.maxEnergy = 100
-EnergyMeter.width = 16
-EnergyMeter.xpos = 4
-EnergyMeter.valueSize = 5
-
-EnergyMeter.autoTime = 3
-EnergyMeter.autoTimeout = 0
-EnergyMeter.autoval = 0
-EnergyMeter.sec = 0
-EnergyMeter.zeroSent = false
-EnergyMeter.entity = nil
-
---
--- Events
---
-EnergyMeter.onOutOfEnergy = nil
-EnergyMeter.onEnergyRecovered = nil
-
---
 -- Public
 --
-function EnergyMeter:create(entity)
+function EnergyMeter:init()
 	local obj = {}
-	setmetatable(obj, self)
 	self.__index = self
-	self.entity = entity
-	
+
+	self.addSpeed = 4
+	self.subtractSpeed = 6
+	self.energy = 50
+	self.maxEnergy = 100
+	self.width = 16
+	self.xpos = 4
+	self.valueSize = 5
+
+	self.autoTime = 3
+	self.autoTimeout = 0
+	self.autoval = 0
+	self.sec = 0
+	self.zeroSent = false
+
 	self.onOutOfEnergy=EventManager:create()
 	self.onEnergyRecovered=EventManager:create()
 
 	self.autoTimeout = self.autoTime
-	self.sec = Time:Millisecs() + 1000	
-	
-	self:doStartAddingEnergy()
 	
 	for k, v in pairs(EnergyMeter) do
 		obj[k] = v
 	end
 	return obj
 end
+
+function EnergyMeter:attach(entity)
+	self.sec = Time:Millisecs() + 1000	
+	self.entity = entity
+	self:doStartAddingEnergy()
+end
+
 
 function EnergyMeter:update()
 	local now = Time:Millisecs()

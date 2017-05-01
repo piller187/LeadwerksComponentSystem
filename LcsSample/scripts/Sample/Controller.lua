@@ -8,56 +8,45 @@ if Controller ~= nil then return end
 Controller = {}
 
 --
--- Variables
---
-Controller.move = 0
-Controller.jump = 0
-Controller.angle = 0
-Controller.entity = nil
-Controller.lastPos = Vec3(0)
-Controller.eyePos = 0.8
-Controller.moveTime = 4000
-Controller.moveTimeout  = 0
-Controller.entity = nil
-
-Controller.moveSpeed = 4
-Controller.jumpForce = 8
-
---
--- Events
--- 
-Controller.onMoving = nil
-Controller.onStartedMoving = nil
-Controller.onStoppedMoving = nil
-
---
 -- Public
 --
-function Controller:create(entity)
+function Controller:init()
 	local obj = {}
-	setmetatable(obj, self)
 	self.__index = self
-	self.entity = entity
+	
+	self.move = 0
+	self.jump = 0
+	self.angle = 0
+	self.lastPos = Vec3(0)
+	self.eyePos = 0.8
+	self.moveTime = 4000
+	self.moveTimeout  = 0
+	
+	self.moveSpeed = 4
+	self.jumpForce = 8
 
-	local mat = Material:Load("Materials/Effects/Invisible.mat")
-	self.entity:SetMaterial(mat)
-	mat:Release()
-
-	local name = entity:GetKeyValue("name")
-	local val = entity:GetKeyValue("eyePos")
 	self.eyepos = tonumber(val)
 	
 	self.onMoving=EventManager:create()
 	self.onStoppedMoving=EventManager:create()
 	self.onStartedMoving=EventManager:create()
 
-	self:doStop()
-	
 	for k, v in pairs(Controller) do
 		obj[k] = v
 	end
 	return obj
 end
+
+function Controller:attach(entity)
+	self.entity = entity
+
+	local mat = Material:Load("Materials/Effects/Invisible.mat")
+	self.entity:SetMaterial(mat)
+	mat:Release()
+	
+	self:doStop()
+end
+
 
 function Controller:update()
 	if 	self.moveTimeout > 0 

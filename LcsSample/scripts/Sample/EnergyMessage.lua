@@ -2,12 +2,7 @@ import "Scripts/LCS/EventManager.lua"
 if EnergyMessage ~= nil then return end
 EnergyMessage = {}
 
-EnergyMessage.onStartAddingEnergy = nil
-EnergyMessage.onStartSubtractingEnergy = nil
-EnergyMessage.onOutOfEnergy = nil
-EnergyMessage.onEnergyRecovered = nil
-
-function EnergyMessage:create()
+function EnergyMessage:init()
 	local obj = {}
 	setmetatable(obj, self)
 	self.__index = self
@@ -38,4 +33,3 @@ end
 function EnergyMessage:doEnergyRecovered()
 	self.onEnergyRecovered:raise()
 end
-

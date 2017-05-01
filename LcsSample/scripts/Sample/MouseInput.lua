@@ -11,26 +11,16 @@ if MouseInput ~= nil then return end
 MouseInput = {}
 
 --
--- Variables
---
-MouseInput.doubleClickTime = 300
-MouseInput.clickTimeout = 0
-MouseInput.entity = nil
---
--- Events
---
-MouseInput.onMove = nil
-MouseInput.onJump = nil
-
---
 -- Public
 --
-function MouseInput:create(entity)
+function MouseInput:init()
 	local obj = {}
 	setmetatable(obj, self)
 	self.__index = self
-	self.entity = entity
 	
+	self.doubleClickTime = 300
+	self.clickTimeout = 0
+
 	self.onMove=EventManager:create()
 	self.onJump=EventManager:create()
 
@@ -38,6 +28,10 @@ function MouseInput:create(entity)
 		obj[k] = v
 	end
 	return obj
+end
+
+function MouseInput:attach(entity)
+	self.entity = entity
 end
 
 function MouseInput:update()

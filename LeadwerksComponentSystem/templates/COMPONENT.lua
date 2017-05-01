@@ -8,34 +8,27 @@ if NAME ~= nil then return end
 NAME = {}
 
 ---
---- Values
----
-
-NAME.value = 0
-
----
---- Events
----
-
-NAME.onEvent = nil
-
----
 --- Public
 ---
 
-function NAME:create(owner)
+function NAME:init()
 	local obj = {}
 	setmetatable(obj, self)
 	self.__index = self
 
-	self.owner = owner
-
-	self.onEvent=EventManager:create()
+	-- Init non-entity related things here
+	
+	-- Create events
+	--self.onEvent=EventManager:create()
 
 	for k, v in pairs(NAME) do
 		obj[k] = v
 	end
 	return obj
+end
+
+function NAME:attach(entity)
+	-- Init entity related things here
 end
 
 function NAME:update()
