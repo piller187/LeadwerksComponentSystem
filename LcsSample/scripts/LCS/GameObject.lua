@@ -55,9 +55,6 @@ function GameObject:createFromJson(entity, gameobject)
 	local entname = self.entity:GetKeyValue("name")
 	local script = self.entity.script
 	
-	-- persisten flag
-	script.peristent = strToBool(gameobject.persistent)
-	
 	-- add values
 	if gameobject.values ~= nil and #gameobject.values > 0 then
 
@@ -139,7 +136,10 @@ function GameObject:createFromJson(entity, gameobject)
 			-- create hook
 			src[ev]:subscribe( dst, dst[ac])
 		end
+
 	end
+		-- persistent flag
+	self.entity.script.gameobject.persistent = strToBool(gameobject.persistent)
 	
 	-- PostStart code
 	if	gameobject.poststart ~= nil 

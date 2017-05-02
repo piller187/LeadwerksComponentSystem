@@ -95,7 +95,7 @@
 		{
 			"name": "EnergyGui",
 			"poststart": "",
-			"persistent": "true",
+			"persistent": "false",
 			"folder": "",
 			"values": 
 			[

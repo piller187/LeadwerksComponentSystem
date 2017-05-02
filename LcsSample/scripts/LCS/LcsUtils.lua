@@ -12,7 +12,7 @@
 
 -- strings to leadwerks
 function strToBool(s)
-	if s == "true" or s ~= "0" then return true 
+	if s == "true" or s == "1" then return true 
 	else return false end
 end
 

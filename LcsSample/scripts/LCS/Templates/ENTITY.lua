@@ -63,7 +63,8 @@ function Script:Detach()
 	for k,v in pairs(self.gameobject.components) do
 		if v.detach ~= nil then v:detach() end
 	end
-	if self.gameobject.persistent then
+	if not self.gameobject.persistent then
+		local name = self.entity:GetKeyValue("name")
 		self.gameobject = nil
 	end
 end
