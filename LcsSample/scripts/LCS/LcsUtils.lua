@@ -95,13 +95,13 @@ function jvalueToStr(vtype,val)
 end
 
 function jvalueToValue(vtype,val)
-	if vtype == "bool" then return strToBool(jvalueToStr(val)) 
-	elseif vtype == "int" then return strToNumber(jvalueToStr(val))
+	if vtype == "bool" then return strToBool(jvalueToStr(vtype,val)) 
+	elseif vtype == "int" then return strToNumber(jvalueToStr(vtype,val))
 	elseif vtype == "nil" then return nil
-	elseif vtype == "float" then return strToNumber(jvalueToStr(val))
-	elseif vtype == "vec2" then return strToVec2(jvalueToStr(val))
-	elseif vtype == "vec3" then return strToVec3(jvalueToStr(val))
-	elseif vtype == "vec4" then return strToVec4(jvalueToStr(val))
+	elseif vtype == "float" then return strToNumber(jvalueToStr(vtype,val))
+	elseif vtype == "vec2" then return strToVec2(jvalueToStr(vtype,val))
+	elseif vtype == "vec3" then return strToVec3(jvalueToStr(vtype,val))
+	elseif vtype == "vec4" then return strToVec4(jvalueToStr(vtype,val))
 	elseif vtype == "string" then return val
 	else return nil end
 end
