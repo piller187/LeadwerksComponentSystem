@@ -21,17 +21,17 @@ function strToNumber(s)
 end
 		
 function strToVec2(s)
-	local x, y = string.match(s,"(.*),(.*)")
+	local x, y = string.match(s,"Vec2%((%d*.%d*),(%d*.%d*)%)")
 	return Vec2(x,y)
 end
 
 function strToVec3(s)
-	local x, y, z = string.match(s,"(.*),(.*),(.*)")
+	local x, y, z = string.match(s,"Vec3%((%d*.%d*),(%d*.%d*),(%d*.%d*)%)")
 	return Vec3(x,y,z)
 end
 
 function strToVec4(s)
-	local x, y, z, w = string.match(s,"(.*),(.*),(.*),(.*)")
+	local x, y, z, w = string.match(s,"Vec4%((%d*.%d*),(%d*.%d*),(%d*.%d*),(%d*.%d*)%)")
 	return Vec4(x,y,z,w)
 end
 

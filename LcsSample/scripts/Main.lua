@@ -28,25 +28,27 @@ world:SetLightQuality((System:GetProperty("lightquality","1")))
 
 --Maps
 local mapfiles = {
-	"Maps/start.map",
-	"Maps/second.map" }
-local map = 1
+	{ Map="Maps/start.map", JSON="LcsSample.json" },
+	{ Map="Maps/second.map", JSON="LcsSample.json" },
+	{ Map="Maps/messages.map", JSON="LCS.json" } }
+local map = 3
 
-LcsLoadMap(mapfiles[map],"LcsSample.json")
+LcsLoadMap(mapfiles[map].Map,mapfiles[map].JSON)
 
 showstats = false
 while	not window:KeyDown(Key.Escape) 
 		and not window:Closed() do
 	
 	--Handle map change
-	if window:KeyHit(Key.M) then
+	if map ~= 3 and window:KeyHit(Key.M) then
 		
 		Time:Pause()
 		System:GCSuspend()		
 		world:Clear()
 
-		if map == 1 then map = 2 else map = 1 end
-		LcsLoadMap(mapfiles[map],"LcsSample.json") 
+		map = map + 1
+		if map == 4 then  map = 1 end
+		LcsLoadMap(mapfiles[map].Map,mapfiles[map].JSON) 
 		
 		System:GCResume()
 		Time:Resume()
@@ -60,10 +62,12 @@ while	not window:KeyDown(Key.Escape)
 	context:SetBlendMode(Blend.Alpha)
 	
 	context:SetColor(Vec4(0,0,0,1))
-	local text = "Press M to switch map"
-	context:DrawText( text, 
-		(context:GetWidth()-font:GetTextWidth(text))/2,
-		context:GetHeight()-font:GetHeight()-4 )
+	if map ~= 3 then
+		local text = "Press M to switch map"
+		context:DrawText( text, 
+			(context:GetWidth()-font:GetTextWidth(text))/2,
+			context:GetHeight()-font:GetHeight()-4 )
+	end
 	
 	if (window:KeyHit(Key.F11)) then showstats = not showstats end
 	if showstats then

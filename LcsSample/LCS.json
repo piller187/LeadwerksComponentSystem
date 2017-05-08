@@ -1,0 +1,345 @@
+{
+	"gameobjects": 
+	[
+		{
+			"name": "Player",
+			"poststart": "self.entity:SetShadowMode(0)
+self.entity:SetCollisionType(Collision.Character)
+self.entity:SetPickMode(0)
+local mat = Material:Load('Materials/Effects/Invisible.mat')
+self.entity:SetMaterial(mat)
+mat:Release()",
+			"persistent": "true",
+			"folder": "",
+			"values": 
+			[
+				{
+					"name": "moveSpeed",
+					"value": "2",
+					"type": "float"
+				},
+				{
+					"name": "rotationSpeed",
+					"value": "15",
+					"type": "float"
+				},
+				{
+					"name": "maxPower",
+					"value": "10",
+					"type": "int"
+				},
+				{
+					"name": "eyePos",
+					"value": "1.6",
+					"type": "float"
+				},
+				{
+					"name": "moveTime",
+					"value": "4",
+					"type": "int"
+				},
+				{
+					"name": "mouseSense",
+					"value": "15",
+					"type": "int"
+				},
+				{
+					"name": "maxPower",
+					"value": "10",
+					"type": "int"
+				},
+				{
+					"name": "verticalCamLimit",
+					"value": "-60,80",
+					"type": "vec2"
+				},
+				{
+					"name": "cursor",
+					"value": "Materials/User/ring512.tex",
+					"type": "string"
+				}
+			],
+			"messages": 
+			[
+				{
+					"name": "PowerMeterMessage",
+					"path": "Scripts/User/Messages/PowerMeterMessage.lua"
+				}
+			],
+			"components": 
+			[
+				{
+					"name": "Cursor",
+					"path": "Scripts/User/Components/Cursor.lua"
+				},
+				{
+					"name": "Input",
+					"path": "Scripts/User/Components/Input.lua"
+				},
+				{
+					"name": "Cam",
+					"path": "Scripts/User/Components/Cam.lua"
+				},
+				{
+					"name": "Controller",
+					"path": "Scripts/User/Components/Controller.lua"
+				},
+				{
+					"name": "Teams",
+					"path": "Scripts/User/Components/Teams.lua"
+				}
+			],
+			"hookups": 
+			[
+				{
+					"source": "Teams",
+					"source_event": "PowerChange",
+					"destination": "PowerMeterMessage",
+					"destination_action": "Set",
+					"message": "",
+					"func": ""
+				},
+				{
+					"source": "Input",
+					"source_event": "Stop",
+					"destination": "Controller",
+					"destination_action": "Stop",
+					"message": "",
+					"func": ""
+				},
+				{
+					"source": "Input",
+					"source_event": "Forward",
+					"destination": "Controller",
+					"destination_action": "MoveForward",
+					"message": "",
+					"func": ""
+				},
+				{
+					"source": "Input",
+					"source_event": "Back",
+					"destination": "Controller",
+					"destination_action": "MoveBackwards",
+					"message": "",
+					"func": ""
+				},
+				{
+					"source": "Input",
+					"source_event": "Click",
+					"destination": "Cam",
+					"destination_action": "Pick",
+					"message": "",
+					"func": ""
+				},
+				{
+					"source": "Controller",
+					"source_event": "Move",
+					"destination": "Cam",
+					"destination_action": "Move",
+					"message": "",
+					"func": ""
+				},
+				{
+					"source": "Cam",
+					"source_event": "Turn",
+					"destination": "Controller",
+					"destination_action": "Turn",
+					"message": "",
+					"func": ""
+				},
+				{
+					"source": "self",
+					"source_event": "Message",
+					"destination": "Teams",
+					"destination_action": "AddRedPower",
+					"message": "add.red.power",
+					"func": "return function(args) if args.Message == 'add.red.power' then return true else return false end end"
+				},
+				{
+					"source": "self",
+					"source_event": "Message",
+					"destination": "Teams",
+					"destination_action": "AddBluePower",
+					"message": "add.blue.power",
+					"func": "return function(args) if args.Message == 'add.blue.power' then return true else return false end end"
+				}
+			]
+		},
+		{
+			"name": "BluePower",
+			"poststart": "",
+			"persistent": "false",
+			"folder": "",
+			"values": 
+			[
+				{
+					"name": "power",
+					"value": "2",
+					"type": "int"
+				}
+			],
+			"messages": 
+			[
+
+			],
+			"components": 
+			[
+				{
+					"name": "BluePower",
+					"path": "Scripts/User/Components/BluePower.lua"
+				}
+			],
+			"hookups": 
+			[
+
+			]
+		},
+		{
+			"name": "RedPower",
+			"poststart": "",
+			"persistent": "false",
+			"folder": "",
+			"values": 
+			[
+				{
+					"name": "power",
+					"value": "2",
+					"type": "int"
+				}
+			],
+			"messages": 
+			[
+
+			],
+			"components": 
+			[
+				{
+					"name": "RedPower",
+					"path": "Scripts/User/Components/RedPower.lua"
+				}
+			],
+			"hookups": 
+			[
+
+			]
+		},
+		{
+			"name": "RedMeter",
+			"poststart": "",
+			"persistent": "true",
+			"folder": "",
+			"values": 
+			[
+				{
+					"name": "xpos",
+					"value": "4",
+					"type": "int"
+				},
+				{
+					"name": "color",
+					"value": "1,0,0,1",
+					"type": "vec4"
+				},
+				{
+					"name": "max",
+					"value": "10",
+					"type": "int"
+				},
+				{
+					"name": "stepSize",
+					"value": "50",
+					"type": "int"
+				},
+				{
+					"name": "width",
+					"value": "16",
+					"type": "int"
+				}
+			],
+			"messages": 
+			[
+				{
+					"name": "PowerMeterMessage",
+					"path": "Scripts/User/Messages/PowerMeterMessage.lua"
+				}
+			],
+			"components": 
+			[
+				{
+					"name": "RedMeter",
+					"path": "Scripts/User/Components/RedMeter.lua"
+				}
+			],
+			"hookups": 
+			[
+				{
+					"source": "PowerMeterMessage",
+					"source_event": "Set",
+					"destination": "RedMeter",
+					"destination_action": "Set",
+					"message": "set.red.power",
+					"func": "return function(arg) if arg.Message=='set.red.power' then return true else return false end end"
+				}
+			]
+		},
+		{
+			"name": "BlueMeter",
+			"poststart": "",
+			"persistent": "true",
+			"folder": "",
+			"values": 
+			[
+				{
+					"name": "xpos",
+					"value": "40",
+					"type": "int"
+				},
+				{
+					"name": "color",
+					"value": "0,0,1,1",
+					"type": "vec4"
+				},
+				{
+					"name": "max",
+					"value": "10",
+					"type": "int"
+				},
+				{
+					"name": "stepSize",
+					"value": "50",
+					"type": "int"
+				},
+				{
+					"name": "width",
+					"value": "16",
+					"type": "int"
+				}
+			],
+			"messages": 
+			[
+				{
+					"name": "PowerMeterMessage",
+					"path": "Scripts/User/Messages/PowerMeterMessage.lua"
+				}
+			],
+			"components": 
+			[
+				{
+					"name": "BlueMeter",
+					"path": "Scripts/User/Components/BlueMeter.lua"
+				}
+			],
+			"hookups": 
+			[
+				{
+					"source": "PowerMeterMessage",
+					"source_event": "Set",
+					"destination": "BlueMeter",
+					"destination_action": "Set",
+					"message": "set.blue.power",
+					"func": "return function(arg) if arg.Message=='set.blue.power' then return true else return false end end"
+				}
+			]
+		}
+	]
+}

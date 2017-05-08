@@ -59,7 +59,8 @@ function EntityCreator:createObject(entity,gameobject)
 	
 		-- create, attach and store
 		else 
-			self.persistent[gameobject.name] = GameObject:create(entity,gameobject)
+			self.persistent[gameobject.name] = GameObject:init()
+			self.persistent[gameobject.name]:build(entity,gameobject)
 			self.persistent[gameobject.name]:attach(entity)
 		end
 		
@@ -67,8 +68,10 @@ function EntityCreator:createObject(entity,gameobject)
 		
 	-- non-persisent
 	else
-		entity.script.gameobject = GameObject:create(entity,gameobject)
+		entity.script.gameobject = GameObject:init()
+		entity.script.gameobject:build(entity,gameobject)
 		entity.script.gameobject:attach(entity)
-
 	end
+	entity.script.onMessage = EventManager:create()
+	entity.script.onMessage:subscribe(entity.script.gameobject, entity.script.gameobject.doMessage )
 end

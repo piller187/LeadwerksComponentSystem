@@ -52,43 +52,57 @@
 					"source": "EnergyMessage",
 					"source_event": "OutOfEnergy",
 					"destination": "Controller",
-					"destination_action": "Stop"
+					"destination_action": "Stop",
+					"message": "",
+					"func": ""
 				},
 				{
 					"source": "Controller",
 					"source_event": "StoppedMoving",
 					"destination": "EnergyMessage",
-					"destination_action": "StartAddingEnergy"
+					"destination_action": "StartAddingEnergy",
+					"message": "",
+					"func": ""
 				},
 				{
 					"source": "Controller",
 					"source_event": "StartedMoving",
 					"destination": "EnergyMessage",
-					"destination_action": "StartSubtractingEnergy"
+					"destination_action": "StartSubtractingEnergy",
+					"message": "",
+					"func": ""
 				},
 				{
 					"source": "MouseInput",
 					"source_event": "Move",
 					"destination": "Controller",
-					"destination_action": "Move"
+					"destination_action": "Move",
+					"message": "",
+					"func": ""
 				},
 				{
 					"source": "MouseInput",
 					"source_event": "Jump",
 					"destination": "Controller",
-					"destination_action": "Jump"
+					"destination_action": "Jump",
+					"message": "",
+					"func": ""
 				},
 				{
 					"source": "FpsCamera",
 					"source_event": "Turn",
 					"destination": "Controller",
-					"destination_action": "Turn"
+					"destination_action": "Turn",
+					"message": "",
+					"func": ""
 				},
 				{
 					"source": "Controller",
 					"source_event": "Moving",
 					"destination": "FpsCamera",
-					"destination_action": "Move"
+					"destination_action": "Move",
+					"message": "",
+					"func": ""
 				}
 			]
 		},
@@ -140,25 +154,33 @@
 					"source": "EnergyMeter",
 					"source_event": "OutOfEnergy",
 					"destination": "EnergyMessage",
-					"destination_action": "OutOfEnergy"
+					"destination_action": "OutOfEnergy",
+					"message": "",
+					"func": ""
 				},
 				{
 					"source": "EnergyMeter",
 					"source_event": "EnergyRecovered",
 					"destination": "EnergyMessage",
-					"destination_action": "EnergyRecovered"
+					"destination_action": "EnergyRecovered",
+					"message": "",
+					"func": ""
 				},
 				{
 					"source": "EnergyMessage",
 					"source_event": "StartAddingEnergy",
 					"destination": "EnergyMeter",
-					"destination_action": "StartAddingEnergy"
+					"destination_action": "StartAddingEnergy",
+					"message": "",
+					"func": ""
 				},
 				{
 					"source": "EnergyMessage",
 					"source_event": "StartSubtractingEnergy",
 					"destination": "EnergyMeter",
-					"destination_action": "StartSubtractingEnergy"
+					"destination_action": "StartSubtractingEnergy",
+					"message": "",
+					"func": ""
 				}
 			]
 		}

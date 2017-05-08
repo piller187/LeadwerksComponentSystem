@@ -34,7 +34,18 @@ function EventManager:subscribe(owner, method, filterFunction)
 	Debug:Assert( owner ~= nil, "Calling EventManager:subscribe with Null-Owner" )
 	Debug:Assert( method ~= nil, "Calling EventManager:subscribe with Null-Method")
 	EventManagerID = EventManagerID+1
-	table.insert(self.handlers, { Id = EventManagerID, Owner = owner, Method = method, FilterFunction = filterFunction })
+	
+	local filter = nil 
+	if filterFunction ~= nil then 
+		filter= assert(loadstring(filterFunction))()
+	end
+		
+	table.insert(self.handlers, { 
+			Id = EventManagerID, 
+			Owner = owner, 
+			Method = method, 
+			FilterFunction = filter })
+
 	return EventManagerID
 end
 
@@ -49,23 +60,14 @@ end
 
 function EventManager:raise(args)
 	for i = 1, #self.handlers do
-		if self.handlers[i] ~= nil then
-			if self.handlers[i].FilterFunction ~= nil then
-				if self.handlers[i].FilterFunction(args) then
-					self.handlers[i].Method(self.handlers[i].Owner, args)
+		local handler = self.handlers[i]
+		if handler ~= nil then
+			if	handler.FilterFunction ~= nil then
+				if handler.FilterFunction(args) then
+					handler.Method(handler.Owner, args)
 				end
 			else
-				self.handlers[i].Method(self.handlers[i].Owner, args)
-			end
-		end
-	end
-end
-
-function EventManager:raiseFiltered(args, filter )
-	for i = 1, #self.handlers do
-		if self.handlers[i] ~= nil then
-			if filter(self.handlers[i].Owner) then
-				self.handlers[i].Method(self.handlers[i].Owner, args)
+				handler.Method(handler.Owner, args)
 			end
 		end
 	end

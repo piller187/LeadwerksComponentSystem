@@ -1,0 +1,18 @@
+//Leadwerks Material File
+
+blendmode=1
+castshadows=0
+zsort=1
+cullbackfaces=0
+depthtest=0
+pickmode=0
+depthmask=0
+diffuse=1.00000000,1.00000000,1.00000000,1.00000000
+specular=0.501960814,0.501960814,0.501960814,0.501960814
+alwaysuseshader=0
+roughness=0.50000000000000000
+mappingscale=1.00000000,1.00000000,1.00000000
+drawmode=-1
+
+shader="Shaders/Model/diffuse.shader"
+texture0="./redgrid.tex"

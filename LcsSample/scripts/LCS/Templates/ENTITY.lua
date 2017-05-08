@@ -9,7 +9,24 @@
 -- - - - - - - - - - - - - - - - - - - - - - -
 -- Rick & Roland                       	
 -----------------------------------------------
+import "Scripts/LCS/EventManager.lua"
 
+Script.onCollision = nil
+Script.onMessage = nil
+Script.gameobject = nil
+
+function Script:doMessage(msg)
+	self.gameobject.onMessage:raise( msg )
+end 
+
+function Script:doCollision(msg) -- {Owner:entity, Entity:entity, Distance:number, Pos=Vec3, Normal=Vec3, Speed=number} )
+	self.onCollision:raise(msg)
+end
+
+function Script:Start()
+	self.pickDistance = Vec3(0)
+	self.onCollision = EventManager:create()
+end
 
 function Script:UpdateWorld()
 	for k,v in pairs(self.gameobject.components) do
@@ -31,9 +48,8 @@ function Script:Overlap(entity)
 end
 
 function Script:Collision(entity, position, normal, speed)
-	for k,v in pairs(self.gameobject.components) do
-		if v.collision ~= nil then v:collision(entity, position, normal, speed) end
-	end
+	self.pickDistance = self.entity:GetPosition(true):DistanceToPoint(entity:GetPosition(true))
+	self:doCollision( {Owner=self.entity, Entity=entity, Distance=self.pickDistance, Pos=position, Normal=normal, Speed=speed} )
 end
 
 function Script:Draw()
@@ -63,14 +79,7 @@ function Script:Detach()
 	for k,v in pairs(self.gameobject.components) do
 		if v.detach ~= nil then v:detach() end
 	end
-	if not self.gameobject.persistent then
-		local name = self.entity:GetKeyValue("name")
+	if self.gameobject.persistent then
 		self.gameobject = nil
-	end
-end
-
-function Script:Cleanup()
-	for k,v in pairs(self.gameobject.components) do
-		if v.cleanup ~= nil then v:cleanup() end
 	end
 end

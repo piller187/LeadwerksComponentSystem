@@ -1,0 +1,2 @@
+texture0=.\BlueGrid.tex
+shader="Shaders/Model/diffuse.shader"
