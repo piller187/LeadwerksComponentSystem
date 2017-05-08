@@ -45,14 +45,14 @@ function Input:update()
 		self:doClick()
 	end
 	
-	if Window:GetCurrent():KeyDown(Key.W) then
+	if Window:GetCurrent():KeyDown(Key.W) and not self.moving then
 		self.moving = true
 		self:doForward()
 	
-	elseif Window:GetCurrent():KeyDown(Key.S) then
+	elseif Window:GetCurrent():KeyDown(Key.S) and not self.moving  then
 		self.moving = true
 		self:doBack()
-	else
+	elseif self.moving then
 		self.moving = false
 		self:doStop()
 	end
