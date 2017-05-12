@@ -21,7 +21,7 @@ function Input:init()
 	-- Init non-entity related things here
 	self.entity = nil
 	self.moving = false
-	self.onMessage = EventManager:create()
+	self.onReceiveMessage = EventManager:create()
 	self.onClick = EventManager:create()
 	self.onForward = EventManager:create()
 	self.onBack = EventManager:create()
@@ -36,8 +36,6 @@ end
 function Input:attach(entity)
 	-- Init entity related things here
 	self.entity = entity
-	System:Print( "@LCS: attaching " .. self.name .. " to " .. entity.script.gameobject.name )
-
 end
 
 function Input:update()
@@ -52,6 +50,7 @@ function Input:update()
 	elseif Window:GetCurrent():KeyDown(Key.S) and not self.moving  then
 		self.moving = true
 		self:doBack()
+		
 	elseif self.moving then
 		self.moving = false
 		self:doStop()

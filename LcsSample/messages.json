@@ -69,6 +69,10 @@ mat:Release()",
 			"components": 
 			[
 				{
+					"name": "Toolbox",
+					"path": "Scripts/User/Components/Toolbox.lua"
+				},
+				{
 					"name": "Cursor",
 					"path": "Scripts/User/Components/Cursor.lua"
 				},
@@ -96,72 +100,80 @@ mat:Release()",
 					"source_event": "PowerChange",
 					"destination": "PowerMeterMessage",
 					"destination_action": "Set",
-					"message": "",
-					"func": ""
+					"arguments": "",
+					"filter": ""
 				},
 				{
 					"source": "Input",
 					"source_event": "Stop",
 					"destination": "Controller",
 					"destination_action": "Stop",
-					"message": "",
-					"func": ""
+					"arguments": "",
+					"filter": ""
 				},
 				{
 					"source": "Input",
 					"source_event": "Forward",
 					"destination": "Controller",
 					"destination_action": "MoveForward",
-					"message": "",
-					"func": ""
+					"arguments": "",
+					"filter": ""
 				},
 				{
 					"source": "Input",
 					"source_event": "Back",
 					"destination": "Controller",
 					"destination_action": "MoveBackwards",
-					"message": "",
-					"func": ""
+					"arguments": "",
+					"filter": ""
 				},
 				{
 					"source": "Input",
 					"source_event": "Click",
 					"destination": "Cam",
 					"destination_action": "Pick",
-					"message": "",
-					"func": ""
+					"arguments": "",
+					"filter": ""
 				},
 				{
 					"source": "Controller",
 					"source_event": "Move",
 					"destination": "Cam",
 					"destination_action": "Move",
-					"message": "",
-					"func": ""
+					"arguments": "",
+					"filter": ""
 				},
 				{
 					"source": "Cam",
 					"source_event": "Turn",
 					"destination": "Controller",
 					"destination_action": "Turn",
-					"message": "",
-					"func": ""
+					"arguments": "",
+					"filter": ""
 				},
 				{
 					"source": "self",
-					"source_event": "Message",
+					"source_event": "ReceiveMessage",
 					"destination": "Teams",
 					"destination_action": "AddRedPower",
-					"message": "add.red.power",
-					"func": "return function(args) if args.Message == 'add.red.power' then return true else return false end end"
+					"arguments": "function(args) return { Message=\"add.red.power\" } end",
+					"filter": "function(args) if args.Message == \"add.red.power\" then return true else return false end end"
 				},
 				{
-					"source": "self",
-					"source_event": "Message",
+					"source": "",
+					"source_event": "ReceiveMessage",
 					"destination": "Teams",
 					"destination_action": "AddBluePower",
-					"message": "add.blue.power",
-					"func": "return function(args) if args.Message == 'add.blue.power' then return true else return false end end"
+					"arguments": "function(args) return { Message=\"add.blue.power\" } end",
+					"filter": "function(args) if args.Message == \"add.blue.power\" then return true else return false end end"
+				},
+				{
+					"source": "Cam",
+					"source_event": "Pick",
+					"destination": "",
+					"destination_action": "SendMessage",
+					"arguments": "function(args) return { Message=\"pick\" } end",
+					"filter": ""
 				}
 			]
 		},
@@ -191,7 +203,22 @@ mat:Release()",
 			],
 			"hookups": 
 			[
-
+				{
+					"source": "",
+					"source_event": "ReceiveMessage",
+					"destination": "BluePower",
+					"destination_action": "Picked",
+					"arguments": "",
+					"filter": ""
+				},
+				{
+					"source": "BluePower",
+					"source_event": "Picked",
+					"destination": "",
+					"destination_action": "SendMessage",
+					"arguments": "function(args) return {Message=\"add.blue.power\", Dest=args.Source, Source=args.Dest} end",
+					"filter": ""
+				}
 			]
 		},
 		{
@@ -220,7 +247,22 @@ mat:Release()",
 			],
 			"hookups": 
 			[
-
+				{
+					"source": "",
+					"source_event": "ReceiveMessage",
+					"destination": "RedPower",
+					"destination_action": "Picked",
+					"arguments": "",
+					"filter": ""
+				},
+				{
+					"source": "RedPower",
+					"source_event": "Picked",
+					"destination": "",
+					"destination_action": "SendMessage",
+					"arguments": "function(args) return {Message=\"add.red.power\", Dest=args.Source, Source=args.Dest} end",
+					"filter": ""
+				}
 			]
 		},
 		{
@@ -277,8 +319,8 @@ mat:Release()",
 					"source_event": "Set",
 					"destination": "RedMeter",
 					"destination_action": "Set",
-					"message": "set.red.power",
-					"func": "return function(arg) if arg.Message=='set.red.power' then return true else return false end end"
+					"arguments": "",
+					"filter": "function(args) if args.Message == \"set.red.power\" then return true else return false end end"
 				}
 			]
 		},
@@ -336,8 +378,40 @@ mat:Release()",
 					"source_event": "Set",
 					"destination": "BlueMeter",
 					"destination_action": "Set",
-					"message": "set.blue.power",
-					"func": "return function(arg) if arg.Message=='set.blue.power' then return true else return false end end"
+					"arguments": "",
+					"filter": "function(args) if args.Message == \"set.blue.power\" then return true else return false end end"
+				}
+			]
+		},
+		{
+			"name": "Hammer",
+			"poststart": "",
+			"persistent": "false",
+			"folder": "",
+			"values": 
+			[
+
+			],
+			"messages": 
+			[
+
+			],
+			"components": 
+			[
+				{
+					"name": "Hammer",
+					"path": "Scripts/User/Components/Hammer.lua"
+				}
+			],
+			"hookups": 
+			[
+				{
+					"source": "",
+					"source_event": "ReceiveMessage",
+					"destination": "",
+					"destination_action": "SendMessage",
+					"arguments": "pick",
+					"filter": ""
 				}
 			]
 		}

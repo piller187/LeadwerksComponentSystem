@@ -21,6 +21,7 @@ function BluePower:init()
 
 	self.entity = nil
 	self.power = 0
+	self.onPicked = EventManager:create()
 	
 	for k, v in pairs(BluePower) do
 		obj[k] = v
@@ -59,12 +60,8 @@ end
 ---
 --- Actions
 ---
-function BluePower:doMessage(msg)
-	System:Print("@LCS: BluePower sends 'add.blue.power'")
-	msg.Source.script.gameobject.onMessage:raise( {
-		Source=self.entity,
-		Message="add.blue.power",
-		Power=self.power } )
+function BluePower:doPicked(msg)
+	msg.Source.script.gameobject.onReceiveMessage:raise( {Power=self.power} )
 	self.entity:Hide()
 end
 

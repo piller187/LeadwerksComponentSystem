@@ -72,6 +72,6 @@ function EntityCreator:createObject(entity,gameobject)
 		entity.script.gameobject:build(entity,gameobject)
 		entity.script.gameobject:attach(entity)
 	end
-	entity.script.onMessage = EventManager:create()
-	entity.script.onMessage:subscribe(entity.script.gameobject, entity.script.gameobject.doMessage )
+	entity.script.onReceiveMessage = EventManager:create()
+	entity.script.onReceiveMessage:subscribe(entity.script.gameobject, entity.script.gameobject.ReceiveMessage )
 end

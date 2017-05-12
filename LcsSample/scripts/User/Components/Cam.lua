@@ -115,7 +115,9 @@ end
 ---
 function Cam:doPick()
 	if self.pendingPick ~= nil then
-		self.pendingPick.script:doMessage( {Source=self.entity, Message="pick"})
+		self.onPick:raise( 
+		{ 	Dest=self.pendingPick, 
+			Source=self.entity } )
 	end
 end
 

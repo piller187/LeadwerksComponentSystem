@@ -21,6 +21,7 @@ function RedPower:init()
 
 	self.entity = nil
 	self.power = 0
+	self.onPicked = EventManager:create()
 	
 	for k, v in pairs(RedPower) do
 		obj[k] = v
@@ -59,12 +60,8 @@ end
 ---
 --- Actions
 ---
-function RedPower:doMessage(msg)
-	System:Print("@LCS: RedPower sends 'add.red.power'")
-	msg.Source.script.gameobject.onMessage:raise( {
-		Source=self.entity,
-		Message="add.red.power",
-		Power=self.power } )
+function RedPower:doPicked(msg)
+	msg.Source.script.gameobject.onReceiveMessage:raise( { Power=self.power } )
 	self.entity:Hide()
 end
 

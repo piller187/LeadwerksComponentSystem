@@ -67,12 +67,10 @@ end
 --- Actions
 ---
 function Teams:doAddRedPower(arg)
-	System:Print( "@LCS: Teams adding " .. arg.Message )
 	self:addPower(arg.Power,self.Team.red)
 end
 
 function Teams:doAddBluePower(arg)
-	System:Print( "@LCS: Teams adding " .. arg.Message )
 	self:addPower(arg.Power,self.Team.blue)
 end
 
@@ -80,7 +78,7 @@ end
 --- Private
 ---
 
-function Teams:addPower(power, team)
+function Teams:addPower(power,team)
 	local old = self.power[team] 
 	self.power[team] = Math:Clamp(old+power,0,self.max)
 	local new = self.power[team]
@@ -92,11 +90,9 @@ function Teams:addPower(power, team)
 	
 	if new ~= old then 
 		if team == self.Team.red then
-			System:Print( "@LCS: Teams sending change 'set.red.power'" )
-			self.onPowerChange:raise( {Source=self.entity, Message="set.red.power", Power=new})
+			self.onPowerChange:raise( { Message="set.red.power", Power=new } )
 		else
-			System:Print( "@LCS: Teams sending change 'set.blue.power'" )
-			self.onPowerChange:raise( {Source=self.entity, Message="set.blue.power", Power=new})
+			self.onPowerChange:raise( { Message="set.blue.power", Power=new } )
 		end
 	end
 end

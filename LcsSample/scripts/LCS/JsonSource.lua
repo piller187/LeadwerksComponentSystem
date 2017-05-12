@@ -45,7 +45,7 @@ end
 
 function JsonSource:process(file)
 	
-	local stream = io.open(file, "r")
+	local stream = assert(io.open(file, "r"))
 	Debug:Assert( stream ~= nil, "JsonSource failed to read " .. file )
 	--
 
@@ -64,4 +64,8 @@ end
 
 function JsonSource:getGameObjects()
 	return self.jsonTable.gameobjects
+end
+
+function JsonSource:getRoot()
+	return self.jsonTable;
 end

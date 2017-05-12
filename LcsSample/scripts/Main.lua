@@ -30,7 +30,7 @@ world:SetLightQuality((System:GetProperty("lightquality","1")))
 local mapfiles = {
 	{ Map="Maps/start.map", JSON="LcsSample.json" },
 	{ Map="Maps/second.map", JSON="LcsSample.json" },
-	{ Map="Maps/messages.map", JSON="LCS.json" } }
+	{ Map="Maps/messages.map", JSON="messages.json" } }
 local map = 3
 
 LcsLoadMap(mapfiles[map].Map,mapfiles[map].JSON)

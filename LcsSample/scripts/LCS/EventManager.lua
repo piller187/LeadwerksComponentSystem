@@ -10,6 +10,9 @@
 -- Rick & Roland                       	
 -----------------------------------------------
 
+--[[
+Class: EventManager
+]]
 
 local EventManagerID = 0
 
@@ -29,22 +32,33 @@ function EventManager:create()
 end
 
 -- returns an ID that can be use for unsubsribing
-function EventManager:subscribe(owner, method, filterFunction)
-	if method == nil then System:Print( debug.traceback() ) end
+function EventManager:subscribe(owner, method, arguments, filterFunction)
+	if method == nil then 
+		System:Print( debug.traceback() ) 
+	end
+	
 	Debug:Assert( owner ~= nil, "Calling EventManager:subscribe with Null-Owner" )
 	Debug:Assert( method ~= nil, "Calling EventManager:subscribe with Null-Method")
+	
 	EventManagerID = EventManagerID+1
 	
-	local filter = nil 
+	local func = nil 
 	if filterFunction ~= nil then 
-		filter= assert(loadstring(filterFunction))()
+		func = assert(loadstring("return " .. filterFunction))()
+	end
+
+	local args = nil 
+	if arguments ~= nil then 
+		local f = "return " .. arguments
+		args = assert(loadstring(f))()
 	end
 		
 	table.insert(self.handlers, { 
 			Id = EventManagerID, 
 			Owner = owner, 
 			Method = method, 
-			FilterFunction = filter })
+			Arguments = args,
+			Function = filter })
 
 	return EventManagerID
 end
@@ -62,12 +76,32 @@ function EventManager:raise(args)
 	for i = 1, #self.handlers do
 		local handler = self.handlers[i]
 		if handler ~= nil then
-			if	handler.FilterFunction ~= nil then
+			
+			local arguments = args
+			if 	handler.Arguments ~= nil
+			and handler.Arguments ~= "" then
+				local handlerArgs = handler.Arguments(args)
+				local handlertype = type(handlerArgs)
+				local argstype = type(args)
+				if 	type(handlerArgs) == "table" 
+				and type(args) == "table" then
+					for k,v in pairs(handlerArgs) do
+						arguments[k]=v
+					end
+				
+				elseif 	type(handlerArgs) == "string" 
+				and		type(args) == "string" then
+					arguments = arguments .. "," .. handlerArgs
+				end
+			end
+				
+			if	handler.FilterFunction ~= nil 
+			and	handler.FilterFunction ~= "" then 
 				if handler.FilterFunction(args) then
-					handler.Method(handler.Owner, args)
+					handler.Method(handler.Owner, arguments)
 				end
 			else
-				handler.Method(handler.Owner, args)
+				handler.Method(handler.Owner, arguments)
 			end
 		end
 	end

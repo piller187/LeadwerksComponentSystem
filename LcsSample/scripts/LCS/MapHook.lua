@@ -12,6 +12,7 @@
 
 import "Scripts/LCS/JsonSource.lua"
 import "Scripts/LCS/EntityCreator.lua"
+import "Scripts/LCS/JsonValidator.lua"
 
 local jsonSource = nil
 local creator = nil
@@ -39,6 +40,9 @@ function MapHook(entity,obj)
 		Debug:Assert( jsonSource ~= nil, "Failed to create JsonSource" )
 		
 		jsonSource:process(currentJsonfile)
+		
+		local jsonValidator = JsonValidator:create()
+		jsonValidator:validate(jsonSource:getRoot())
 		
 		-- initialize the game creation object
 		creator = EntityCreator:create(jsonSource)

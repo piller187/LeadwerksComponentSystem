@@ -1,0 +1,1 @@
+perl c:\tools\NaturalDocs-1.52\NaturalDocs -i "C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS" -o FramedHTML "C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\doc\html" -p C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\doc\proj %1

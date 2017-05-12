@@ -17,14 +17,6 @@ local Messages = {}
 if GameObject ~= nil then return end
 GameObject = {}
 
-GameObject.onMessage = nil
-
-function GameObject:doMessage(arg)
-	System:Print( "@LCS: GameObject " .. self.name .. ".onMessage:raise(...)" )
-	arg.Source.script.onMessage:raise(arg)
-	--self.onMessage:raise(arg)
-end
-
 --
 -- Public methods
 --
@@ -33,7 +25,7 @@ function GameObject:init()
     self.__index = self
 	self.name = ""
 	self.components = {}
-	self.onMessage = EventManager:create()
+	self.onReceiveMessage = EventManager:create()
 	
 	for k, v in pairs(GameObject) do
 		obj[k] = v
@@ -112,8 +104,8 @@ function GameObject:build(entity,gameobject)
 				Debug:Assert(instance~=nil, "Failed to import " .. comp.name )
 				self.components[comp.name] = _G[comp.name]:init()
 				script[comp.name] = self.components[comp.name]
-				if script[comp.name].doMessage ~= nil then
-					self.onMessage:subscribe(script[comp.name],script[comp.name].doMessage)
+				if script[comp.name].ReceiveMessage ~= nil then
+					self.onReceiveMessage:subscribe(script[comp.name],script[comp.name].ReceiveMessage)
 				end
 			end
 		end
@@ -125,38 +117,51 @@ function GameObject:build(entity,gameobject)
 	
 		for k,hooks in pairs(gameobject.hookups) do
 			
-			-- validate
-			Debug:Assert( hooks.source ~= nil and hooks.source ~= "", "'source' not defined in JSON hookups for " .. entname )
-			Debug:Assert( hooks.destination ~= nil and hooks.destination ~= "", "'destination' not defined in JSON hookups for " .. entname )
-			Debug:Assert( hooks.source_event ~= nil and hooks.source_event ~= "", "'source_event' not defined in JSON hookups for " .. entname )
-			Debug:Assert( hooks.destination_action ~= nil and hooks.destination_action ~= "", "'destination_action' not defined in JSON hookups for " .. entname )
-			
 			-- get and verify source
 			local src = ""
-			if hooks.source == "self" then src = self.entity.script.gameobject
-			else src = self.components[hooks.source] end
-			
-			Debug:Assert( src ~= nil, hooks.source .. " is missing as source hookup for " .. entname )
+			if 	hooks.source == "self" or 
+				hooks.source == "" or 
+				hooks.source == nil  then
+				src = self.entity.script.gameobject
+			else
+				src = self.components[hooks.source]
+			end
 			
 			-- get and verify destiation
 			local dst = ""
-			if hooks.destination == "self" then dst = self.entity.script.gameobject
-			else dst = self.components[hooks.destination] end
+			if 	hooks.destination == "self" or
+				hooks.destination == "" or 
+				hooks.destination == nil then 
+				dst = self.entity.script.gameobject
+			else 
+				dst = self.components[hooks.destination] 
+			end
 			
-			Debug:Assert( dst ~= nil, hooks.destination .. " is missing as destination hookup for " .. entname )
-
 			-- get and verify events and actions
 			local ev = "on"..hooks.source_event
-			local ac = "do"..hooks.destination_action
-			Debug:Assert( src[ev] ~= nil,  ev .. " event not found in " .. hooks.source .. " when processing hookups in " .. entname )
-			Debug:Assert( dst[ac] ~= nil,  ac .. " action not found in " .. hooks.destination .. " when processing hookups in " .. entname  )
+			local ac = ""
+			if 	hooks.destination_action ~= "SendMessage"
+			and hooks.destination_action ~= "ReceiveMessage" then
+				ac = ac .. "do"
+			end
+			ac = ac..hooks.destination_action
 			
 			-- create hook
 			if 	hooks.func == nil 
 			or  hooks.func == "" then
-				src[ev]:subscribe( dst, dst[ac])
+				if 	hooks.arguments == nil
+				or	hooks.arguments == "" then
+					src[ev]:subscribe( dst, dst[ac])
+				else
+					src[ev]:subscribe( dst, dst[ac], hooks.arguments )
+				end
 			else
-				src[ev]:subscribe( dst, dst[ac], hooks.func )
+				if 	hooks.arguments == nil
+				or	hooks.arguments == "" then
+					src[ev]:subscribe( dst, dst[ac], nil, hooks.func)
+				else
+					src[ev]:subscribe( dst, dst[ac], hooks.arguments, hooks.func )
+				end
 			end
 			
 			local hookstring = 
@@ -172,14 +177,33 @@ function GameObject:build(entity,gameobject)
 		end
 
 	end
-		-- persistent flag
+	
+	-- persistent flag
 	self.entity.script.gameobject.persistent = strToBool(gameobject.persistent)
 	
 	-- PostStart code
 	if	gameobject.poststart ~= nil 
 	and gameobject.poststart ~= "" then
 		-- add PostStart code
-		script.PostStart = loadstring("return function(self) " .. gameobject.poststart .. " end")(script)
+		script.PostStart = loadstring("return function(self) " .. gameobject.poststart .. " end")()
 		script.PostStart(script)
+	end
+end
+
+GameObject.onReceiveMessage = nil
+
+function GameObject:ReceiveMessage(arg)
+	self.onReceiveMessage:raise(arg)
+end
+
+
+function GameObject:SendMessage(arg) -- arg = {Dest, Source, Message} }
+	
+	if type(arg.Dest) ~= "table" then
+		arg.Dest.script:ReceiveMessage( arg )
+	else
+		for k,v in pairs(arg.Dest) do 
+			v.script:ReceiveMessage( arg )
+		end
 	end
 end
