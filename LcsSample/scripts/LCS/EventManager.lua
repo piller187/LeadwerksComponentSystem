@@ -12,6 +12,8 @@
 
 --[[
 Class: EventManager
+
+
 ]]
 
 local EventManagerID = 0
@@ -31,7 +33,22 @@ function EventManager:create()
     return obj
 end
 
--- returns an ID that can be use for unsubsribing
+--[[
+Function: subscribe(owner, method, arguments, filterFunction)
+
+Subscribe to an event
+
+Parameters: 
+
+	owner - owner of the method
+	method - function/method to call on raise
+	arguments - table or string of arguments
+	filterFunction - function called for enable/disable the event
+	
+Returns:
+
+	A number the identifies the event. Can be used to remove a subscribtion
+]]
 function EventManager:subscribe(owner, method, arguments, filterFunction)
 	if method == nil then 
 		System:Print( debug.traceback() ) 
@@ -63,6 +80,18 @@ function EventManager:subscribe(owner, method, arguments, filterFunction)
 	return EventManagerID
 end
 
+--[[
+Function: unsubscribe(id)
+
+Unsubscribe an event
+
+Parameters: 
+
+	id - identification on the event
+	
+See Also:
+	<subscribe(owner, method, arguments, filterFunction)>
+]]
 function EventManager:unsubscribe(id) -- the id returned when subscribing
 	for i = 1, #self.handlers do
 		if  self.handlers[i].Id == id then
@@ -72,6 +101,29 @@ function EventManager:unsubscribe(id) -- the id returned when subscribing
 	end
 end
 
+--[[
+Function: raise(args)
+
+Raise an event which will be caught by all subscribers
+
+Parameters: 
+
+	args - argument send with the envent
+	
+See Also:
+	<subscribe(owner, method, arguments, filterFunction)>
+	
+Argument: 
+	An argument can be a table or just a value
+	
+Example: 
+	self.onEvent:raise( 10 ) -- a value
+	
+	self.onEvent:raise( "run" ) -- a string 
+	
+	self.onEvent:raise( { Speed=10, Message="run" } )
+
+]]
 function EventManager:raise(args)
 	for i = 1, #self.handlers do
 		local handler = self.handlers[i]
