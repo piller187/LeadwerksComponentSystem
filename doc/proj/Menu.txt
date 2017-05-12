@@ -52,5 +52,6 @@ Group: Index  {
 
    Class Index: Classes
    Index: Everything
+   Function Index: Functions
    }  # Group: Index
 
