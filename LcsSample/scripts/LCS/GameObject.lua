@@ -11,6 +11,8 @@
 -----------------------------------------------
 
 import "Scripts/LCS/LcsUtils.lua"
+import "Scripts/LCS/ComponentCreator.lua"
+import "Scripts/LCS/MessageCreator.lua"
 
 local Messages = {}
 
@@ -49,6 +51,9 @@ end
 	
 function GameObject:build(entity,gameobject)
 
+	local compcreator = ComponentCreator:create()
+	local msgcreator = MessageCreator:create()
+	
 	self.entity = entity
 	self.entity.script.gameobject = self
 	
@@ -79,6 +84,11 @@ function GameObject:build(entity,gameobject)
 			if 	v.name ~= nil 
 			and v.name ~= "" then
 
+				-- create the message file if it doesn't exist
+				if FileSystem:GetFileType(v.path) ~= FileSystem.File then
+					msgcreator:createComponent( v.name, gameobject.hookups, v.path )
+				end
+				
 				-- needs creation?
 				if Messages[v.name] == nil then
 					import(v.path)
@@ -97,6 +107,11 @@ function GameObject:build(entity,gameobject)
 		for k,comp in pairs(gameobject.components) do
 			if 	comp.name ~= nil 
 			and comp.name ~= "" then
+				
+				-- create the message file if it doesn't exist
+				if FileSystem:GetFileType(comp.path) ~= FileSystem.File then
+					compcreator:createComponent( comp.name, gameobject.hookups, comp.path )
+				end
 				
 				-- always create !
 				import(comp.path)

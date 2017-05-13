@@ -22,6 +22,11 @@ local currentJsonfile = ""
 -- CALL THIS INSTEAD OF CALLING 'Map:Load' DIRECTLY --
 ------------------------------------------------------
 function LcsLoadMap( mapfile, jsonSource  )
+	if FileSystem:GetFileType("LCS/Temp")  ~= FileSystem.Dir then
+		FileSystem:DeleteFile("LCS/Temp") -- just in cast the file Temp exist
+		FileSystem:CreateDir("LCS/Temp" )
+	end
+	
 	currentJsonfile = jsonSource
 	local wasLoaded = Map:Load(mapfile, "MapHook")
 	Debug:Assert( wasLoaded, "Failed to load map " .. mapfile ) 

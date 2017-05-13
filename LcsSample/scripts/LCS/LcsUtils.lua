@@ -105,3 +105,33 @@ function jvalueToValue(vtype,val)
 	elseif vtype == "string" then return val
 	else return nil end
 end
+
+function split(str, delim )
+	local result, pat, lastPos = {},"(.-)" .. delim .. "()",1
+    for part, pos in string.gfind(str, pat) do
+        table.insert(result, part); lastPos = pos
+    end
+    table.insert(result, string.sub(str, lastPos))
+    return result
+end
+
+function split2words( str )
+	local t = {}
+	local function helper(word)
+		table.insert(t, word)
+		return ""
+	end
+	if not str:gsub("%w+", helper):find"%S" then
+		return t
+	end
+end
+
+function split2lines( str )
+	local t = {}
+	local function helper(line) 
+		table.insert(t, line) 
+		return "" 
+	end
+	helper((str:gsub("(.-)\r?\n", helper)))
+	return t
+  end

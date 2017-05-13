@@ -116,8 +116,8 @@ function JsonValidator:validate_message( name, message )
 					message.path ~= "",
 					"'path' not defined in '" .. name .. "." .. message.name .. "'" )
 	
-	Debug:Assert(	FileSystem:GetFileSize(message.path) > 0, 
-					"'"..message.path.."' not found in " .. name .. "." .. message.name .. "'" )
+--	Debug:Assert(	FileSystem:GetFileSize(message.path) > 0, 
+--					"'"..message.path.."' not found in " .. name .. "." .. message.name .. "'" )
 
 end
 
@@ -130,8 +130,8 @@ function JsonValidator:validate_component( name, component )
 					component.path ~= "",
 					"'path' not defined in '" .. name .. "." .. component.name .. "'" )
 	
-	Debug:Assert(	FileSystem:GetFileSize(component.path) > 0, 
-					"'"..component.path.."' not found in " .. name .. "." .. component.name .. "'" )
+--	Debug:Assert(	FileSystem:GetFileSize(component.path) > 0, 
+--					"'"..component.path.."' not found in " .. name .. "." .. component.name .. "'" )
 
 end
 
