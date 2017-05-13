@@ -18,9 +18,26 @@ local jsonSource = nil
 local creator = nil
 local currentJsonfile = ""
 
-------------------------------------------------------
--- CALL THIS INSTEAD OF CALLING 'Map:Load' DIRECTLY --
-------------------------------------------------------
+--[[
+	Function: LcsLoadMap( mafile, jsonSource )
+	
+	Loads a map and creates all needed files and/or objects
+	using the Project.Json file.
+
+	Parameters:
+	
+	mapfile - path to Leadwerks map file
+	jsonSource - path to LCS Json project file
+	
+	Important:
+
+	CALL THIS INSTEAD OF CALLING 'Map:Load' DIRECTLY
+	
+	Example:
+	
+	>LcsLoadMap("Maps/start.map","MyGame.json")
+	
+]]
 function LcsLoadMap( mapfile, jsonSource  )
 	if FileSystem:GetFileType("LCS/Temp")  ~= FileSystem.Dir then
 		FileSystem:DeleteFile("LCS/Temp") -- just in cast the file Temp exist
@@ -32,7 +49,25 @@ function LcsLoadMap( mapfile, jsonSource  )
 	Debug:Assert( wasLoaded, "Failed to load map " .. mapfile ) 
 end
 
---called when map is loaded
+--[[
+	Function: MapHook(entity, obj)
+	
+	Called by Map:Load for each entity loaded
+	You may also call this anytime with a runtime generated
+	entity and obj set to nil.
+	
+	This function will create GameObjects hooked to the entitys
+	and their components, messages and make all hookups 
+	
+	The json source will be validated and give assertions if
+	any errors are found
+	
+	Parameters:
+	
+	entity - entity loaded
+	obj - ingnored
+
+]]
 function MapHook(entity,obj)
 	
 	Debug:Assert( currentJsonfile ~= "", "Use LcsLoadMap(mapfile,jsonSource) to load maps. !!!NOT!!! Map:Load(mapfile)" )

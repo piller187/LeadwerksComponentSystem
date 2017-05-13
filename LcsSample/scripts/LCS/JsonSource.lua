@@ -10,6 +10,12 @@
 -- Rick & Roland                       	
 -----------------------------------------------
 
+--[[
+	Class: JsonSource
+	
+	Reads a Json Source file and converts it 
+	to LUA tables
+]]
 
 if JsonSource ~= nil then return end
 JsonSource = {}
@@ -21,11 +27,17 @@ JsonSource.jsonTable = {}
 
 JSON = nil -- GLOBAL JSON
 
+
 --
 -- Public methods
 --
 
--- Initalizes the Global JSON object 
+--[[
+	Function: create()
+	
+	Create an instance of the class
+	and initalizes the Global JSON object 
+]]
 function JsonSource:create()
 	local obj = {}
     setmetatable(obj, self)
@@ -43,6 +55,16 @@ function JsonSource:create()
     return obj
 end
 
+--[[
+	Function: process(file)
+	
+	Process the JSON file and convert it 
+	into tables
+	
+	Parameters:
+	
+	file - The JSON file to process
+]]
 function JsonSource:process(file)
 	
 	local stream = assert(io.open(file, "r"))
@@ -62,6 +84,15 @@ function JsonSource:process(file)
 				or  #self.jsonTable.gameobjects == 0 , "game_objects are missing in " .. file )
 end
 
+--[[
+	Function: getGameObjects()
+	
+	Return the table of GameObjects
+
+	Returns:
+	
+	Table of GameObjects
+]]
 function JsonSource:getGameObjects()
 	return self.jsonTable.gameobjects
 end

@@ -117,11 +117,11 @@ Argument:
 	An argument can be a table or just a value
 	
 Example: 
-	self.onEvent:raise( 10 ) -- a value
+	>self.onEvent:raise( 10 ) -- a value
 	
-	self.onEvent:raise( "run" ) -- a string 
+	>self.onEvent:raise( "run" ) -- a string 
 	
-	self.onEvent:raise( { Speed=10, Message="run" } )
+	>self.onEvent:raise( { Speed=10, Message="run" } ) -- a table
 
 ]]
 function EventManager:raise(args)

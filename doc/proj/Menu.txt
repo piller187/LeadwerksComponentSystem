@@ -46,12 +46,18 @@ Format: 1.52
 # --------------------------------------------------------------------------
 
 
+File: EntityCreator  (EntityCreator.lua)
 File: EventManager  (EventManager.lua)
+File: GameObject  (GameObject.lua)
+File: JsonSource  (JsonSource.lua)
+File: JsonValidator  (JsonValidator.lua)
+File: MapHook  (no auto-title, MapHook.lua)
 
 Group: Index  {
 
    Class Index: Classes
    Index: Everything
+   File Index: Files
    Function Index: Functions
    }  # Group: Index
 

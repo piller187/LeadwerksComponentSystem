@@ -14,6 +14,11 @@ import "Scripts/LCS/LcsUtils.lua"
 import "Scripts/LCS/ComponentCreator.lua"
 import "Scripts/LCS/MessageCreator.lua"
 
+--[[
+	Class: GameObject
+	
+	The GameObject which attached to the entity script Script.gameobject
+]]
 local Messages = {}
 
 if GameObject ~= nil then return end
@@ -22,6 +27,11 @@ GameObject = {}
 --
 -- Public methods
 --
+--[[
+	Function: init()
+	
+	Create and instance of the GameObject. 
+]]
 function GameObject:init()
 	local obj = {}
     self.__index = self
@@ -37,6 +47,16 @@ function GameObject:init()
 end
 
 
+--[[
+	Function: attach(entity)
+	
+	Attach the GameObject to an entity as 
+	Script.gameobject.
+	
+	Parameters:
+	
+	entity - the entity where the gameobject will be attached
+]]
 function GameObject:attach(entity)
 		
 	self.entity = entity
@@ -49,6 +69,21 @@ function GameObject:attach(entity)
 	end
 end
 	
+--[[
+	Function: build(entity,gameobject)
+	
+	Builds the GameObject
+	
+	Parameters:
+	
+	entity - the entity where the gameobject will be attached
+	
+	gameobject - A JsonSource table with the gameobject 
+	
+	See Also:
+	
+	<JsonSource>
+]]
 function GameObject:build(entity,gameobject)
 
 	local compcreator = ComponentCreator:create()
@@ -207,11 +242,48 @@ end
 
 GameObject.onReceiveMessage = nil
 
+--[[
+	Function: ReceiveMessage(arg)
+	
+	Called to raise the onReceiveMessage event
+
+	Parameters:
+	
+	arg - event arguments
+]]
 function GameObject:ReceiveMessage(arg)
 	self.onReceiveMessage:raise(arg)
 end
 
 
+--[[
+	Function: SendMessage(arg)
+	
+	Send a message to an entity
+
+	Parameters:
+	
+	arg - message argument
+	
+	Argument:
+	
+	The argument must be table like this
+	{
+		Dest
+		Source
+		Message
+	}
+	where
+	
+	Dest - entity that will receive the message
+	Source - entity that sent the message
+	Message - a text describing the message
+	
+	Example:
+	
+	>self:SendMessage( {Dest=pickedEntity, Source=self.entity, Message="pick" })
+	
+]]
 function GameObject:SendMessage(arg) -- arg = {Dest, Source, Message} }
 	
 	if type(arg.Dest) ~= "table" then

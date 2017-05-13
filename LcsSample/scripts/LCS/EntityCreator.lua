@@ -13,6 +13,23 @@
 import "Scripts/LCS/GameObject.lua"
 import "Scripts/LCS/LcsUtils.lua"
 
+--[[
+	Class: EntityCreator
+	
+	Create a GameObject that's attached to an entity
+	This is done by checking for the entity name in 
+	the JSON Source array of GameObjects. 
+	
+	If a GameObject with that name is found the GameObject
+	is created and attached to the entity as Script.gameobject
+
+	The GameObject will contain everything defined in 
+	the Json gameobject.
+	
+	Used by:
+	
+	<MapHook(entity, obj)>
+]]
 if EntityCreator ~= nil then return end
 EntityCreator = {}
 
@@ -20,9 +37,26 @@ EntityCreator = {}
 --
 -- Public methods
 --
+
+--[[
+	Function: create(json)
+	
+	Create an instance for the given JSON Source 
+	
+	Returns:
+	
+	A new instance of the class
+	
+	Example:
+	
+	>-- create and decode the json file
+	>jsonSource = JsonSource:create()
+	>jsonSource:process("MyGame.json")
+	>gameobjects = json:getGameObjects()
+]]
+
 function EntityCreator:create(json)
 	local obj = {}
-    setmetatable(obj, self)
     self.__index = self
 
 	self.persistent = {}
@@ -35,6 +69,17 @@ function EntityCreator:create(json)
     return obj
 end
 
+--[[
+	Function: process(entity)
+	
+	Processes the entity and create its GameObject
+	
+	The entity name must be found among the GameObjects
+	in order to create anything
+	
+	If the GameObject is flagged as 'persistent'
+	it will be stored and reused when loading another map.
+]]
 function EntityCreator:process(entity)
 	for k,v in pairs(self.gameobjects) do
 		if v.name == entity:GetKeyValue("name") then 
