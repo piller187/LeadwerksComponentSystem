@@ -32,6 +32,7 @@ end
 
 function ComponentCreator:createComponent( classname, hooks, path )
 	
+	
 	if 	classname == nil 
 	or	classname == ""
 	or	hooks == nil
@@ -59,9 +60,8 @@ function ComponentCreator:createComponent( classname, hooks, path )
 	code = self:addLine( code, "\tlocal obj = {}" )
 	code = self:addLine( code, "\tself.__index = self" )
 	code = self:addLine( code, "" )
+	code = self:addLine( code, "\tself.entity = nil" )
 	code = self:addEvents( code, classname, hooks) 
-	code = self:addLine( code, "" )
-	code = self:addHookups( code, classname, hooks) 
 	code = self:addLine( code, "" )
 	code = self:addLine( code, "\t-- Init non-entity related things here" )
 	code = self:addLine( code, "\tself.name = \"" .. classname .."\"" )
@@ -139,30 +139,17 @@ function ComponentCreator:addEvents(code, classname, hooks)
 		if 	v.source == classname
 		and v.source_event ~= nil 
 		and v.source_event ~= "" then
-			code = self:addLine( code, "\tself.on" .. v.source_event .. " = EventManager:create()")
-		end 		
+			if string.find(code, "self.on" .. v.source_event .. " = EventManager" ) == nil then
+				code = self:addLine( code, "\tself.on" .. v.source_event .. " = EventManager:create()")
+			end
+		end
 		if 	v.destination == classname
 		and v.destination_action ~= nil 
 		and v.destination_action~= "" then
-			code = self:addLine( code, "\tself.on" .. v.destination_action .. " = EventManager:create()")
-		end 		
-	end
-	return code 
-end
-
-function ComponentCreator:addHookups(code, classname, hooks)
-	code = self:addLine(code, "\t--- Hookups" )
-	for k,v in pairs(hooks) do
-		if 	v.source == classname
-		and v.source_event ~= nil 
-		and v.source_event ~= "" then
-			code = self:addLine( code, "\tself.on" .. v.source_event .. ":subscribe( self, self.do" .. v.source_event .. " )" )
-		end 		
-		if 	v.destination == classname
-		and v.destination_action ~= nil 
-		and v.destination_action ~= "" then
-			code = self:addLine( code, "\tself.on" .. v.destination_action .. ":subscribe( self, self.do" .. v.destination_action .. " )" )
-		end 		
+			if string.find(code, "self.on" .. v.destination_action .. " = EventManager" ) == nil then
+				code = self:addLine( code, "\tself.on" .. v.destination_action .. " = EventManager:create()")
+			end
+		end
 	end
 	return code 
 end
@@ -172,21 +159,25 @@ function ComponentCreator:addActions(code, classname, hooks)
 		if 	v.source == classname
 		and v.source_event ~= nil 
 		and v.source_event ~= "" then
-			code = self:addLine( code, "function " ..classname.. ":do" .. v.source_event .. "(args)")
-			code = self:addLine( code, "\tDebug:Assert( false, \"TODO! Add code in function " .. classname .. ":do" .. v.source_event .. "(args)\" )" )
-			code = self:addLine( code, "end")
-			code = self:addLine( code, "")
-			code = self:addLine( code, "")
-		end 		
+			if string.find(code, ":do" .. v.source_event ) == nil then
+				code = self:addLine( code, "function " ..classname.. ":do" .. v.source_event .. "(args)")
+				code = self:addLine( code, "\tDebug:Assert( false, \"TODO! Add code in function " .. classname .. ":do" .. v.source_event .. "(args)\" )" )
+				code = self:addLine( code, "end")
+				code = self:addLine( code, "")
+				code = self:addLine( code, "")
+			end
+		end
 		if 	v.destination == classname
 		and v.destination_action ~= nil 
 		and v.destination_action ~= "" then
-			code = self:addLine( code, "function " ..classname.. ":do" .. v.destination_action .. "(args)")
-			code = self:addLine( code, "\tDebug:Assert( false, \"TODO! Add code in function " .. classname .. ":do" .. v.destination_action .. "(args)\" )" )
-			code = self:addLine( code, "end")
-			code = self:addLine( code, "")
-			code = self:addLine( code, "")
-		end 		
+			if string.find(code, ":do" .. v.destination_action ) == nil then
+				code = self:addLine( code, "function " ..classname.. ":do" .. v.destination_action .. "(args)")
+				code = self:addLine( code, "\tDebug:Assert( false, \"TODO! Add code in function " .. classname .. ":do" .. v.destination_action .. "(args)\" )" )
+				code = self:addLine( code, "end")
+				code = self:addLine( code, "")
+				code = self:addLine( code, "")
+			end
+		end
 	end
 	return code 
 end

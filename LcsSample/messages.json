@@ -210,14 +210,6 @@ mat:Release()",
 					"destination_action": "Picked",
 					"arguments": "",
 					"filter": ""
-				},
-				{
-					"source": "BluePower",
-					"source_event": "Picked",
-					"destination": "",
-					"destination_action": "SendMessage",
-					"arguments": "function(args) return {Message=\"add.blue.power\", Dest=args.Source, Source=args.Dest} end",
-					"filter": ""
 				}
 			]
 		},
@@ -253,14 +245,6 @@ mat:Release()",
 					"destination": "RedPower",
 					"destination_action": "Picked",
 					"arguments": "",
-					"filter": ""
-				},
-				{
-					"source": "RedPower",
-					"source_event": "Picked",
-					"destination": "",
-					"destination_action": "SendMessage",
-					"arguments": "function(args) return {Message=\"add.red.power\", Dest=args.Source, Source=args.Dest} end",
 					"filter": ""
 				}
 			]
@@ -390,7 +374,11 @@ mat:Release()",
 			"folder": "",
 			"values": 
 			[
-
+				{
+					"name": "type",
+					"value": "stone",
+					"type": "string"
+				}
 			],
 			"messages": 
 			[
@@ -408,9 +396,17 @@ mat:Release()",
 				{
 					"source": "",
 					"source_event": "ReceiveMessage",
+					"destination": "Hammer",
+					"destination_action": "Picked",
+					"arguments": "",
+					"filter": ""
+				},
+				{
+					"source": "Hammer",
+					"source_event": "Picked",
 					"destination": "",
 					"destination_action": "SendMessage",
-					"arguments": "pick",
+					"arguments": "function(args) return {Message=\"add.tool.hammer\",Dest=args.Source, Source=args.Dest} end",
 					"filter": ""
 				}
 			]

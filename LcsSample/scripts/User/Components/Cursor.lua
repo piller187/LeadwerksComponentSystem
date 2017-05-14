@@ -31,7 +31,6 @@ end
 
 function Cursor:attach(entity)
 	self.entity = entity
-	System:Print( "@LCS: attaching " .. self.name .. " to " .. entity.script.gameobject.name )
 	self.cursor = Texture:Load(entity.script.cursor)
 	Debug:Assert(self.cursor ~= nil, "Failed to load cursor " .. entity.script.cursor )
 end

@@ -36,7 +36,6 @@ end
 function Controller:attach(entity)
 	-- Init entity related things here
 	self.entity = entity
-	System:Print( "@LCS: attaching " .. self.name .. " to " .. entity.script.gameobject.name )
 	self.moveSpeed = entity.script.moveSpeed
 	self.eyePos = entity.script.eyePos
 

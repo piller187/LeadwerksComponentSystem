@@ -61,7 +61,7 @@ end
 --- Actions
 ---
 function BluePower:doPicked(msg)
-	msg.Source.script.gameobject.onReceiveMessage:raise( {Power=self.power} )
+	msg.Source.script.gameobject.onReceiveMessage:raise( {Message="add.blue.power", Power=self.power} )
 	self.entity:Hide()
 end
 

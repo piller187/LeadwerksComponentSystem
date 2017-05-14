@@ -38,8 +38,7 @@ end
 function Cam:attach(entity)
 	-- Init entity related things here
 	self.entity = entity
-	System:Print( "@LCS: attaching " .. self.name .. " to " .. entity.script.gameobject.name )
-
+	
 	self.mouseSense = entity.script.mouseSense
 	self.verticalCamLimit = entity.script.verticalCamLimit
 	

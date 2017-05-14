@@ -50,18 +50,14 @@ Returns:
 	A number the identifies the event. Can be used to remove a subscribtion
 ]]
 function EventManager:subscribe(owner, method, arguments, filterFunction)
-	if method == nil then 
-		System:Print( debug.traceback() ) 
-	end
-	
 	Debug:Assert( owner ~= nil, "Calling EventManager:subscribe with Null-Owner" )
 	Debug:Assert( method ~= nil, "Calling EventManager:subscribe with Null-Method")
 	
 	EventManagerID = EventManagerID+1
 	
-	local func = nil 
+	local filter = nil 
 	if filterFunction ~= nil then 
-		func = assert(loadstring("return " .. filterFunction))()
+		filter = assert(loadstring("return " .. filterFunction))()
 	end
 
 	local args = nil 
@@ -75,7 +71,7 @@ function EventManager:subscribe(owner, method, arguments, filterFunction)
 			Owner = owner, 
 			Method = method, 
 			Arguments = args,
-			Function = filter })
+			Filter = filter })
 
 	return EventManagerID
 end
@@ -130,26 +126,33 @@ function EventManager:raise(args)
 		if handler ~= nil then
 			
 			local arguments = args
+			
 			if 	handler.Arguments ~= nil
 			and handler.Arguments ~= "" then
+				
+				-- there is an JSON argument
 				local handlerArgs = handler.Arguments(args)
-				local handlertype = type(handlerArgs)
-				local argstype = type(args)
 				if 	type(handlerArgs) == "table" 
 				and type(args) == "table" then
+					-- overwrite any JSON argument with an incoming argument
 					for k,v in pairs(handlerArgs) do
-						arguments[k]=v
+						local argv = v
+						for k2, v2 in pairs(args) do 
+							if k == k2 then
+								argv = v2
+								break
+							end
+						end
+						arguments[k]=argv
 					end
-				
-				elseif 	type(handlerArgs) == "string" 
-				and		type(args) == "string" then
-					arguments = arguments .. "," .. handlerArgs
+				else
+					arguments = args
 				end
 			end
 				
-			if	handler.FilterFunction ~= nil 
-			and	handler.FilterFunction ~= "" then 
-				if handler.FilterFunction(args) then
+			if	handler.Filter ~= nil 
+			and	handler.Filter ~= "" then 
+				if handler.Filter(args) then
 					handler.Method(handler.Owner, arguments)
 				end
 			else
