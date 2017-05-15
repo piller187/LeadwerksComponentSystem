@@ -51,6 +51,7 @@ File: EventManager  (EventManager.lua)
 File: GameObject  (GameObject.lua)
 File: JsonSource  (JsonSource.lua)
 File: JsonValidator  (JsonValidator.lua)
+File: LcsUtils  (no auto-title, LcsUtils.lua)
 File: MapHook  (no auto-title, MapHook.lua)
 
 Group: Index  {

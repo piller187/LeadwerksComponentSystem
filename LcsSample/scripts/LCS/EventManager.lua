@@ -110,43 +110,35 @@ See Also:
 	<subscribe(owner, method, arguments, filterFunction)>
 	
 Argument: 
-	An argument can be a table or just a value
+	An argument MUST be a table
 	
 Example: 
-	>self.onEvent:raise( 10 ) -- a value
-	
-	>self.onEvent:raise( "run" ) -- a string 
-	
-	>self.onEvent:raise( { Speed=10, Message="run" } ) -- a table
+	>self.onEvent:raise( { Speed=10, Message="run" } ) -- arguments must be table
 
 ]]
 function EventManager:raise(args)
 	for i = 1, #self.handlers do
 		local handler = self.handlers[i]
 		if handler ~= nil then
-			
+		
 			local arguments = args
 			
+			-- merge with handler args in any
 			if 	handler.Arguments ~= nil
 			and handler.Arguments ~= "" then
 				
-				-- there is an JSON argument
-				local handlerArgs = handler.Arguments(args)
-				if 	type(handlerArgs) == "table" 
-				and type(args) == "table" then
-					-- overwrite any JSON argument with an incoming argument
-					for k,v in pairs(handlerArgs) do
-						local argv = v
-						for k2, v2 in pairs(args) do 
-							if k == k2 then
-								argv = v2
-								break
-							end
+				local handlerArguments = handler.Arguments(args)
+				
+				-- overwrite any handler argument with an incoming argument
+				for k,v in pairs(handlerArguments) do
+					local argv = v
+					for k2, v2 in pairs(args) do 
+						if k == k2 then
+							argv = v2
+							break
 						end
-						arguments[k]=argv
 					end
-				else
-					arguments = args
+					arguments[k] = argv
 				end
 			end
 				
