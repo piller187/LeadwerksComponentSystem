@@ -1,19 +1,13 @@
 Format: 1.52
 
 
-# You can add a title and sub-title to your menu like this:
-# Title: [project name]
+Title: Leadwerks Component System
+
+# You can also add a sub-title to your menu like this:
 # SubTitle: [subtitle]
 
-# You can add a footer to your documentation like this:
-# Footer: [text]
-# If you want to add a copyright notice, this would be the place to do it.
-
-# You can add a timestamp to your documentation like one of these:
-# Timestamp: Generated on month day, year
-# Timestamp: Updated mm/dd/yyyy
-# Timestamp: Last updated mon day
-#
+Footer: A Free Project By Rick Piller and Roland Str止erg
+Timestamp: Last updated mon day year
 #   m     - One or two digit month.  January is "1"
 #   mm    - Always two digit month.  January is "01"
 #   mon   - Short month word.  January is "Jan"
@@ -43,22 +37,42 @@ Format: 1.52
 # time it is run.  When working with groups, just deal with the braces and
 # forget about the indentation and comments.
 # 
+# You can use this file on other computers even if they use different
+# directories.  As long as the command line points to the same source files,
+# Natural Docs will be able to correct the locations automatically.
+# 
 # --------------------------------------------------------------------------
 
 
-File: EntityCreator  (EntityCreator.lua)
-File: EventManager  (EventManager.lua)
-File: GameObject  (GameObject.lua)
-File: JsonSource  (JsonSource.lua)
-File: JsonValidator  (JsonValidator.lua)
-File: LcsUtils  (no auto-title, LcsUtils.lua)
-File: MapHook  (no auto-title, MapHook.lua)
+Link: Leadwerks WebSite  (http://www.leadwerks.com)
+
+Group: Classes  {
+
+   File: EntityCreator  (C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\EntityCreator.lua)
+   File: EventManager  (C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\EventManager.lua)
+   File: GameObject  (C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\GameObject.lua)
+   File: JsonSource  (C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\JsonSource.lua)
+   File: JsonValidator  (C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\JsonValidator.lua)
+   }  # Group: Classes
+
+Group: Functions  {
+
+   File: LcsUtils  (no auto-title, C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\LcsUtils.lua)
+   File: MapHook  (no auto-title, C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\MapHook.lua)
+   }  # Group: Functions
+
+File: Project File  (C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\doc\text\JSON.txt)
 
 Group: Index  {
 
    Class Index: Classes
    Index: Everything
-   File Index: Files
+   File Index: 
    Function Index: Functions
    }  # Group: Index
 
+
+
+##### Do not change or remove these lines. #####
+Data: 1(D3330wba6GH6bHuop\bBu9NEG\t6b1Gpf7GHA6b1Gpf7GHA60uEIu\G\trQ6tGEb196rpEIoGb69H8It6b10r)
+Data: 1(h3330wba6GH6bHuop\bBu9NEG\t6b1Gpf7GHA6b1Gpf7GHA60uEIu\G\trQ6tGEbfu9btGst)
