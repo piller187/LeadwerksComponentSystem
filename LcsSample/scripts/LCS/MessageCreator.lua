@@ -12,12 +12,31 @@
 
 import "Scripts/LCS/LcsUtils.lua"
 
+--[[ 
+
+Class: MessageCreator
+
+Creates a component LUA file using GameObject information
+
+from the JSON project file
+--]]
+
+
+
 if MessageCreator ~= nil then return end
 MessageCreator = {}
 
---
--- Public methods
---
+--[[
+
+Function: create()
+
+Creates an instance of the class
+
+Returns: 
+
+The created instance
+]]
+
 function MessageCreator:create()
 	local obj = {}
     self.__index = self
@@ -29,6 +48,22 @@ function MessageCreator:create()
     return obj
 end
 
+--[[
+
+Function: createComponent( classname, hooks, path )
+
+Creates a component using the JSON GameObject Hooks
+The component will be create as file given by the path
+
+Parameters: 
+
+classname - Name of the component class to be created
+
+hooks - hookup part of a JSON GameObject
+
+path - Name of file to be created
+
+]]
 
 function MessageCreator:createComponent( classname, hooks, path )
 	

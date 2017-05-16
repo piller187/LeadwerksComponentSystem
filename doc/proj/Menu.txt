@@ -48,11 +48,14 @@ Link: Leadwerks WebSite  (http://www.leadwerks.com)
 
 Group: Classes  {
 
+   File: ComponentCreator  (C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\ComponentCreator.lua)
+   File: ENTITY  (C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\Templates\ENTITY.lua)
    File: EntityCreator  (C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\EntityCreator.lua)
    File: EventManager  (C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\EventManager.lua)
    File: GameObject  (C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\GameObject.lua)
    File: JsonSource  (C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\JsonSource.lua)
    File: JsonValidator  (C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\JsonValidator.lua)
+   File: MessageCreator  (C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\MessageCreator.lua)
    }  # Group: Classes
 
 Group: Functions  {
@@ -65,6 +68,8 @@ Group: Project Setup  {
 
    File: Project File  (C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\doc\text\projsetup.txt)
    File: Example of a simple JSON file  (C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\doc\text\example_1.txt)
+   File: Generated Input Component  (C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\doc\text\example_1_input.txt)
+   File: Generated Controller Component  (C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\doc\text\example_1_controller.txt)
    }  # Group: Project Setup
 
 Group: Index  {
