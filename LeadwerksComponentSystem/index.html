@@ -54,31 +54,27 @@
 		var aceEditors = {};
 		var werkFile = "";
 		
-		// the main lcsObject that mimics the export/import
-		var lcsObject = {
-			shared_components: [],
-			shared_entitys: [],
-			shared_messages: [],
-			maps: []
-		};
-		
-		// may not need this here but placing it here as a template
-		var mapObject = {
-			name: "start",
-			components: [
+		// the main editor file
+		var gameObjects = [
+			{
 				name: "",
-				path: "",
+				poststart: "",
+				persistant: "",
+				folder: "",
 				values: [
-					{ name: "", type: "", value: "" }
+					{ name: "", value: "", type: "" }
 				],
-				events: [
-					{ name: "", arg: "" }
+				messages: [
+					{ name: "", path: "" }
 				],
-				actions: [
-					{ name: "", arg: "" }
+				components: [
+					{ name: "", path: "" }
+				],
+				hookups: [
+					{ source: "", source_event: "", destination: "", destination_action: "" }
 				]
-			]
-		}
+			}
+		];
 		
 		var path = require('path');
 		var nwDir = path.dirname(process.execPath);
@@ -122,50 +118,61 @@
 			var fileName = $("#name").val();
 			var path = $(this).attr("path");
 			var template = $(this).attr("template");
+			var type = $(this).attr("type");
 			
-			// if the file doesn't have .lua then add it
-			if(fileName.indexOf(".lua") == -1){
-				fileName = fileName + ".lua";
-			}
-			
-			var finalFile = path + fileName;
-			finalFile = finalFile.replace(/\//g, "\\");
-			
-			var stats;
-			try{
-				stats = fs.statSync(finalFile);
-				alert("File already exists.");
-			}
-			catch(e){
-				// file does not exist so create it
-				var templateFile = nwDir + "\\LeadwerksComponentSystem\\templates\\" + template;
-				var fileContents = fs.readFileSync(templateFile, "utf8");
-				var className = fileName.replace(".lua", "");
-				var alteredFileContents = fileContents.replace(/NAME/g, className);
-				
-				// write the file
-				fs.writeFileSync(finalFile, alteredFileContents, { flag: 'w' });
-				
-				// insert the new file into the the treeview
-				var newNode = {
-					id: finalFile.replace(/\\/g, "/"),
+			if(type == "game_object"){	
+				// the new node for the tree view
+				var node = {
+					id: fileName,
 					text: fileName,
-					type: 'file',
-					icon: 'jstree-file',
-					children: []
 				};
 				
-				var parent = $('#projectTree').jstree('get_selected');
+			} else if(type == "filter"){	// todo: make filter for game object
 				
-				// add this new node to the tree view and open it by simulating a click
-				$("#projectTree").jstree().create_node(parent, newNode, 'inside', function(){ console.log("created"); $("#projectTree").jstree("activate_node", finalFile.replace(/\\/g, "/")); });
+			} else {	// create component/class/message file
+				// if the file doesn't have .lua then add it
+				if(fileName.indexOf(".lua") == -1){
+					fileName = fileName + ".lua";
+				}
+			
+				var finalFile = path + fileName;
+				finalFile = finalFile.replace(/\//g, "\\");
+			
+				var stats;
+				try{
+					stats = fs.statSync(finalFile);
+					alert("File already exists.");
+				}
+				catch(e){
+					// file does not exist so create it
+					var templateFile = nwDir + "\\LeadwerksComponentSystem\\templates\\" + template;
+					var fileContents = fs.readFileSync(templateFile, "utf8");
+					var className = fileName.replace(".lua", "");
+					var alteredFileContents = fileContents.replace(/NAME/g, className);
 				
-				$("#dlgCreateNewItem").dialog("close"); 
+					// write the file
+					fs.writeFileSync(finalFile, alteredFileContents, { flag: 'w' });
+				
+					// insert the new file into the the treeview
+					var newNode = {
+						id: finalFile.replace(/\\/g, "/"),
+						text: fileName,
+						type: 'file',
+						icon: 'jstree-file',
+						children: []
+					};
+				
+					var parent = $('#projectTree').jstree('get_selected');
+				
+					// add this new node to the tree view and open it by simulating a click
+					$("#projectTree").jstree().create_node(parent, newNode, 'inside', function(){ console.log("created"); $("#projectTree").jstree("activate_node", finalFile.replace(/\\/g, "/")); });
+				
+					$("#dlgCreateNewItem").dialog("close"); 
+				}
 			}
 		});
 		
 		function reportMenu(node) {
-			//alert('Node id ' + node.id);
 			var path = node.id.replace(/\//g, "\\");
 			var stats = fs.statSync(path);
 			
@@ -179,16 +186,19 @@
 				return {
 					createItem : {
 						"label" : "New Component",
-						"action" : function(obj) { 
+						"action" : function(obj) {
+							$("#btnCreateItem").attr("type", "component");
 							$("#btnCreateItem").attr("path", path);
 							$("#btnCreateItem").attr("template", "COMPONENT.lua");
 							$("#dlgCreateNewItem").dialog("open"); 
+							
 						},
 						"_class" : "class"
 					},
 					renameItem : {
 						"label" : "New Class",
 						"action" : function(obj) {
+							$("#btnCreateItem").attr("type", "class");
 							$("#btnCreateItem").attr("path", path);
 							$("#btnCreateItem").attr("template", "GENERAL.lua");
 							$("#dlgCreateNewItem").dialog("open"); 
@@ -197,6 +207,7 @@
 					deleteItem : {
 						"label" : "New World Message",
 						"action" : function(obj) {
+							$("#btnCreateItem").attr("type", "message");
 							$("#btnCreateItem").attr("path", path);
 							$("#btnCreateItem").attr("template", "MESSAGE.lua");
 							$("#dlgCreateNewItem").dialog("open"); 
@@ -207,13 +218,20 @@
 		}
 		
 		function gameObjectMenu(node){
+			var path = node.id.replace(/\//g, "\\");
+			
+			// make this the selected node, because we use the selected node when deciding what parent to place this under
+			$("#gameObjectTree").jstree("activate_node", node.id);
+					
 			return {
 				createGameObject : {
 					label : "New Game Object",
 					action : function(obj) { 
-						alert("New game object");
-					}/*,
-					"_class" : "class"*/
+						alert("New game object " + node.id);
+						$("#btnCreateItem").attr("type", "game_object");
+						$("#btnCreateItem").attr("path", path);
+						$("#dlgCreateNewItem").dialog("open"); 
+					}
 				},
 				createFilter: {
 					label : "New Filter",
@@ -240,7 +258,6 @@
 			// get the file that needs to be saved
 			var selected = $("#fileTabs").tabs("option", "active");
 			var file = $($("#fileTabs li")[selected]).attr("title");
-			//console.log(aceEditors);
 			var editor = aceEditors[file];
 			var editorText = editor.getSession().getValue();
 			
@@ -248,8 +265,7 @@
 			if(!editor.session.getUndoManager().isClean()){
 				try	{
 					fs.writeFileSync(file.replace(/\//g, "\\"), editorText, { flag: 'w' });
-					//console.log("file saved");
-				
+
 					var selectedTabTitle = $("#fileTabs .ui-tabs-active").text();
 					var selectedTabHtml = $("#fileTabs .ui-tabs-active").html();
 					$("#fileTabs .ui-tabs-active").html(selectedTabHtml.replace(selectedTabTitle, selectedTabTitle.substring(1)));
@@ -267,8 +283,6 @@
 				// activate the tab that's already open
 				var index = $('#fileTabs a[href="#' + name + '"]').parent().index();
 				$("#fileTabs").tabs("option", "active", index);
-				
-				console.log("Activating " + name + " " + index);
 				
 				return;
 			}
@@ -370,34 +384,43 @@
 				});
 				
 				// todo: look for e.target.files[0].name.replace(".werk", "") + ".lcp" file and if there load this tree else create the lcp file and load this tree view based on that empty lcp file
+				console.log(e.target.files[0].name.replace(".werk", ".lcp"));
+				var stats; 
 				
-				// create or load the tree view the tree view
-				$('#gameObjectTree').jstree({
-					core: {
-						data: {
-							id: 'game_object_root',
-							text: e.target.files[0].name.replace(".werk", ""),
-							icon: 'jstree-folder',
-							children: []
+				try{				
+					fs.statSync(e.target.files[0].name.replace(".werk", ".lcp"));
+					
+					// todo: file exists so load it and set game object tree view based on it
+				}
+				catch(ex){
+					// todo: file doesn't exist
+					$('#gameObjectTree').jstree({
+						core: {
+							data: {
+								id: "/" + e.target.files[0].name.replace(".werk", ""),
+								text: "/" + e.target.files[0].name.replace(".werk", ""),
+								icon: 'jstree-folder',
+								children: []
+							},
+							check_callback: true
 						},
-						check_callback: true
-					},
-					sort: function(a, b){
-						// we are sorting on icon (folders vs files) and the case insensitive name
-						a1 = this.get_node(a);
-						b1 = this.get_node(b);
-						if (a1.icon == b1.icon){
-							return (a1.text.toLowerCase() > b1.text.toLowerCase()) ? 1 : -1;
-						} else {
-							return (a1.icon > b1.icon) ? -1 : 1;
-						}
-					},
-					contextmenu: {
-						select_node: false,
-						items: gameObjectMenu
-					},
-					plugins: ["contextmenu", "sort"]
-				});
+						sort: function(a, b){
+							// we are sorting on icon (folders vs files) and the case insensitive name
+							a1 = this.get_node(a);
+							b1 = this.get_node(b);
+							if (a1.icon == b1.icon){
+								return (a1.text.toLowerCase() > b1.text.toLowerCase()) ? 1 : -1;
+							} else {
+								return (a1.icon > b1.icon) ? -1 : 1;
+							}
+						},
+						contextmenu: {
+							select_node: false,
+							items: gameObjectMenu
+						},
+						plugins: ["contextmenu", "sort"]
+					});
+				}
 			});
 			
 			// opening a file from the sidebar

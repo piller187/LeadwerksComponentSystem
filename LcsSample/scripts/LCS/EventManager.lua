@@ -75,7 +75,7 @@ function EventManager:subscribe(owner, method, arguments, filterFunction)
 			Owner = owner, 
 			Method = method, 
 			Arguments = args,
-			Function = filter })
+			Function = func })
 
 	return EventManagerID
 end
@@ -149,7 +149,7 @@ function EventManager:raise(args)
 				
 			if	handler.FilterFunction ~= nil 
 			and	handler.FilterFunction ~= "" then 
-				if handler.FilterFunction(args) then
+				if handler.FilterFunction(arguments) then
 					handler.Method(handler.Owner, arguments)
 				end
 			else
