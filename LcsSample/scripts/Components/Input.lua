@@ -19,10 +19,11 @@ function Input:init()
 	--- Events
 	self.onMove = EventManager:create()
 	self.onJump = EventManager:create()
-
+	
 	-- Init non-entity related things here
 	self.name = "Input"
-
+	self.moving = false
+	
 	for k, v in pairs(Input) do
 		obj[k] = v
 	end
@@ -38,6 +39,13 @@ function Input:attach(entity)
 end
 
 function Input:update()
+	if Window:GetCurrent():KeyDown(Key.W) and not self.moving then
+		self:doMove()
+	end
+	
+	if Window:GetCurrent():KeyHit(Key.Space) then
+		self:doJump()
+	end
 end
 
 function Input:updatePhysics()
@@ -62,12 +70,12 @@ end
 --- Actions
 ---
 function Input:doMove(args)
-	Debug:Assert( false, "TODO! Add code in function Input:doMove(args)" )
+	self.onMove:raise()
 end
 
 
 function Input:doJump(args)
-	Debug:Assert( false, "TODO! Add code in function Input:doJump(args)" )
+	self.onMove:raise()
 end
 
 

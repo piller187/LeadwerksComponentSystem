@@ -22,7 +22,9 @@ function Controller:init()
 
 	-- Init non-entity related things here
 	self.name = "Controller"
-
+	self.jump = 0
+	self.move = 0
+	
 	for k, v in pairs(Controller) do
 		obj[k] = v
 	end
@@ -32,7 +34,9 @@ end
 function Controller:attach(entity)
 	-- Init entity related things here
 	self.entity = entity
-
+	self.moveSpeed = entity.script.moveSpeed
+	self.jumpForece = entity.script.jumpForce 
+	
 	-- Subscribe for collisions
 	-- self.entity.onCollision:subscribe( self, self.doCollision)
 end
@@ -41,6 +45,8 @@ function Controller:update()
 end
 
 function Controller:updatePhysics()
+	self.entity:SetInput( 0, self.move, self.jump , 0)
+	self.jump = 0
 end
 
 function Controller:overlap(entity)
@@ -62,12 +68,12 @@ end
 --- Actions
 ---
 function Controller:doMove(args)
-	Debug:Assert( false, "TODO! Add code in function Controller:doMove(args)" )
+	self.move = self.moveSpeed
 end
 
 
 function Controller:doJump(args)
-	Debug:Assert( false, "TODO! Add code in function Controller:doJump(args)" )
+	self.jump = self.jumpForce
 end
 
 

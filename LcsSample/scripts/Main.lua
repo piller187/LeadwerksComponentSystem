@@ -41,7 +41,9 @@ while	not window:KeyDown(Key.Escape)
 		and not window:Closed() do
 	
 	--Handle map change
-	if map ~= 3 and window:KeyHit(Key.M) then
+	if 	map ~= 3 
+	and map ~= 4 
+	and window:KeyHit(Key.M) then
 		
 		Time:Pause()
 		System:GCSuspend()		
@@ -63,7 +65,8 @@ while	not window:KeyDown(Key.Escape)
 	context:SetBlendMode(Blend.Alpha)
 	
 	context:SetColor(Vec4(0,0,0,1))
-	if map ~= 3 then
+	if 	map ~= 3 
+	and map ~= 4 then
 		local text = "Press M to switch map"
 		context:DrawText( text, 
 			(context:GetWidth()-font:GetTextWidth(text))/2,

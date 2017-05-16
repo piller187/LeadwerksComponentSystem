@@ -3,12 +3,7 @@
 	[
 		{
 			"name": "Player",
-			"poststart": "self.entity:SetShadowMode(0)
-self.entity:SetCollisionType(Collision.Character)
-self.entity:SetPickMode(0)
-local mat = Material:Load('Materials/Effects/Invisible.mat')
-self.entity:SetMaterial(mat)
-mat:Release()",
+			"poststart": "",
 			"persistent": "true",
 			"folder": "",
 			"values": 
