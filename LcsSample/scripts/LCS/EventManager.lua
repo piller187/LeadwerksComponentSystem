@@ -49,7 +49,7 @@ Returns:
 
 	A number the identifies the event. Can be used to remove a subscribtion
 ]]
-function EventManager:subscribe(owner, method, arguments, filterFunction)
+function EventManager:subscribe(owner, method, arguments, filterFunction, postFunction)
 	if method == nil then 
 		System:Print( debug.traceback() ) 
 	end
@@ -75,7 +75,8 @@ function EventManager:subscribe(owner, method, arguments, filterFunction)
 			Owner = owner, 
 			Method = method, 
 			Arguments = args,
-			Function = func })
+			Function = func,
+			PostFunction = postFunction })
 
 	return EventManagerID
 end
@@ -154,6 +155,10 @@ function EventManager:raise(args)
 				end
 			else
 				handler.Method(handler.Owner, arguments)
+			end
+			
+			if handler.PostFunction ~= nil then
+				handler.PostFunction(arguments)
 			end
 		end
 	end
