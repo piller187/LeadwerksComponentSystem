@@ -202,18 +202,26 @@ function GameObject:build(entity,gameobject)
 				if 	hooks.arguments == nil
 				or	hooks.arguments == "" then
 					src[ev]:subscribe( dst, dst[ac])
+				elseif 	hooks.post ~= nil
+				and		hooks.post ~= "" then
+					System:Print( "@LCS: " .. hooks.source ..".".. ev .. "-" .. hooks.destination .. "." ..ac.. " A=" .. hooks.arguments .. " P=" .. hooks.post)
+					src[ev]:subscribe( dst, dst[ac], hooks.arguments, nil, hooks.post )
 				else
 					System:Print( "@LCS: " .. hooks.source ..".".. ev .. "-" .. hooks.destination .. "." ..ac.. " A=" .. hooks.arguments )
-					src[ev]:subscribe( dst, dst[ac], hooks.arguments )
+					src[ev]:subscribe( dst, dst[ac], hooks.arguments, nil, nil )
 				end
 			else
 				if 	hooks.arguments == nil
 				or	hooks.arguments == "" then
 					System:Print( "@LCS: " ..  hooks.source ..".".. ev .. "-" ..  hooks.destination .. "." ..ac.. " F=" .. hooks.filter)
-					src[ev]:subscribe( dst, dst[ac], nil, hooks.filter)
+					src[ev]:subscribe( dst, dst[ac], nil, hooks.filter, nil )
+				elseif 	hooks.post ~= nil
+				or		hooks.post ~= "" then
+					System:Print( "@LCS: " ..  hooks.source .."." ..ev .. "-" ..  hooks.destination .. "." ..ac.. " A=" .. hooks.arguments .. " F=" .. hooks.filter)
+					src[ev]:subscribe( dst, dst[ac], hooks.arguments, hooks.filter, nil )
 				else
 					System:Print( "@LCS: " ..  hooks.source .."." ..ev .. "-" ..  hooks.destination .. "." ..ac.. " A=" .. hooks.arguments .. " F=" .. hooks.filter)
-					src[ev]:subscribe( dst, dst[ac], hooks.arguments, hooks.filter )
+					src[ev]:subscribe( dst, dst[ac], hooks.arguments, hooks.filter, hooks.post )
 				end
 			end
 		end

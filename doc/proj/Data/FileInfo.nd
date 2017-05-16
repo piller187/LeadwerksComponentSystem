@@ -1,0 +1,17 @@
+1.52
+LUA
+C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\doc\text\projsetup.txt	1494943383	1	Project File
+C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\Templates\MESSAGE.lua	1493671999	0	C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\Templates\MESSAGE.lua
+C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\Templates\GENERAL.lua	1493672007	0	C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\Templates\GENERAL.lua
+C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\EventManager.lua	1494937957	1	EventManager
+C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\LcsUtils.lua	1494883903	1	C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\LcsUtils.lua
+C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\JsonSource.lua	1494714736	1	JsonSource
+C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\GameObject.lua	1494801360	1	GameObject
+C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\ComponentCreator.lua	1494789699	0	C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\ComponentCreator.lua
+C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\MapHook.lua	1494788686	1	C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\MapHook.lua
+C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\EntityCreator.lua	1494759918	1	EntityCreator
+C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\doc\text\example_1.txt	1494943401	1	Example of a simple JSON file
+C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\Templates\ENTITY.lua	1494937143	0	C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\Templates\ENTITY.lua
+C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\MessageCreator.lua	1494703800	0	C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\MessageCreator.lua
+C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\Json.lua	1492846514	0	C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\Json.lua
+C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\JsonValidator.lua	1494711169	1	JsonValidator

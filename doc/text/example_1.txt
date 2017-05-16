@@ -1,0 +1,281 @@
+Title: Example of a simple JSON file
+
+Here is an example of a simple JSON project file that will create a GameObject
+
+and attach it to an Entity named "Player". It will also create two components 
+
+called "Input" and "Control". Input will handle user actions for moving the
+
+player and Control will do the actual moving. The Input will fire a Move event
+
+the user hits a key desired for movement. The Controller has an Action for 
+
+moving. So what we want to do is hooking up the Input event Move to the 
+
+Controller Move action. Same goes for jumping. 
+
+(start code)
+{
+	"gameobjects": 
+	[
+		{
+			"name": "Player",
+			"poststart": "
+self.entity:SetShadowMode(0)
+self.entity:SetCollisionType(Collision.Character)
+self.entity:SetPickMode(0)
+local mat = Material:Load('Materials/Effects/Invisible.mat')
+self.entity:SetMaterial(mat)
+mat:Release()"
+			"persistent": "true",
+			"folder": "",
+			"values": 
+			[
+				{
+					"name": "moveSpeed",
+					"value": "2",
+					"type": "int"
+				},
+				{
+					"name": "jumpForce",
+					"value": "4",
+					"type": "int"
+				}
+			],
+			"messages": 
+			[
+			],
+			"components": 
+			[
+				{
+					"name": "Input",
+					"path": "Scripts/Components/Input.lua"
+				},
+				{
+					"name": "Control",
+					"path": "Scripts/Components/Control.lua"
+				}
+			],
+			"hookups": 
+			[
+				{
+					"source": "Input",
+					"source_event": "Move",
+					"destination": "Controller",
+					"destination_action": "Move",
+					"arguments": "",
+					"filter": ""
+				},
+				{
+					"source": "Input",
+					"source_event": "Jump",
+					"destination": "Controller",
+					"destination_action": "Jump",
+					"arguments": "",
+					"filter": ""
+				}
+			]
+		}
+	]
+}
+(end)
+
+When you then run your Leadwerks program first time using the LcsLoader all
+
+files needed will be created, which means Scripts/Components/Input.lua and
+
+Scripts/Components/Control.lua. The Player GameObjet is created in runtime and 
+
+wont see that and does not need to. It will contains the components involved 
+
+and handle event messages sent between the components
+
+Topic: Generated Input Component
+
+Here is the code generated for the Input component
+
+(start code)
+---
+--- Created by Leadwerks Component System
+---
+
+import "Scripts/LCS/EventManager.lua"
+
+if Input~= nil then return end
+Input = {}
+
+
+---
+--- Public
+---
+function Input:init()
+	local obj = {}
+	self.__index = self
+
+	self.entity = nil
+	--- Events
+	self.onMove = EventManager:create()
+	self.onJump = EventManager:create()
+
+	-- Init non-entity related things here
+	self.name = "Input"
+
+	for k, v in pairs(Input) do
+		obj[k] = v
+	end
+	return obj
+end
+
+function Input:attach(entity)
+	-- Init entity related things here
+	self.entity = entity
+
+	-- Subscribe for collisions
+	-- self.entity.onCollision:subscribe( self, self.doCollision)
+end
+
+function Input:update()
+end
+
+function Input:updatePhysics()
+end
+
+function Input:overlap(entity)
+end
+
+function Input:draw()
+end
+
+function Input:drawEach(camera)
+end
+
+function Input:postRender(context)
+end
+
+function Input:detach()
+end
+
+---
+--- Actions
+---
+function Input:doMove(args)
+	Debug:Assert( false, "TODO! Add code in function Input:doMove(args)" )
+end
+
+
+function Input:doJump(args)
+	Debug:Assert( false, "TODO! Add code in function Input:doJump(args)" )
+end
+
+
+
+-- Handle subscribed collision 
+-- arg = { Owner:entity, Entity:entity, Distance:number, Pos:Vec3, Normal:Vec3, Speed=number}
+--[[
+function Input:doCollision( arg )
+end
+]]
+
+---
+--- Private
+---
+
+
+--- EOF ---
+(end)
+
+Topic: Generated Controller Component
+
+And here is the Control component
+
+(start code)
+---
+--- Created by Leadwerks Component System
+---
+
+import "Scripts/LCS/EventManager.lua"
+
+if Controller~= nil then return end
+Controller = {}
+
+
+---
+--- Public
+---
+function Controller:init()
+	local obj = {}
+	self.__index = self
+
+	self.entity = nil
+	--- Events
+	self.onMove = EventManager:create()
+	self.onJump = EventManager:create()
+
+	-- Init non-entity related things here
+	self.name = "Controller"
+
+	for k, v in pairs(Controller) do
+		obj[k] = v
+	end
+	return obj
+end
+
+function Controller:attach(entity)
+	-- Init entity related things here
+	self.entity = entity
+
+	-- Subscribe for collisions
+	-- self.entity.onCollision:subscribe( self, self.doCollision)
+end
+
+function Controller:update()
+end
+
+function Controller:updatePhysics()
+end
+
+function Controller:overlap(entity)
+end
+
+function Controller:draw()
+end
+
+function Controller:drawEach(camera)
+end
+
+function Controller:postRender(context)
+end
+
+function Controller:detach()
+end
+
+---
+--- Actions
+---
+function Controller:doMove(args)
+	Debug:Assert( false, "TODO! Add code in function Controller:doMove(args)" )
+end
+
+
+function Controller:doJump(args)
+	Debug:Assert( false, "TODO! Add code in function Controller:doJump(args)" )
+end
+
+
+
+-- Handle subscribed collision 
+-- arg = { Owner:entity, Entity:entity, Distance:number, Pos:Vec3, Normal:Vec3, Speed=number}
+--[[
+function Controller:doCollision( arg )
+end
+]]
+
+---
+--- Private
+---
+
+
+--- EOF ---
+
+(end)
+

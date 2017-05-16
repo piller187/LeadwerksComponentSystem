@@ -16,7 +16,8 @@ Script.onMessage = nil
 Script.gameobject = nil
 
 function Script:ReceiveMessage(msg)
-	self.onReceiveMessage:raise( msg )
+	--self.onReceiveMessage:raise( msg )
+	self.gameobject:ReceiveMessage(msg)
 end 
 
 function Script:doCollision(msg) -- {Owner:entity, Entity:entity, Distance:number, Pos=Vec3, Normal=Vec3, Speed=number} )

@@ -35,8 +35,9 @@
 					"source_event": "",
 					"destination": "",
 					"destination_action": "",
-					"message": "",
-					"func": ""
+					"arguments": "",
+					"func": "",
+					"post": ""
 				}
 			]
 		}

@@ -61,7 +61,11 @@ Group: Functions  {
    File: MapHook  (no auto-title, C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\LcsSample\scripts\LCS\MapHook.lua)
    }  # Group: Functions
 
-File: Project File  (C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\doc\text\JSON.txt)
+Group: Project Setup  {
+
+   File: Project File  (C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\doc\text\projsetup.txt)
+   File: Example of a simple JSON file  (C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\doc\text\example_1.txt)
+   }  # Group: Project Setup
 
 Group: Index  {
 

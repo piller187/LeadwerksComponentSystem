@@ -34,7 +34,7 @@ function EventManager:create()
 end
 
 --[[
-Function: subscribe(owner, method, arguments, filterFunction)
+Function: subscribe(owner, method, arguments, filterFunction, postFunction)
 
 Subscribe to an event
 
@@ -44,12 +44,17 @@ Parameters:
 	method - function/method to call on raise
 	arguments - table or string of arguments
 	filterFunction - function called for enable/disable the event
+	postFunction - callback 
 	
 Returns:
 
 	A number the identifies the event. Can be used to remove a subscribtion
 ]]
-function EventManager:subscribe(owner, method, arguments, filterFunction)
+function EventManager:subscribe(owner, method, arguments, filterFunction, postFunction)
+	if method == nil then 
+		System:Print( debug.traceback() ) 
+	end
+	
 	Debug:Assert( owner ~= nil, "Calling EventManager:subscribe with Null-Owner" )
 	Debug:Assert( method ~= nil, "Calling EventManager:subscribe with Null-Method")
 	
@@ -58,6 +63,11 @@ function EventManager:subscribe(owner, method, arguments, filterFunction)
 	local filter = nil 
 	if filterFunction ~= nil then 
 		filter = assert(loadstring("return " .. filterFunction))()
+	end
+
+	local postFunc = nil 
+	if postFunction ~= nil then 
+		postFunc= assert(loadstring("return " .. postFunction))()
 	end
 
 	local args = nil 
@@ -71,7 +81,8 @@ function EventManager:subscribe(owner, method, arguments, filterFunction)
 			Owner = owner, 
 			Method = method, 
 			Arguments = args,
-			Filter = filter })
+			Filter = filter,
+			PostFunction = postFunc })
 
 	return EventManagerID
 end
@@ -86,7 +97,7 @@ Parameters:
 	id - identification on the event
 	
 See Also:
-	<subscribe(owner, method, arguments, filterFunction)>
+	<subscribe(owner, method, arguments, filterFunction, postFunction)>
 ]]
 function EventManager:unsubscribe(id) -- the id returned when subscribing
 	for i = 1, #self.handlers do
@@ -107,7 +118,7 @@ Parameters:
 	args - argument send with the envent
 	
 See Also:
-	<subscribe(owner, method, arguments, filterFunction)>
+	<subscribe(owner, method, arguments, filterFunction, postFunction)>
 	
 Argument: 
 	An argument MUST be a table
@@ -120,7 +131,7 @@ function EventManager:raise(args)
 	for i = 1, #self.handlers do
 		local handler = self.handlers[i]
 		if handler ~= nil then
-		
+			
 			local arguments = args
 			
 			-- merge with handler args in any
@@ -138,10 +149,9 @@ function EventManager:raise(args)
 							break
 						end
 					end
-					arguments[k] = argv
 				end
 			end
-				
+			
 			if	handler.Filter ~= nil 
 			and	handler.Filter ~= "" then 
 				if handler.Filter(args) then

@@ -1,0 +1,80 @@
+Title:  Project File
+
+A LCS project is setup by writing a JSON formatted text file.
+
+Information about JSON can be found at http://www.json.org  
+
+
+Topic: Overview
+The JSON Project file defines a list of GameObjects which a attached to entitys
+
+used in a map. If a GameObject has the same name as an entity it will be 
+
+created and attached to that entity when a map i loaded
+
+Topic: Format
+
+Text in capital letters should be replaced by your values
+
+(start code)
+{
+	"gameobjects": 
+	[
+		{
+			"name": "NAME OF ENTITY",
+			"poststart": "CODE EXECUTED AFTER SCRIPT:START()"
+			"persistent": "TRUE|FALSE",
+			"folder": "IGNORED",
+			"values": 
+			[
+				{
+					"name": "VALUE NAME",
+					"value": "VALUE",
+					"type": "VALUE TYPE"
+				},
+				{
+					... more values
+				}
+			],
+			"messages": 
+			[
+				{
+					"name": "CLASS NAME",
+					"path": "LUA FILE PATH"
+				},
+				{
+					... more messages
+				}
+			],
+			"components": 
+			[
+				{
+					"name": "CLASS NAME",
+					"path": "LUA FILE PATH"
+				},
+				{
+					... more components
+				}
+			],
+			"hookups": 
+			[
+				{
+					"source": "OWNER OF THE EVENT",
+					"source_event": "EVENT",
+					"destination": "DESTINATION OF THE EVENT",
+					"destination_action": "ACTION FIRED ON THE EVENT",
+					"arguments": "FUNCTION RETURN EVENT ARGUMETS",
+					"filter": "FILTER FUNCTION"
+				},
+				{
+					... more hookups
+				}
+			]
+		},
+		{
+			more gameobjects
+		}
+	]
+}
+(end)
+
