@@ -70,6 +70,7 @@ Group: Project Setup  {
    File: Example of a simple JSON file  (C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\doc\text\example_1.txt)
    File: Generated Input Component  (C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\doc\text\example_1_input.txt)
    File: Generated Controller Component  (C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\doc\text\example_1_controller.txt)
+   File: Adding LCS to your project  (C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\doc\text\addingLCS.txt)
    }  # Group: Project Setup
 
 Group: Index  {

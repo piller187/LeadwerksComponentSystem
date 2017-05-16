@@ -1,0 +1,40 @@
+Title:  Adding LCS to your project
+
+Adding LCS to your project is done by simply replacing your *Map:Load* 
+
+with the LCS map loader *LcsLoadMap*
+
+
+Topic: Example
+
+(start code)
+import "Scripts/LCS/MapHook.lua" -- LCS SUPPORT
+
+--Initialize Steamworks (optional)
+Steamworks:Initialize()
+
+--Create a window
+local window = Window:Create(
+	"myGame",
+	0,0,
+	System:GetProperty("screenwidth","1024"),
+	System:GetProperty("screenheight","768"), 
+	Window.Titlebar)
+
+window:HideMouse()
+
+--Create the graphics context
+local context=Context:Create(window,0)
+if context==nil then return end
+
+--Create a world
+local world=World:Create()
+world:SetLightQuality((System:GetProperty("lightquality","1")))
+
+--Map
+LcsLoadMap("Maps/myMap.map", "myProject.json")  -- LCS SUPPORT
+
+...
+...
+
+(end)
