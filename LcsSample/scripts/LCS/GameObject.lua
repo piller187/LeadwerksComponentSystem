@@ -197,33 +197,25 @@ function GameObject:build(entity,gameobject)
 			ac = ac..hooks.destination_action
 			
 			-- create hook
-			if 	hooks.func == nil 
-			or  hooks.func == "" then
+			if 	hooks.filter == nil 
+			or  hooks.filter == "" then
 				if 	hooks.arguments == nil
 				or	hooks.arguments == "" then
 					src[ev]:subscribe( dst, dst[ac])
 				else
+					System:Print( "@LCS: " .. hooks.source ..".".. ev .. "-" .. hooks.destination .. "." ..ac.. " A=" .. hooks.arguments )
 					src[ev]:subscribe( dst, dst[ac], hooks.arguments )
 				end
 			else
 				if 	hooks.arguments == nil
 				or	hooks.arguments == "" then
-					src[ev]:subscribe( dst, dst[ac], nil, hooks.func)
+					System:Print( "@LCS: " ..  hooks.source ..".".. ev .. "-" ..  hooks.destination .. "." ..ac.. " F=" .. hooks.filter)
+					src[ev]:subscribe( dst, dst[ac], nil, hooks.filter)
 				else
-					src[ev]:subscribe( dst, dst[ac], hooks.arguments, hooks.func )
+					System:Print( "@LCS: " ..  hooks.source .."." ..ev .. "-" ..  hooks.destination .. "." ..ac.. " A=" .. hooks.arguments .. " F=" .. hooks.filter)
+					src[ev]:subscribe( dst, dst[ac], hooks.arguments, hooks.filter )
 				end
 			end
-			
-			local hookstring = 
-				"@LCS: [Hook " .. entname .. "] " ..
-				hooks.source .. "." .. ev .. ":subscribe(" .. 
-				hooks.destination .. "," .. hooks.destination .. "." .. ac 
-			if hooks.func ~= nil and hooks.func ~= "" then
-				hookstring = hookstring .. "," .. hooks.func 
-			end
-			hookstring = hookstring .. ")"
-			
-			System:Print( hookstring )
 		end
 
 	end
@@ -252,7 +244,9 @@ GameObject.onReceiveMessage = nil
 	arg - event arguments
 ]]
 function GameObject:ReceiveMessage(arg)
-	self.onReceiveMessage:raise(arg)
+	if self.onReceiveMessage ~= nil then
+		self.onReceiveMessage:raise(arg)
+	end
 end
 
 

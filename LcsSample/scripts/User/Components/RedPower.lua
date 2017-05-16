@@ -61,7 +61,7 @@ end
 --- Actions
 ---
 function RedPower:doPicked(msg)
-	msg.Source.script.gameobject.onReceiveMessage:raise( { Power=self.power } )
+	msg.Source.script.gameobject.onReceiveMessage:raise( {Message="add.red.power", Power=self.power} )
 	self.entity:Hide()
 end
 

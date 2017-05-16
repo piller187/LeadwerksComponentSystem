@@ -72,7 +72,13 @@ function BlueMeter:postRender(context)
 	local y = sh - bottom_margin - 2 * border - hval
 
 	local v = self.power / self.max
-	context:SetColor(1.0 - v, v, 0.0, 1.0)
+	local v = self.power / self.max
+	context:SetColor( 
+		self.color.x*v, 
+		self.color.y*v, 
+		self.color.z*v, 
+		1.0)
+	
 	context:DrawRect(self.xpos, y, self.width, hval, 0)
 
 	-- border

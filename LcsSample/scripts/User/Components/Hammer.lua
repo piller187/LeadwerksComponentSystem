@@ -4,23 +4,25 @@
 
 import "Scripts/LCS/EventManager.lua"
 
-if Hammer ~= nil then return end
+if Hammer~= nil then return end
 Hammer = {}
+
 
 ---
 --- Public
 ---
-
-
 function Hammer:init()
 	local obj = {}
 	self.__index = self
 
+	self.entity = nil
+
+	--- Events
+	self.onPicked = EventManager:create()
+
 	-- Init non-entity related things here
 	self.name = "Hammer"
 
-	self.entity = nil
-	
 	for k, v in pairs(Hammer) do
 		obj[k] = v
 	end
@@ -31,6 +33,8 @@ function Hammer:attach(entity)
 	-- Init entity related things here
 	self.entity = entity
 
+	-- Subscribe for collisions
+	-- self.entity.onCollision:subscribe( self, self.doCollision)
 end
 
 function Hammer:update()
@@ -57,12 +61,23 @@ end
 ---
 --- Actions
 ---
-function Hammer:Use()
+function Hammer:doPicked(args)
+	args.Source.script.gameobject.onReceiveMessage:raise( { Message="hammer.picked", Force = 10 } )
+	self.entity:Hide()
 end
 
-function Hammer:StopUsing()
+
+
+-- Handle subscribed collision 
+-- arg = { Owner:entity, Entity:entity, Distance:number, Pos:Vec3, Normal:Vec3, Speed=number}
+--[[
+function Hammer:doCollision( arg )
 end
+]]
 
 ---
 --- Private
 ---
+
+
+--- EOF ---
