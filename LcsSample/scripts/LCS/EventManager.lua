@@ -133,12 +133,14 @@ function EventManager:raise(args)
 		if handler ~= nil then
 			
 			local arguments = args
+			local handlerArguments = nil
+			local postArguments = nil
 			
-			-- merge with handler args in any
+			-- merge with handler args if any
 			if 	handler.Arguments ~= nil
 			and handler.Arguments ~= "" then
 				
-				local handlerArguments = handler.Arguments(args)
+				handlerArguments = handler.Arguments(args)
 				
 				-- overwrite any handler argument with an incoming argument
 				for k,v in pairs(handlerArguments) do
@@ -149,6 +151,37 @@ function EventManager:raise(args)
 							break
 						end
 					end
+				end
+			end
+			
+			-- merge with handler post if any
+			if 	handler.PostFunction ~= nil
+			and handler.PostFunction ~= "" then
+				
+				postArguments = handler.PostFunction(args)
+				
+				-- overwrite any handler argument with an incoming argument
+				for k,v in pairs(postArguments) do
+					local argv = v
+					for k2, v2 in pairs(args) do 
+						if k == k2 then
+							argv = v2
+							break
+						end
+					end
+				end
+			end		
+			
+			-- merge all together 
+			if handlerArguments ~= nil then
+				for k,v in pairs(handlerArguments) do
+					arguments[k]=v
+				end
+			end
+			
+			if postArguments ~= nil then
+				for k,v in pairs(postArguments) do
+					arguments[k]=v
 				end
 			end
 			
