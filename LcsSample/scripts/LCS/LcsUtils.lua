@@ -332,6 +332,38 @@ function jvalueToValue(vtype,val)
 end
 
 --[[
+	Function: isValidJsonType(type)
+	
+	Check if argument is a valid JSON type
+	
+	Valid types are: 
+	
+	- bool
+	- int
+	- nil
+	- float 
+	- vec2
+	- vec3
+	- vec4
+	- string
+	
+	Returns: 
+	
+	True if valid
+	
+]]
+function isValidJsonType(type)
+	return 	type == "bool"
+		or	type == "int"
+		or	type == "nil"
+		or	type == "float" 
+		or	type == "vec2"
+		or	type == "vec3"
+		or	type == "vec4"
+		or	type == "string"
+end
+
+--[[
 	Function: split(str,delim)
 	
 	Split a string using a delimiter

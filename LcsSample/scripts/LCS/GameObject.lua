@@ -145,7 +145,7 @@ function GameObject:build(entity,gameobject)
 				
 				-- create the message file if it doesn't exist
 				if FileSystem:GetFileType(comp.path) ~= FileSystem.File then
-					compcreator:createComponent( comp.name, gameobject.hookups, comp.path )
+					compcreator:createComponent( comp.name, gameobject.hookups, gameobject.values, comp.path )
 				end
 				
 				-- always create !

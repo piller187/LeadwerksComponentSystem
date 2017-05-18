@@ -91,7 +91,7 @@ path - Name of file to be created
 
 ]]
 
-function ComponentCreator:createComponent( classname, hooks, path )
+function ComponentCreator:createComponent( classname, hooks, values, path )
 	
 	
 	if 	classname == nil 
@@ -124,7 +124,6 @@ function ComponentCreator:createComponent( classname, hooks, path )
 	code = self:addLine( code, "\tself.entity = nil" )
 	code = self:addEvents( code, classname, hooks) 
 	code = self:addLine( code, "" )
-	code = self:addLine( code, "\t-- Init non-entity related things here" )
 	code = self:addLine( code, "\tself.name = \"" .. classname .."\"" )
 	code = self:addLine( code, "" )
 	code = self:addLine( code, "\tfor k, v in pairs(" .. classname ..") do" )
@@ -134,9 +133,10 @@ function ComponentCreator:createComponent( classname, hooks, path )
 	code = self:addLine( code, "end")
 	code = self:addLine( code, "")
 	code = self:addLine( code, "function " .. classname .. ":attach(entity)")
-	code = self:addLine( code, "	-- Init entity related things here")
+	code = self:addLine( code, "	-- Init variables here")
 	code = self:addLine( code, "	self.entity = entity")
 	code = self:addLine( code, "" )
+	code = self:addValues( code, values )
 	code = self:addLine( code, "	-- Subscribe for collisions" )
 	code = self:addLine( code, "	-- self.entity.onCollision:subscribe( self, self.doCollision)" )
 	code = self:addLine( code, "end" )
@@ -214,6 +214,25 @@ function ComponentCreator:addEvents(code, classname, hooks)
 	end
 	return code 
 end
+
+
+function ComponentCreator:addValues(code, values )
+	code = self:addLine(code, "\t--- Values" )
+	for k,v in pairs(values) do
+		if 	v.name ~= nil 
+		and v.name ~= "" 
+		and v.value ~= nil
+		and v.value ~= "" 
+		and v.type ~= nil 
+		and v.type ~= ""
+		and isValidJsonType(v.type)
+		then
+			code = self:addLine( code, "\tself." .. v.name .. " = " .. jvalueToStr(v.type, v.value) ) 
+		end
+	end
+	return code 
+end
+
 
 function ComponentCreator:addActions(code, classname, hooks)
 	for k,v in pairs(hooks) do
