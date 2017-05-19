@@ -385,3 +385,87 @@ function split(str, delim )
     table.insert(result, string.sub(str, lastPos))
     return result
 end
+
+--[[
+	Function: deepCopy( t )
+	
+	Create a copy of a table and all 'sub-tables'
+
+	Parameters: 
+	
+	t - table to be copied
+	
+	Returns: 
+	
+	A copy of the table
+]]
+function deepCopy( t )
+
+	local result={}
+	if type(t)=="table" then
+		for k,v in pairs(t) do result[k] = deepCopy(v) end
+	elseif t ~= nil then
+		result=t
+	end
+	return result
+end
+
+
+--[[
+	Function: merge( t1, t2 )
+	
+	Merges two tables and return a new resulting table
+	
+	Parameters: 
+	
+	t1 - first table
+	
+	t2 - second table
+	
+	Returns: 
+	
+	The merged resulting table
+
+]]
+function merge( t1, t2 )
+	local result={}
+	if t1 ~= nil then for k1,v1 in pairs(t1) do result[k1] = v1 end end
+	if t2 ~= nil then for k2,v2 in pairs(t2) do result[k2] = v2 end end
+	return result
+end
+
+--[[
+	Function: mergeTo( to, from )
+	
+	Merges one table to another. If an table entry 
+	exist is both tables the 'to' entry will be owerwritten
+	by the 'from' entry 
+	
+	Parameters: 
+	
+	to - source and destination
+	
+	from - second source
+	
+
+]]
+function mergeTo( to, from)
+	if to ~= nil then for k,v in pairs(from) do to[k] = v end end
+end
+
+--[[
+	Function: wait(ms) 
+	
+	Waits for a number of milliseconds
+	
+	Parameters: 
+	
+	ms - time to wait
+]]
+
+function wait(ms)
+	local time = Time:GetCurrent()
+	while Time:GetCurrent() < time + ms do
+		coroutine.yield()
+	end
+end

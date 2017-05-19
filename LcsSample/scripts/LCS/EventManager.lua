@@ -20,12 +20,24 @@ local EventManagerID = 0
 
 if EventManager ~= nil then return end
 EventManager = {}
+EventManager.coroutines = {}
 
+--[[
+Function: create()
+
+Create an instance of the EventManager
+
+Returns: 
+
+The instance
+
+]]
 function EventManager:create()
 	obj = {}
     setmetatable(obj, self)
     self.__index = self
 	self.handlers = {}
+	
 	for k, v in pairs(EventManager) do
 		obj[k] = v
 	end
@@ -135,68 +147,57 @@ function EventManager:raise(args)
 			if	handler.Filter ~= nil 
 			and	handler.Filter ~= "" then 
 				if handler.Filter(args) then
-					handler.Method(handler.Owner, self:createArguments(handler,args) )
+					local co = coroutine.create(handler.Method)
+					coroutine.resume(co, handler.Owner, self:createArguments(handler,args) )
+					if coroutine.status(co) ~= "dead" then
+						table.insert( EventManager.coroutines, co )
+					end
+					-- handler.Method(handler.Owner, self:createArguments(handler,args) )
 				end
 			else
-				handler.Method(handler.Owner, self:createArguments(handler,args) )
+				local co = coroutine.create(handler.Method)
+				coroutine.resume(co, handler.Owner, self:createArguments(handler,args) )
+				if coroutine.status(co) ~= "dead" then
+					table.insert( EventManager.coroutines, co )
+				end
+				-- handler.Method(handler.Owner, self:createArguments(handler,args) )
 			end
 		end
 	end
 end
 
+--[[
+Function: update()
+
+Updates the EventManager
+
+]]
+function EventManager:update()
+	for i = #EventManager.coroutines, 1, -1 do
+		local co = EventManager.coroutines[i]
+		coroutine.resume(co) 
+		if coroutine.status(co) == "dead" then
+			table.remove(EventManager.coroutines, i)
+		end
+	end
+end
+
+
 function EventManager:createArguments(handler, args)
 			
 		local arguments = args
-		local handlerArguments = nil
-		local postArguments = nil
 		
 		-- merge with handler args if any
 		if 	handler.Arguments ~= nil
 		and handler.Arguments ~= "" then
-			
-			handlerArguments = handler.Arguments(args)
-			
-			-- overwrite any handler argument with an incoming argument
-			for k,v in pairs(handlerArguments) do
-				local argv = v
-				for k2, v2 in pairs(args) do 
-					if k == k2 then
-						argv = v2
-						break
-					end
-				end
-			end
+			mergeTo(arguments, handler.Arguments(args) )
 		end
 		
 		-- merge with handler post if any
 		if 	handler.PostFunction ~= nil
 		and handler.PostFunction ~= "" then
-			
-			postArguments = handler.PostFunction(args)
-			
-			-- overwrite any handler argument with an incoming argument
-			for k,v in pairs(postArguments) do
-				local argv = v
-				for k2, v2 in pairs(args) do 
-					if k == k2 then
-						argv = v2
-						break
-					end
-				end
-			end
+			mergeTo(arguments, handler.PostFunction(args) )
 		end		
 		
-		-- merge all together 
-		if handlerArguments ~= nil then
-			for k,v in pairs(handlerArguments) do
-				arguments[k]=v
-			end
-		end
-		
-		if postArguments ~= nil then
-			for k,v in pairs(postArguments) do
-				arguments[k]=v
-			end
-		end
 		return arguments
 end
