@@ -20,8 +20,6 @@ function Toolbox:init()
 	self.name = "Toolbox"
 
 	self.entity = nil
-	self.tools = {}
-	self.current = nil
 	
 	for k, v in pairs(Toolbox) do
 		obj[k] = v
@@ -32,6 +30,8 @@ end
 function Toolbox:attach(entity)
 	-- Init entity related things here
 	self.entity = entity
+	self.tools = {}
+	self.current = nil
 end
 
 function Toolbox:update()

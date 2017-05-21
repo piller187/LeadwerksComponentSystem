@@ -16,12 +16,8 @@ function Teams:init()
 	self.__index = self
 
 	-- Init non-entity related things here
-	self.Team = { red = 1, blue = 2 }
 	
 	self.name = "Teams"
-	self.entity = nil
-	self.max = 0
-	self.power = {}
 
 	self.onPowerChange = EventManager:create()
 	self.onAddRedPower = EventManager:create()
@@ -37,7 +33,10 @@ end
 function Teams:attach(entity)
 	-- Init entity related things here
 	self.entity = entity
-	self.max = entity.script.maxPower
+	self.Team = { red = 1, blue = 2 }
+	self.power = {}
+
+	self.max = 10
 	self.power[self.Team.red] = 0
 	self.power[self.Team.blue] = 0
 end
@@ -66,12 +65,12 @@ end
 ---
 --- Actions
 ---
-function Teams:doAddRedPower(arg)
-	self:addPower(arg.Power,self.Team.red)
+function Teams:doAddRedPower(args)
+	self:addPower(args.Power,self.Team.red)
 end
 
-function Teams:doAddBluePower(arg)
-	self:addPower(arg.Power,self.Team.blue)
+function Teams:doAddBluePower(args)
+	self:addPower(args.Power,self.Team.blue)
 end
 
 ---
@@ -84,8 +83,8 @@ function Teams:addPower(power,team)
 	local new = self.power[team]
 	
 	if new == self.max then
-		if team == self.Team.red then self.onMaxReached:raise("red") 
-		else self.onMaxReached:raise("blue") end 
+		if team == self.Team.red then self.onMaxReached:raise({Message="max.red.power"}) 
+		else self.onMaxReached:raise({Message="max.blue.power"}) end 
 	end
 	
 	if new ~= old then 

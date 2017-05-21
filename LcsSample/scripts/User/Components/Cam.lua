@@ -17,15 +17,7 @@ function Cam:init()
 
 	self.name = "Cam"
 	
-	self.mouseDifference = Vec2(0,0)
-	self.currentMousePos = Vec3(0,0)
-	self.camRotation = Vec3(0,0)
-	self.pendingPick = nil
-	self.mouseSense = 0
-	self.verticalCamLimit = Vec2(0)
-	self.camera = nil
-	self.entity = nil
-	
+
 	self.onPick = EventManager:create()
 	self.onTurn = EventManager:create()
 	
@@ -39,8 +31,12 @@ function Cam:attach(entity)
 	-- Init entity related things here
 	self.entity = entity
 	
-	self.mouseSense = entity.script.mouseSense
-	self.verticalCamLimit = entity.script.verticalCamLimit
+	self.mouseSense = 15
+	self.verticalCamLimit = Vec2(-60,80)
+	self.mouseDifference = Vec2(0,0)
+	self.currentMousePos = Vec3(0,0)
+	self.camRotation = Vec3(0,0)
+	self.pendingPick = nil
 	
 	-- camera
 	self.camera = Camera:Create()

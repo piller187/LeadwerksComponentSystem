@@ -19,8 +19,6 @@ function Input:init()
 	self.name = "Input"
 
 	-- Init non-entity related things here
-	self.entity = nil
-	self.moving = false
 	self.onReceiveMessage = EventManager:create()
 	self.onClick = EventManager:create()
 	self.onForward = EventManager:create()
@@ -36,6 +34,8 @@ end
 function Input:attach(entity)
 	-- Init entity related things here
 	self.entity = entity
+	self.entity = nil
+	self.moving = false
 end
 
 function Input:update()

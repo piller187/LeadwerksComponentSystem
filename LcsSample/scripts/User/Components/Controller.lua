@@ -17,13 +17,6 @@ function Controller:init()
 	self.__index = self
 
 	self.name = "Controller"
-
-	self.move = 0
-	self.angle = 0
-	self.eyePos = 0
-	self.oldPos = Vec3(0)
-	self.entity = nil
-	self.moveSpeed = 0
 	
 	self.onMove = EventManager:create()
 	
@@ -36,8 +29,12 @@ end
 function Controller:attach(entity)
 	-- Init entity related things here
 	self.entity = entity
-	self.moveSpeed = entity.script.moveSpeed
-	self.eyePos = entity.script.eyePos
+	self.move = 0
+	self.angle = 0
+	self.eyePos = 0
+	self.oldPos = Vec3(0)
+	self.moveSpeed = 2
+	self.eyePos = 1.6
 
 end
 

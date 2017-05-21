@@ -13,51 +13,7 @@ mat:Release()",
 			"folder": "",
 			"values": 
 			[
-				{
-					"name": "moveSpeed",
-					"value": "2",
-					"type": "float"
-				},
-				{
-					"name": "rotationSpeed",
-					"value": "15",
-					"type": "float"
-				},
-				{
-					"name": "maxPower",
-					"value": "10",
-					"type": "int"
-				},
-				{
-					"name": "eyePos",
-					"value": "1.6",
-					"type": "float"
-				},
-				{
-					"name": "moveTime",
-					"value": "4",
-					"type": "int"
-				},
-				{
-					"name": "mouseSense",
-					"value": "15",
-					"type": "int"
-				},
-				{
-					"name": "maxPower",
-					"value": "10",
-					"type": "int"
-				},
-				{
-					"name": "verticalCamLimit",
-					"value": "-60,80",
-					"type": "vec2"
-				},
-				{
-					"name": "cursor",
-					"value": "Materials/User/ring512.tex",
-					"type": "string"
-				}
+
 			],
 			"messages": 
 			[
@@ -74,7 +30,20 @@ mat:Release()",
 				},
 				{
 					"name": "Cursor",
-					"path": "Scripts/User/Components/Cursor.lua"
+					"path": "Scripts/User/Components/Cursor.lua",
+					"values": 
+					[
+						{
+							"name": "cursorImage",
+							"value": "Materials/User/ring512.tex",
+							"type": "string"
+						},
+						{
+							"name": "size",
+							"value": "48",
+							"type": "int"
+						}
+					]
 				},
 				{
 					"name": "Input",
@@ -82,15 +51,49 @@ mat:Release()",
 				},
 				{
 					"name": "Cam",
-					"path": "Scripts/User/Components/Cam.lua"
+					"path": "Scripts/User/Components/Cam.lua",
+					"values": 
+					[
+						{
+							"name": "mouseSense",
+							"value": "15",
+							"type": "int"
+						},
+						{
+							"name": "verticalCamLimit",
+							"value": "-60,80",
+							"type": "vec2"
+						}
+					]
 				},
 				{
 					"name": "Controller",
-					"path": "Scripts/User/Components/Controller.lua"
+					"path": "Scripts/User/Components/Controller.lua",
+					"values": 
+					[
+						{
+							"name": "moveSpeed",
+							"value": "2",
+							"type": "float"
+						},
+						{
+							"name": "eyePos",
+							"value": "1.6",
+							"type": "float"
+						}
+					]
 				},
 				{
 					"name": "Teams",
-					"path": "Scripts/User/Components/Teams.lua"
+					"path": "Scripts/User/Components/Teams.lua",
+					"values": 
+					[
+						{
+							"name": "max",
+							"value": "10",
+							"type": "int"
+						}
+					]
 				}
 			],
 			"hookups": 
@@ -194,11 +197,7 @@ mat:Release()",
 			"folder": "",
 			"values": 
 			[
-				{
-					"name": "power",
-					"value": "2",
-					"type": "int"
-				}
+
 			],
 			"messages": 
 			[
@@ -208,7 +207,15 @@ mat:Release()",
 			[
 				{
 					"name": "BluePower",
-					"path": "Scripts/User/Components/BluePower.lua"
+					"path": "Scripts/User/Components/BluePower.lua",
+					"values": 
+					[
+						{
+							"name": "power",
+							"value": "2",
+							"type": "int"
+						}
+					]
 				}
 			],
 			"hookups": 
@@ -231,11 +238,7 @@ mat:Release()",
 			"folder": "",
 			"values": 
 			[
-				{
-					"name": "power",
-					"value": "2",
-					"type": "int"
-				}
+
 			],
 			"messages": 
 			[
@@ -245,7 +248,15 @@ mat:Release()",
 			[
 				{
 					"name": "RedPower",
-					"path": "Scripts/User/Components/RedPower.lua"
+					"path": "Scripts/User/Components/RedPower.lua",
+					"values": 
+					[
+						{
+							"name": "power",
+							"value": "2",
+							"type": "int"
+						}
+					]
 				}
 			],
 			"hookups": 
@@ -268,31 +279,7 @@ mat:Release()",
 			"folder": "",
 			"values": 
 			[
-				{
-					"name": "xpos",
-					"value": "4",
-					"type": "int"
-				},
-				{
-					"name": "color",
-					"value": "1,0,0,1",
-					"type": "vec4"
-				},
-				{
-					"name": "max",
-					"value": "10",
-					"type": "int"
-				},
-				{
-					"name": "stepSize",
-					"value": "50",
-					"type": "int"
-				},
-				{
-					"name": "width",
-					"value": "16",
-					"type": "int"
-				}
+
 			],
 			"messages": 
 			[
@@ -305,7 +292,30 @@ mat:Release()",
 			[
 				{
 					"name": "RedMeter",
-					"path": "Scripts/User/Components/RedMeter.lua"
+					"path": "Scripts/User/Components/RedMeter.lua",
+					"values": 
+					[
+						{
+							"name": "xpos",
+							"value": "4",
+							"type": "int"
+						},
+						{
+							"name": "color",
+							"value": "1,0,0,1",
+							"type": "vec4"
+						},
+						{
+							"name": "max",
+							"value": "10",
+							"type": "int"
+						},
+						{
+							"name": "width",
+							"value": "16",
+							"type": "int"
+						}
+					]
 				}
 			],
 			"hookups": 
@@ -316,7 +326,7 @@ mat:Release()",
 					"destination": "RedMeter",
 					"destination_action": "Set",
 					"arguments": "",
-					"filter": "function(args) if args.Message == \"set.red.power\" then return true else return false end end",
+					"filter": "function(args) if args.Message == 'set.red.power' then return true else return false end end",
 					"post": ""
 				}
 			]
@@ -328,31 +338,7 @@ mat:Release()",
 			"folder": "",
 			"values": 
 			[
-				{
-					"name": "xpos",
-					"value": "40",
-					"type": "int"
-				},
-				{
-					"name": "color",
-					"value": "0,0,1,1",
-					"type": "vec4"
-				},
-				{
-					"name": "max",
-					"value": "10",
-					"type": "int"
-				},
-				{
-					"name": "stepSize",
-					"value": "50",
-					"type": "int"
-				},
-				{
-					"name": "width",
-					"value": "16",
-					"type": "int"
-				}
+
 			],
 			"messages": 
 			[
@@ -365,7 +351,30 @@ mat:Release()",
 			[
 				{
 					"name": "BlueMeter",
-					"path": "Scripts/User/Components/BlueMeter.lua"
+					"path": "Scripts/User/Components/BlueMeter.lua",
+					"values": 
+					[
+						{
+							"name": "xpos",
+							"value": "40",
+							"type": "int"
+						},
+						{
+							"name": "color",
+							"value": "0,0,1,1",
+							"type": "vec4"
+						},
+						{
+							"name": "max",
+							"value": "10",
+							"type": "int"
+						},
+						{
+							"name": "width",
+							"value": "16",
+							"type": "int"
+						}
+					]
 				}
 			],
 			"hookups": 
@@ -376,7 +385,7 @@ mat:Release()",
 					"destination": "BlueMeter",
 					"destination_action": "Set",
 					"arguments": "",
-					"filter": "function(args) if args.Message == \"set.blue.power\" then return true else return false end end",
+					"filter": "function(args) if args.Message == 'set.blue.power' then return true else return false end end",
 					"post": ""
 				}
 			]

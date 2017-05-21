@@ -19,8 +19,6 @@ function RedPower:init()
 	-- Init non-entity related things here
 	self.name = "RedPower"
 
-	self.entity = nil
-	self.power = 0
 	self.onPicked = EventManager:create()
 	
 	for k, v in pairs(RedPower) do
@@ -32,7 +30,7 @@ end
 function RedPower:attach(entity)
 	-- Init entity related things here
 	self.entity = entity
-	self.power = entity.script.power
+	self.power = 2
 
 end
 

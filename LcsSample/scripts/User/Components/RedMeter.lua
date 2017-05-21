@@ -7,26 +7,15 @@ import "Scripts/LCS/EventManager.lua"
 if RedMeter ~= nil then return end
 RedMeter = {}
 
+
 ---
 --- Public
 ---
-
 function RedMeter:init()
 	local obj = {}
-	setmetatable(obj, self)
 	self.__index = self
-
-	-- Init non-entity related things here
 	self.name = "RedMeter"
 
-	self.power = 0
-	self.entity = nil
-	self.max = 0
-	self.xpos = 0
-	self.color = Vec4(0)
-	self.stepSize = 0
-	self.width = 0
-	
 	for k, v in pairs(RedMeter) do
 		obj[k] = v
 	end
@@ -34,13 +23,22 @@ function RedMeter:init()
 end
 
 function RedMeter:attach(entity)
-	-- Init entity related things here
 	self.entity = entity
-	self.max = entity.script.max
-	self.xpos = entity.script.xpos
-	self.color = entity.script.color
-	self.stepSize = entity.script.stepSize
-	self.width = entity.script.width
+	self.xpos = 4
+	self.width = 3 -- %
+	self.height = 90 -- %
+	self.max = 10
+	self.power = 0
+	self.disabled = false
+	
+	local ct = Context:GetCurrent()
+	local sh = ct:GetHeight()
+	local sw = ct:GetWidth()
+	self.width = (self.width/100)*sw
+	self.height = (self.height/100)*sh
+	self.valueSize = self.height/self.max
+	self.pixelValue = Math:Round(self.power * self.valueSize)
+	
 end
 
 function RedMeter:update()
@@ -52,6 +50,9 @@ end
 function RedMeter:overlap(entity)
 end
 
+function RedMeter:collision(entity, position, normal, speed)
+end
+
 function RedMeter:draw()
 end
 
@@ -59,49 +60,51 @@ function RedMeter:drawEach(camera)
 end
 
 function RedMeter:postRender(context)
+	if not self.disabled then
+	
+		-- size
+		local hmax = Math:Round(self.max * self.valueSize)
+		local hval = self.pixelValue
 
-	-- size
-	local hmax = self.max * self.stepSize
-	local hval = self.power *  self.stepSize
+		-- value
+		local bottom_margin = 10
+		local sh = context:GetHeight()
+		local border = 2;
 
-	-- value
-	local bottom_margin = 10
-	local sh = context:GetHeight()
-	local border = 2;
+		local y = sh - bottom_margin - 2 * border - hval
 
-	local y = sh - bottom_margin - 2 * border - hval
+		context:SetColor(1,0,0,1)
+		context:DrawRect(self.xpos, y, self.width, hval, 0)
 
-	local v = self.power / self.max
-	context:SetColor( 
-		self.color.x*v, 
-		self.color.y*v, 
-		self.color.z*v, 
-		1.0)
-	context:DrawRect(self.xpos, y, self.width, hval, 0)
-
-	-- border
-	y = sh - bottom_margin - 2 * border - hmax
-	context:SetColor(Vec4(0,0,0,1))
-	context:DrawRect(self.xpos+1, y+1, self.width, hmax, 1)
-	context:SetColor(Vec4(1,1,1,1))
-	context:DrawRect(self.xpos, y, self.width, hmax, 1)
+		-- border
+		y = sh - bottom_margin - 2 * border - hmax
+		context:SetColor(Vec4(0,0,0,1))
+		context:DrawRect(self.xpos+1, y+1, self.width, hmax, 1)
+		context:SetColor(Vec4(1,1,1,1))
+		context:DrawRect(self.xpos, y, self.width, hmax, 1)
+	
+	end
 end
 
 function RedMeter:detach()
+end
+
+function RedMeter:cleanup(context)
 end
 
 ---
 --- Actions
 ---
 
-function RedMeter:doSet(arg)
-	self.power = Math:Clamp(arg.Power, 0, self.max )
-end
+function RedMeter:doSet(args)
 
-function RedMeter:doGet()
-	return self.power
+	local value = 1
+	if args.Power < self.power then value = -1 end
+	
+	local goal = Math:Round(Math:Clamp(args.Power, 0, self.max) * self.valueSize)
+	while self.pixelValue ~= goal do
+		self.pixelValue = self.pixelValue  + value
+		coroutine.yield()
+	end
+	self.power = args.Power
 end
-
----
---- Private
----

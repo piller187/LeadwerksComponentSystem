@@ -17,12 +17,6 @@ function Cursor:init()
 
 	self.name = "Cursor"
 
-	self.size = 48
-	self.disabled = true
-	self.entity = nil
-	self.cursor = nil
-
-
 	for k, v in pairs(Cursor) do
 		obj[k] = v
 	end
@@ -31,8 +25,11 @@ end
 
 function Cursor:attach(entity)
 	self.entity = entity
-	self.cursor = Texture:Load(entity.script.cursor)
-	Debug:Assert(self.cursor ~= nil, "Failed to load cursor " .. entity.script.cursor )
+	self.cursorImage = "Materials/User/ring512.tex"
+	self.moving = false
+	self.size = 48
+	self.cursor = Texture:Load(self.cursorImage)
+	Debug:Assert(self.cursor ~= nil, "Failed to load cursor " .. self.cursorImage )
 end
 
 function Cursor:update()

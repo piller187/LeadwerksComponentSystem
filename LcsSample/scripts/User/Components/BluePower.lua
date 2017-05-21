@@ -19,8 +19,6 @@ function BluePower:init()
 	-- Init non-entity related things here
 	self.name = "BluePower"
 
-	self.entity = nil
-	self.power = 0
 	self.onPicked = EventManager:create()
 	
 	for k, v in pairs(BluePower) do
@@ -32,8 +30,7 @@ end
 function BluePower:attach(entity)
 	-- Init entity related things here
 	self.entity = entity
-	self.power = entity.script.power
-
+	self.power = 2
 end
 
 function BluePower:update()
