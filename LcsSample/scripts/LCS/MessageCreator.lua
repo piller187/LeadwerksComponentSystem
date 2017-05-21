@@ -96,10 +96,6 @@ function MessageCreator:createComponent( classname, hooks, path )
 	code = self:addLine( code, "" )
 	code = self:addEvents( code, classname, hooks) 
 	code = self:addLine( code, "" )
-	--code = self:addHookups( code, classname, hooks) 
-	--code = self:addLine( code, "" )
-	--code = self:addLine( code, "\t-- Init non-entity related things here" )
-	--code = self:addLine( code, "\tself.name = \"" .. classname .."\"" )
 	code = self:addLine( code, "" )
 	code = self:addLine( code, "\tfor k, v in pairs(" .. classname ..") do" )
 	code = self:addLine( code, "\t\tobj[k] = v" )
@@ -107,50 +103,10 @@ function MessageCreator:createComponent( classname, hooks, path )
 	code = self:addLine( code, "\treturn obj" )
 	code = self:addLine( code, "end")
 	code = self:addLine( code, "")
-	--code = self:addLine( code, "function " .. classname .. ":attach(entity)")
-	--code = self:addLine( code, "	-- Init entity related things here")
-	--code = self:addLine( code, "	self.entity = entity")
-	--code = self:addLine( code, "" )
-	--code = self:addLine( code, "	-- Subscribe for collisions" )
-	--code = self:addLine( code, "	-- self.entity.onCollision:subscribe( self, self.doCollision)" )
-	--code = self:addLine( code, "end" )
-	--code = self:addLine( code, "" )
-	--code = self:addLine( code, "function " .. classname .. ":update()" )
-	--code = self:addLine( code, "end" )
-	--code = self:addLine( code, "" )
-	--code = self:addLine( code, "function " .. classname .. ":updatePhysics()" )
-	--code = self:addLine( code, "end" )
-	--code = self:addLine( code, "" )
-	--code = self:addLine( code, "function " .. classname .. ":overlap(entity)" )
-	--code = self:addLine( code, "end" )
-	--code = self:addLine( code, "" )
-	--code = self:addLine( code, "function " .. classname .. ":draw()" )
-	--code = self:addLine( code, "end" )
-	--code = self:addLine( code, "" )
-	--code = self:addLine( code, "function " .. classname .. ":drawEach(camera)" )
-	--code = self:addLine( code, "end" )
-	--code = self:addLine( code, "" )
-	--code = self:addLine( code, "function " .. classname .. ":postRender(context)" )
-	--code = self:addLine( code, "end" )
-	--code = self:addLine( code, "" )
-	--code = self:addLine( code, "function " .. classname .. ":detach()" )
-	--code = self:addLine( code, "end" )
-	--code = self:addLine( code, "" )
 	code = self:addLine( code, "---" )
 	code = self:addLine( code, "--- Actions" )
 	code = self:addLine( code, "---" )
 	code = self:addActions(code, classname, hooks) 
-	--code = self:addLine( code, "" )
-	--code = self:addLine( code, "-- Handle subscribed collision " )
-	--code = self:addLine( code, "-- arg = { Owner:entity, Entity:entity, Distance:number, Pos:Vec3, Normal:Vec3, Speed=number}" ) 
-	--code = self:addLine( code, "--[[" )
-	--code = self:addLine( code, "function " .. classname .. ":doCollision( arg )" )
-	--code = self:addLine( code, "end" )
-	--code = self:addLine( code, "]]" )
-	--code = self:addLine( code, "" )
-	--code = self:addLine( code, "---" )
-	--code = self:addLine( code, "--- Private" )
-	--code = self:addLine( code, "---" )
 	code = self:addLine( code, "" )
 	code = self:addLine( code, "" )
 	code = self:addLine( code, "--- EOF ---" )
@@ -184,23 +140,6 @@ function MessageCreator:addEvents(code, classname, hooks)
 	end
 	return code 
 end
-
---function MessageCreator:addHookups(code, classname, hooks)
---	code = self:addLine(code, "\t--- Hookups" )
---	for k,v in pairs(hooks) do
---		if 	v.source == classname
---		and v.source_event ~= nil 
---		and v.source_event ~= "" then
---			code = self:addLine( code, "\tself.on" .. v.source_event .. ":subscribe( self, self.do" .. v.source_event .. " )" )
---		end 		
---		if 	v.destination == classname
---		and v.destination_action ~= nil 
---		and v.destination_action ~= "" then
---			code = self:addLine( code, "\tself.on" .. v.destination_action .. ":subscribe( self, self.do" .. v.destination_action .. " )" )
---		end 		
---	end
---	return code 
---end
 
 function MessageCreator:addActions(code, classname, hooks)
 	for k,v in pairs(hooks) do

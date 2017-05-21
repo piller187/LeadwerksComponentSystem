@@ -33,7 +33,6 @@ import "Scripts/LCS/LcsUtils.lua"
 if EntityCreator ~= nil then return end
 EntityCreator = {}
 
-
 --
 -- Public methods
 --

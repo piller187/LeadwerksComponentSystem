@@ -34,7 +34,6 @@ The instance
 ]]
 function EventManager:create()
 	obj = {}
-    setmetatable(obj, self)
     self.__index = self
 	self.handlers = {}
 	
@@ -84,8 +83,7 @@ function EventManager:subscribe(owner, method, arguments, filterFunction, postFu
 
 	local args = nil 
 	if arguments ~= nil then 
-		local f = "return " .. arguments
-		args = assert(loadstring(f))()
+		args = assert(loadstring("return " .. arguments))()
 	end
 		
 	table.insert(self.handlers, { 
@@ -152,7 +150,6 @@ function EventManager:raise(args)
 					if coroutine.status(co) ~= "dead" then
 						table.insert( EventManager.coroutines, co )
 					end
-					-- handler.Method(handler.Owner, self:createArguments(handler,args) )
 				end
 			else
 				local co = coroutine.create(handler.Method)
@@ -160,7 +157,6 @@ function EventManager:raise(args)
 				if coroutine.status(co) ~= "dead" then
 					table.insert( EventManager.coroutines, co )
 				end
-				-- handler.Method(handler.Owner, self:createArguments(handler,args) )
 			end
 		end
 	end

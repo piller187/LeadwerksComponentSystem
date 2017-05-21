@@ -450,7 +450,10 @@ end
 
 ]]
 function mergeTo( to, from)
-	if to ~= nil then for k,v in pairs(from) do to[k] = v end end
+	if 	to ~= nil 
+	and type(to)=="table" then 
+		for k,v in pairs(from) do to[k] = v end 
+	end
 end
 
 --[[

@@ -23,6 +23,7 @@ local Messages = {}
 
 if GameObject ~= nil then return end
 GameObject = {}
+GameObject.onReceiveMessage = nil
 
 --
 -- Public methods
@@ -96,7 +97,7 @@ function GameObject:build(entity,gameobject)
 	local script = self.entity.script
 	
 		
-	-- add values
+	-- write values to entity keyvalues
 	if gameobject.values ~= nil and #gameobject.values > 0 then
 
 		for k,v in pairs(gameobject.values) do
@@ -104,8 +105,7 @@ function GameObject:build(entity,gameobject)
 			if 	v.name ~= nil and v.name ~= "" 
 			and v.value ~= nil and v.value ~= "" 
 			and v.type ~= nil and v.type ~= "" then
-
-				script[v.name]=jvalueToValue(v.type,v.value)
+				self.entity:SetKeyValue( v.name, jvalueToStr(v.type,v.value) )
 			end
 		end
 	end
@@ -204,23 +204,18 @@ function GameObject:build(entity,gameobject)
 					src[ev]:subscribe( dst, dst[ac])
 				elseif 	hooks.post ~= nil
 				and		hooks.post ~= "" then
-					System:Print( "@LCS: " .. hooks.source ..".".. ev .. "-" .. hooks.destination .. "." ..ac.. " A=" .. hooks.arguments .. " P=" .. hooks.post)
 					src[ev]:subscribe( dst, dst[ac], hooks.arguments, nil, hooks.post )
 				else
-					System:Print( "@LCS: " .. hooks.source ..".".. ev .. "-" .. hooks.destination .. "." ..ac.. " A=" .. hooks.arguments )
 					src[ev]:subscribe( dst, dst[ac], hooks.arguments, nil, nil )
 				end
 			else
 				if 	hooks.arguments == nil
 				or	hooks.arguments == "" then
-					System:Print( "@LCS: " ..  hooks.source ..".".. ev .. "-" ..  hooks.destination .. "." ..ac.. " F=" .. hooks.filter)
 					src[ev]:subscribe( dst, dst[ac], nil, hooks.filter, nil )
 				elseif 	hooks.post ~= nil
 				or		hooks.post ~= "" then
-					System:Print( "@LCS: " ..  hooks.source .."." ..ev .. "-" ..  hooks.destination .. "." ..ac.. " A=" .. hooks.arguments .. " F=" .. hooks.filter)
 					src[ev]:subscribe( dst, dst[ac], hooks.arguments, hooks.filter, nil )
 				else
-					System:Print( "@LCS: " ..  hooks.source .."." ..ev .. "-" ..  hooks.destination .. "." ..ac.. " A=" .. hooks.arguments .. " F=" .. hooks.filter)
 					src[ev]:subscribe( dst, dst[ac], hooks.arguments, hooks.filter, hooks.post )
 				end
 			end
@@ -235,12 +230,10 @@ function GameObject:build(entity,gameobject)
 	if	gameobject.poststart ~= nil 
 	and gameobject.poststart ~= "" then
 		-- add PostStart code
-		script.PostStart = loadstring("return function(self) " .. gameobject.poststart .. " end")()
-		script.PostStart(script)
+		self.entity.script.gameobject.postStart = assert(loadstring("return " .. gameobject.poststart ))()
+		self.entity.script.gameobject:postStart(self)
 	end
 end
-
-GameObject.onReceiveMessage = nil
 
 --[[
 	Function: ReceiveMessage(arg)
