@@ -181,7 +181,11 @@ end
 
 function EventManager:createArguments(handler, args)
 			
-		local arguments = args
+		if args == nil then 
+			local arguments = {}
+		else
+			local arguments = args
+		end
 		
 		-- merge with handler args if any
 		if 	handler.Arguments ~= nil
