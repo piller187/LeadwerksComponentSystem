@@ -58,9 +58,12 @@ function EntityCreator:create(json)
 	local obj = {}
     self.__index = self
 
+	self.objects = {}
 	self.persistent = {}
 	self.gameobjects = json:getGameObjects()
 	
+	self.saveFile = FileSystem:GetAppDataPath() .. "/" .. json:getRoot().name .. "/" .. json:getRoot().name .. ".json"
+
 	for k, v in pairs(EntityCreator) do
 		obj[k] = v
 	end
@@ -118,4 +121,6 @@ function EntityCreator:createObject(entity,gameobject)
 	end
 	entity.script.onReceiveMessage = EventManager:create()
 	entity.script.onReceiveMessage:subscribe(entity.script.gameobject, entity.script.gameobject.ReceiveMessage )
+	table.insert(self.objects,entity.script.gameobject)
+	
 end

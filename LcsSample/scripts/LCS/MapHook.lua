@@ -47,6 +47,56 @@ function LcsLoadMap( mapfile, jsonSource  )
 	currentJsonfile = jsonSource
 	local wasLoaded = Map:Load(mapfile, "MapHook")
 	Debug:Assert( wasLoaded, "Failed to load map " .. mapfile ) 
+	
+	for k,v in pairs(creator.objects) do
+		System:Print( "@LCS: " .. v.name )
+	end
+end
+
+--[[
+	Function: LcsSave()
+	
+	Save all GameObject Values to a file 
+]]
+function LcsSave()
+	if creator ~= nil then
+		local t = {}
+		for k,v in pairs(creator.objects) do
+			if v.doSave then 
+				v:doSave( {Table=t} ) 
+			end
+		end
+		for k,v in pairs(creator.objects) do
+			if v.doSaveDone then v:doSaveDone() end
+		end
+		local stream = assert(io.open(creator.saveFile, "w"))
+		Debug:Assert( stream ~= nil, "Failed saving to " .. creator.saveFile )
+		local jstring = JSON:encode_pretty(t)
+		stream:write( jstring )
+		stream:flush()
+		stream:close()
+	end
+end
+
+--[[
+	Function: LcsLoad()
+	
+	Load all GameObject Values from a file 
+]]
+function LcsLoad()
+	if creator ~= nil then
+		local stream = assert(io.open(creator.saveFile, "r"))
+		Debug:Assert( stream ~= nil, "Failed loading from " .. creator.saveFile )
+		local t = JSON:decode(stream:read("*all"))
+		stream:flush();
+		stream:close();
+		for k,v in pairs(creator.objects) do
+			if v.doLoad then v:doLoad({Table=t}) end
+		end
+		for k,v in pairs(creator.objects) do
+			if v.doLoadDone then v:doLoadDone() end
+		end
+	end
 end
 
 --[[
@@ -83,7 +133,7 @@ function MapHook(entity,obj)
 		
 		local jsonValidator = JsonValidator:create()
 		jsonValidator:validate(jsonSource:getRoot())
-		
+
 		-- initialize the game creation object
 		creator = EntityCreator:create(jsonSource)
 	end

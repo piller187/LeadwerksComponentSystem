@@ -11,10 +11,10 @@ BlueMeter = {}
 ---
 --- Public
 ---
+BlueMeter.name = "BlueMeter"
 function BlueMeter:init()
 	local obj = {}
 	self.__index = self
-	self.name = "BlueMeter"
 
 	for k, v in pairs(BlueMeter) do
 		obj[k] = v

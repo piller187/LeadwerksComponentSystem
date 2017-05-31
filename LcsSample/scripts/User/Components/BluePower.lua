@@ -10,14 +10,13 @@ BluePower = {}
 ---
 --- Public
 ---
+BluePower.name = "BluePower"
 
 
 function BluePower:init()
 	local obj = {}
 	self.__index = self
 
-	-- Init non-entity related things here
-	self.name = "BluePower"
 
 	self.onPicked = EventManager:create()
 	
@@ -28,7 +27,6 @@ function BluePower:init()
 end
 
 function BluePower:attach(entity)
-	-- Init entity related things here
 	self.entity = entity
 	self.power = 2
 end

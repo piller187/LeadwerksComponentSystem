@@ -1,4 +1,5 @@
 {
+	"name": "LcsSample",
 	"gameobjects": 
 	[
 		{
@@ -86,7 +87,20 @@
 						{
 							"name": "max",
 							"value": "10",
-							"type": "int"
+							"type": "int",
+							"store": "true"
+						},
+						{
+							"name": "redPower",
+							"value": "10",
+							"type": "int",
+							"store": "true"
+						},
+						{
+							"name": "bluePower",
+							"value": "10",
+							"type": "int",
+							"store": "true"
 						}
 					]
 				}
@@ -161,8 +175,8 @@
 					"source_event": "ReceiveMessage",
 					"destination": "Teams",
 					"destination_action": "AddRedPower",
-					"arguments": "function(args) return { Message=\"add.red.power\" } end",
-					"filter": "function(args) if args.Message == \"add.red.power\" then return true else return false end end",
+					"arguments": "function(args) return { Message='add.red.power' } end",
+					"filter": "function(args) if args.Message == 'add.red.power' then return true else return false end end",
 					"post": ""
 				},
 				{

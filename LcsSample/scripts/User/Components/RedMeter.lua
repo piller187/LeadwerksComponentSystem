@@ -7,6 +7,7 @@ import "Scripts/LCS/EventManager.lua"
 if RedMeter ~= nil then return end
 RedMeter = {}
 
+RedMeter.name = "RedMeter"
 
 ---
 --- Public
@@ -14,8 +15,7 @@ RedMeter = {}
 function RedMeter:init()
 	local obj = {}
 	self.__index = self
-	self.name = "RedMeter"
-
+	
 	for k, v in pairs(RedMeter) do
 		obj[k] = v
 	end

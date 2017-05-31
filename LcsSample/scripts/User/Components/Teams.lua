@@ -10,14 +10,12 @@ Teams = {}
 ---
 --- Public
 ---
+Teams.name = "Teams"
 
 function Teams:init()
 	local obj = {}
 	self.__index = self
 
-	-- Init non-entity related things here
-	
-	self.name = "Teams"
 
 	self.onPowerChange = EventManager:create()
 	self.onAddRedPower = EventManager:create()
@@ -31,7 +29,6 @@ function Teams:init()
 end
 
 function Teams:attach(entity)
-	-- Init entity related things here
 	self.entity = entity
 	self.Team = { red = 1, blue = 2 }
 	self.power = {}

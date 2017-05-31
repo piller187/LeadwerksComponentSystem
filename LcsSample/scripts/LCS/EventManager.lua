@@ -71,6 +71,8 @@ function EventManager:subscribe(owner, method, arguments, filterFunction, postFu
 	
 	EventManagerID = EventManagerID+1
 	
+	System:Print( "@LCS: " ..EventManagerID .. " - " .. owner.name )
+	
 	local filter = nil 
 	if filterFunction ~= nil then 
 		filter = assert(loadstring("return " .. filterFunction))()
@@ -81,9 +83,13 @@ function EventManager:subscribe(owner, method, arguments, filterFunction, postFu
 		postFunc= assert(loadstring("return " .. postFunction))()
 	end
 
-	local args = nil 
+	local args = nil
 	if arguments ~= nil then 
-		args = assert(loadstring("return " .. arguments))()
+		if type(arguments) == "function" then
+			args = arguments
+		else
+			args = assert(loadstring("return " .. arguments))()
+		end
 	end
 		
 	table.insert(self.handlers, { 
@@ -141,7 +147,6 @@ function EventManager:raise(args)
 	for i = 1, #self.handlers do
 		local handler = self.handlers[i]
 		if handler ~= nil then
-				
 			if	handler.Filter ~= nil 
 			and	handler.Filter ~= "" then 
 				if handler.Filter(args) then
@@ -181,10 +186,9 @@ end
 
 function EventManager:createArguments(handler, args)
 			
-		if args == nil then 
-			local arguments = {}
-		else
-			local arguments = args
+		local arguments = {}
+		if args ~= nil then 
+			arguments = args
 		end
 		
 		-- merge with handler args if any

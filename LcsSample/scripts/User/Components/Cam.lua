@@ -10,25 +10,24 @@ Cam = {}
 ---
 --- Public
 ---
+Cam.name = "Cam"
+
 function Cam:init()
 	local obj = {}
-	setmetatable(obj, self)
 	self.__index = self
 
-	self.name = "Cam"
 	
-
 	self.onPick = EventManager:create()
 	self.onTurn = EventManager:create()
 	
 	for k, v in pairs(Cam) do
 		obj[k] = v
 	end
+
 	return obj
 end
 
 function Cam:attach(entity)
-	-- Init entity related things here
 	self.entity = entity
 	
 	self.mouseSense = 15
@@ -72,7 +71,7 @@ function Cam:update()
 	
 	if self.camera:GetRotation().y ~= self.camRotation.y then  
 		self.camera:SetRotation(self.camRotation)
-		self:doTurn(self.camRotation.y)
+		self.onTurn:raise( {Angle=self.camRotation.y} )
 	end
 
 	-- entity detected?
@@ -116,14 +115,15 @@ function Cam:doPick()
 	end
 end
 
-function Cam:doTurn(angle)
-	self.onTurn:raise(angle)
+function Cam:doMove(args)
+	self.camera:SetPosition(args.Pos,true)
 end
 
-function Cam:doMove(pos)
-	self.camera:SetPosition(pos,true)
+function Cam:doTurn(args)
+	local rot = self.camera:GetRotation(true)
+	rot.y = args.Angle
+	self.camera:SetRotation(rot,true)
 end
-
 
 ---
 --- Private

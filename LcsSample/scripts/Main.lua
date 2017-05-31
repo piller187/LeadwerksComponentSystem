@@ -43,3 +43,6 @@ while	not window:KeyDown(Key.Escape)
 	context:Sync(true)
 	
 end
+
+LcsSave()
+LcsLoad()

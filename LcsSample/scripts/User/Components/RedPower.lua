@@ -10,14 +10,13 @@ RedPower = {}
 ---
 --- Public
 ---
+RedPower.name = "RedPower"
 
 
 function RedPower:init()
 	local obj = {}
 	self.__index = self
 
-	-- Init non-entity related things here
-	self.name = "RedPower"
 
 	self.onPicked = EventManager:create()
 	
@@ -28,7 +27,6 @@ function RedPower:init()
 end
 
 function RedPower:attach(entity)
-	-- Init entity related things here
 	self.entity = entity
 	self.power = 2
 

@@ -10,14 +10,13 @@ Input = {}
 ---
 --- Public
 ---
+Input.name = "Input"
 	
 function Input:init()
 	local obj = {}
-	setmetatable(obj, self)
 	self.__index = self
 
-	self.name = "Input"
-
+	
 	-- Init non-entity related things here
 	self.onReceiveMessage = EventManager:create()
 	self.onClick = EventManager:create()
@@ -32,9 +31,7 @@ function Input:init()
 end
 
 function Input:attach(entity)
-	-- Init entity related things here
 	self.entity = entity
-	self.entity = nil
 	self.moving = false
 end
 

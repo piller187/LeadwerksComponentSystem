@@ -10,12 +10,12 @@ Cursor = {}
 ---
 --- Public
 ---
+Cursor.name = "Cursor"
 
 function Cursor:init()
 	local obj = {}
 	self.__index = self
 
-	self.name = "Cursor"
 
 	for k, v in pairs(Cursor) do
 		obj[k] = v

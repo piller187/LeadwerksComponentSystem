@@ -7,6 +7,7 @@ import "Scripts/LCS/EventManager.lua"
 if Hammer~= nil then return end
 Hammer = {}
 
+Hammer.name = "Hammer"
 
 ---
 --- Public
@@ -15,13 +16,8 @@ function Hammer:init()
 	local obj = {}
 	self.__index = self
 
-	self.entity = nil
-
-	--- Events
 	self.onPicked = EventManager:create()
 
-	-- Init non-entity related things here
-	self.name = "Hammer"
 
 	for k, v in pairs(Hammer) do
 		obj[k] = v
@@ -30,11 +26,7 @@ function Hammer:init()
 end
 
 function Hammer:attach(entity)
-	-- Init entity related things here
 	self.entity = entity
-
-	-- Subscribe for collisions
-	-- self.entity.onCollision:subscribe( self, self.doCollision)
 end
 
 function Hammer:update()

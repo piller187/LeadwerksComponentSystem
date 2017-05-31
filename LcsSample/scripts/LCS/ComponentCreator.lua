@@ -112,6 +112,7 @@ function ComponentCreator:createComponent( classname, hooks, values, path )
 	code = self:addLine( code, "" )
 	code = self:addLine( code, "if " .. classname .. "~= nil then return end" )
 	code = self:addLine( code, classname .. " = {}" )
+	code = self:addLine( code, classname .. ".name = \"" .. classname .."\"" )
 	code = self:addLine( code, "" )
 	code = self:addLine( code, "" )
 	code = self:addLine( code, "---" )
@@ -122,9 +123,8 @@ function ComponentCreator:createComponent( classname, hooks, values, path )
 	code = self:addLine( code, "\tself.__index = self" )
 	code = self:addLine( code, "" )
 	code = self:addLine( code, "\tself.entity = nil" )
-	code = self:addEvents( code, classname, hooks) 
 	code = self:addLine( code, "" )
-	code = self:addLine( code, "\tself.name = \"" .. classname .."\"" )
+	code = self:addEvents( code, classname, hooks) 
 	code = self:addLine( code, "" )
 	code = self:addLine( code, "\tfor k, v in pairs(" .. classname ..") do" )
 	code = self:addLine( code, "\t\tobj[k] = v" )
@@ -137,6 +137,7 @@ function ComponentCreator:createComponent( classname, hooks, values, path )
 	code = self:addLine( code, "	self.entity = entity")
 	code = self:addLine( code, "" )
 	code = self:addValues( code, values )
+	code = self:addLine( code, "" )
 	code = self:addLine( code, "	-- Subscribe for collisions" )
 	code = self:addLine( code, "	-- self.entity.onCollision:subscribe( self, self.doCollision)" )
 	code = self:addLine( code, "end" )
@@ -166,6 +167,9 @@ function ComponentCreator:createComponent( classname, hooks, values, path )
 	code = self:addLine( code, "--- Actions" )
 	code = self:addLine( code, "---" )
 	code = self:addActions(code, classname, hooks) 
+	code = self:addSaveFunction(code, classname, values)
+	code = self:addLine( code, "" )
+	code = self:addLoadFunction(code, classname, values)
 	code = self:addLine( code, "" )
 	code = self:addLine( code, "-- Handle subscribed collision " )
 	code = self:addLine( code, "-- arg = { Owner:entity, Entity:entity, Distance:number, Pos:Vec3, Normal:Vec3, Speed=number}" ) 
@@ -217,19 +221,67 @@ end
 
 
 function ComponentCreator:addValues(code, values )
-	code = self:addLine(code, "\t--- Values" )
-	for k,v in pairs(values) do
-		if 	v.name ~= nil 
-		and v.name ~= "" 
-		and v.value ~= nil
-		and v.value ~= "" 
-		and v.type ~= nil 
-		and v.type ~= ""
-		and isValidJsonType(v.type)
-		then
-			code = self:addLine( code, "\tself." .. v.name .. " = " .. jvalueToStr(v.type, v.value) ) 
+	if values ~= nil then 
+		code = self:addLine(code, "\t--- Values" )
+		for k,v in pairs(values) do
+			if 	v.name ~= nil 	and v.name ~= "" 
+			and v.value ~= nil 	and v.value ~= "" 
+			and v.type ~= nil 	and v.type ~= ""
+			and isValidJsonType(v.type)
+			then
+				code = self:addLine( code, "\tself." .. v.name .. " = " .. jvalueToStr(v.type, v.value) ) 
+			end
 		end
 	end
+	return code 
+end
+
+function ComponentCreator:addSaveFunction( code, classname, values )
+	code = self:addLine(code, "function " .. classname .. ":doSave(args)" )
+	if values ~= nil then 
+		code = self:addLine( code, "\targs.Table."..classname.."={}")
+		for k,v in pairs(values) do
+			if 	v.name ~= nil 	and v.name ~= "" 
+			and v.value ~= nil 	and v.value ~= "" 
+			and v.type ~= nil 	and v.type ~= ""
+			and v.store ~= nil 	and v.store ~= "" and v.store == "true" 
+			then
+				code = self:addLine( code, "\targs.Table."..classname.."."..v.name.." = self." .. v.name ) 
+			end
+		end
+	end
+	code = self:addLine(code, "end" )
+	
+	code = self:addLine(code, "" )
+	
+	code = self:addLine(code, "function " .. classname .. ":doSaveDone()" )
+	code = self:addLine(code, "\t-- Called when ALL components are saved" )
+	code = self:addLine(code, "end" )
+	
+	return code 
+end
+
+function ComponentCreator:addLoadFunction( code, classname, values )
+	code = self:addLine(code, "function " .. classname .. ":doLoad(args)" )
+	if values ~= nil then 
+		for k,v in pairs(values) do
+			if 	v.name ~= nil 	and v.name ~= "" 
+			and v.value ~= nil 	and v.value ~= "" 
+			and v.type ~= nil 	and v.type ~= ""
+			and v.store ~= nil 	and v.store ~= "" and v.store == "true"
+			then
+				code = self:addLine( code, "\tself."..v.name.."=args.Table."..classname.."."..v.name)
+			end
+		end
+	end
+	code = self:addLine(code, "end" )
+
+	code = self:addLine(code, "" )
+	
+	code = self:addLine(code, "function " .. classname .. ":doLoadDone()" )
+	code = self:addLine(code, "\t-- Called when ALL components are loaded" )
+	code = self:addLine(code, "end" )
+	
 	return code 
 end
 

@@ -10,13 +10,13 @@ Controller = {}
 ---
 --- Public
 ---
+Controller.name = "Controller"
 
 function Controller:init()
 	local obj = {}
 	setmetatable(obj, self)
 	self.__index = self
 
-	self.name = "Controller"
 	
 	self.onMove = EventManager:create()
 	
@@ -27,11 +27,9 @@ function Controller:init()
 end
 
 function Controller:attach(entity)
-	-- Init entity related things here
 	self.entity = entity
 	self.move = 0
 	self.angle = 0
-	self.eyePos = 0
 	self.oldPos = Vec3(0)
 	self.moveSpeed = 2
 	self.eyePos = 1.6
@@ -39,8 +37,10 @@ function Controller:attach(entity)
 end
 
 function Controller:update()
-	if self.oldpos ~= self.entity:GetPosition(true) then
-		self.onMove:raise(self.entity:GetPosition(true)+Vec3(0,self.eyePos,0),true)
+	local newpos = self.entity:GetPosition(true)
+	if self.oldpos ~= newpos then
+		newpos.y = newpos.y + self.eyePos
+		self.onMove:raise({Pos=newpos})
 	end
 end
 
@@ -75,12 +75,8 @@ function Controller:doMoveBackwards()
 	self.move = -self.moveSpeed 
 end
 
-function Controller:doJump(entity)
-	self.jump = self.jumpForce 
-end
-
-function Controller:doTurn(angle)
-	self.angle = angle
+function Controller:doTurn(args)
+	self.angle = args.Angle
 end
 
 function Controller:doStop()

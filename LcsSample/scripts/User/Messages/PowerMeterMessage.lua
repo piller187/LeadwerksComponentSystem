@@ -10,11 +10,12 @@ PowerMeterMessage = {}
 ---
 --- Public
 ---
+
 function PowerMeterMessage:init()
 	local obj = {}
 	self.__index = self
 
-	-- create events here 
+	self.name = "PowerMeterMessage"
 	self.onGet = EventManager:create()
 	self.onSet = EventManager:create()
 

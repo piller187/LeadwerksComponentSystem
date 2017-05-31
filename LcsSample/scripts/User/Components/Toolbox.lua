@@ -11,14 +11,13 @@ Toolbox = {}
 --- Public
 ---
 
+Toolbox.name = "Toolbox"
 
 function Toolbox:init()
 	local obj = {}
 	self.__index = self
 
-	-- Init non-entity related things here
-	self.name = "Toolbox"
-
+	
 	self.entity = nil
 	
 	for k, v in pairs(Toolbox) do
@@ -28,7 +27,6 @@ function Toolbox:init()
 end
 
 function Toolbox:attach(entity)
-	-- Init entity related things here
 	self.entity = entity
 	self.tools = {}
 	self.current = nil

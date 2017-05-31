@@ -71,6 +71,8 @@ function JsonValidator:validate( json )
 	
 	Debug:Assert( json.gameobjects ~= nil,	"*gameojects* are missing" )
 	Debug:Assert( #json.gameobjects > 0 ,	"*gameojects* is empty" )
+	Debug:Assert( 	json.name ~= nil 
+				and json.name ~= "", "*name* is empty or missing" )
 	
 	local gameobjects = json.gameobjects 
 	for k,v in pairs(gameobjects) do

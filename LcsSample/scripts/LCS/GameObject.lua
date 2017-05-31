@@ -38,6 +38,7 @@ function GameObject:init()
     self.__index = self
 	self.name = ""
 	self.components = {}
+	
 	self.onReceiveMessage = EventManager:create()
 	
 	for k, v in pairs(GameObject) do
@@ -66,7 +67,9 @@ function GameObject:attach(entity)
 
 	-- re-attach entity to components
 	for k,v in pairs(self.components) do
-		if v.attach ~= nil then v:attach(entity) end
+		if v.attach ~= nil then 
+			v:attach(entity) 
+		end
 	end
 end
 	
@@ -93,15 +96,13 @@ function GameObject:build(entity,gameobject)
 	self.entity = entity
 	self.entity.script.gameobject = self
 	
-	local entname = self.entity:GetKeyValue("name")
+	local name = self.entity:GetKeyValue("name")
 	local script = self.entity.script
+	script.gameobject.name = name
 	
-		
 	-- write values to entity keyvalues
 	if gameobject.values ~= nil and #gameobject.values > 0 then
-
 		for k,v in pairs(gameobject.values) do
-
 			if 	v.name ~= nil and v.name ~= "" 
 			and v.value ~= nil and v.value ~= "" 
 			and v.type ~= nil and v.type ~= "" then
@@ -109,7 +110,7 @@ function GameObject:build(entity,gameobject)
 			end
 		end
 	end
-	
+
 	-- add messages
 	if 	gameobject.messages ~= nil 
 	and #gameobject.messages >  0 then
@@ -143,9 +144,9 @@ function GameObject:build(entity,gameobject)
 			if 	comp.name ~= nil 
 			and comp.name ~= "" then
 				
-				-- create the message file if it doesn't exist
+				-- create the component file if it doesn't exist
 				if FileSystem:GetFileType(comp.path) ~= FileSystem.File then
-					compcreator:createComponent( comp.name, gameobject.hookups, gameobject.values, comp.path )
+					compcreator:createComponent( comp.name, gameobject.hookups, comp.values, comp.path )
 				end
 				
 				-- always create !
@@ -167,6 +168,9 @@ function GameObject:build(entity,gameobject)
 	
 		for k,hooks in pairs(gameobject.hookups) do
 			
+			if hooks.source == "Controller" then
+				local x = 1
+			end
 			-- get and verify source
 			local src = ""
 			if 	hooks.source == "self" or 
@@ -196,7 +200,11 @@ function GameObject:build(entity,gameobject)
 			end
 			ac = ac..hooks.destination_action
 			
-			-- create hook
+			--System:Print( "@LCS: " ..
+			--	src.name .. ".".. ev .. ":subscribe(" .. dst.name ..", " .. dst.name.. "." .. ac ..")")
+			
+			
+			-- create hooks
 			if 	hooks.filter == nil 
 			or  hooks.filter == "" then
 				if 	hooks.arguments == nil
@@ -219,9 +227,10 @@ function GameObject:build(entity,gameobject)
 					src[ev]:subscribe( dst, dst[ac], hooks.arguments, hooks.filter, hooks.post )
 				end
 			end
+			
 		end
-
 	end
+
 	
 	-- persistent flag
 	self.entity.script.gameobject.persistent = strToBool(gameobject.persistent)
@@ -287,5 +296,29 @@ function GameObject:SendMessage(arg) -- arg = {Dest, Source, Message} }
 		for k,v in pairs(arg.Dest) do 
 			v.script:ReceiveMessage( arg )
 		end
+	end
+end
+
+function GameObject:doSave(args)
+	for k,v in pairs(self.components) do
+		if v.doSave then v:doSave(args) end
+	end
+end
+
+function GameObject:doLoad(args)
+	for k,v in pairs(self.components) do
+		if v.doLoad then v:doLoad(args) end
+	end
+end
+
+function GameObject:doSaveDone()
+	for k,v in pairs(self.components) do
+		if v.doSaveDone then v:doSaveDone() end
+	end
+end
+
+function GameObject:doLoadDone()
+	for k,v in pairs(self.components) do
+		if v.doLoadDone then v:doLoadDone(args) end
 	end
 end
