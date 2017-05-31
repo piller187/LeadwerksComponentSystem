@@ -71,7 +71,7 @@ function EventManager:subscribe(owner, method, arguments, filterFunction, postFu
 	
 	EventManagerID = EventManagerID+1
 	
-	System:Print( "@LCS: " ..EventManagerID .. " - " .. owner.name )
+	--System:Print( "@LCS: " ..EventManagerID .. " - " .. owner.name )
 	
 	local filter = nil 
 	if filterFunction ~= nil then 

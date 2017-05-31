@@ -44,13 +44,16 @@ function LcsLoadMap( mapfile, jsonSource  )
 		FileSystem:CreateDir("LCS/Temp" )
 	end
 	
+	if creator ~= nil then
+		creator:reset()
+	end
 	currentJsonfile = jsonSource
 	local wasLoaded = Map:Load(mapfile, "MapHook")
 	Debug:Assert( wasLoaded, "Failed to load map " .. mapfile ) 
 	
-	for k,v in pairs(creator.objects) do
-		System:Print( "@LCS: " .. v.name )
-	end
+	--for k,v in pairs(creator.objects) do
+	--	System:Print( "@LCS: " .. v.name )
+	--end
 end
 
 --[[

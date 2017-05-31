@@ -124,3 +124,10 @@ function EntityCreator:createObject(entity,gameobject)
 	table.insert(self.objects,entity.script.gameobject)
 	
 end
+
+
+function EntityCreator:reset()
+	for k,v in pairs(self.objects) do
+		self.objects[k] = nil
+	end
+end
