@@ -50,10 +50,6 @@ function LcsLoadMap( mapfile, jsonSource  )
 	currentJsonfile = jsonSource
 	local wasLoaded = Map:Load(mapfile, "MapHook")
 	Debug:Assert( wasLoaded, "Failed to load map " .. mapfile ) 
-	
-	--for k,v in pairs(creator.objects) do
-	--	System:Print( "@LCS: " .. v.name )
-	--end
 end
 
 --[[
@@ -62,16 +58,23 @@ end
 	Save all GameObject Values to a file 
 ]]
 function LcsSave()
-	if creator ~= nil then
+	if 	creator ~= nil 
+	and jsonSource ~= nil then
 		local t = {}
+		
+		-- save Json declared values and user data
 		for k,v in pairs(creator.objects) do
-			if v.doSave then 
-				v:doSave( {Table=t} ) 
+			v:save( t, jsonSource )
+		end
+		
+		-- tell everything is saved
+		for k,v in pairs(creator.objects) do
+			for k1,v1 in pairs(v.components) do
+				if v1.doSaveDone then v1:doSaveDone() end
 			end
 		end
-		for k,v in pairs(creator.objects) do
-			if v.doSaveDone then v:doSaveDone() end
-		end
+		
+		-- store result to file
 		local stream = assert(io.open(creator.saveFile, "w"))
 		Debug:Assert( stream ~= nil, "Failed saving to " .. creator.saveFile )
 		local jstring = JSON:encode_pretty(t)
@@ -87,17 +90,26 @@ end
 	Load all GameObject Values from a file 
 ]]
 function LcsLoad()
-	if creator ~= nil then
+	if 	creator ~= nil 
+	and jsonSource ~= nil then
+
+		-- read from file
 		local stream = assert(io.open(creator.saveFile, "r"))
 		Debug:Assert( stream ~= nil, "Failed loading from " .. creator.saveFile )
 		local t = JSON:decode(stream:read("*all"))
 		stream:flush();
 		stream:close();
+		
+		-- load to gameobject and components
 		for k,v in pairs(creator.objects) do
-			if v.doLoad then v:doLoad({Table=t}) end
+			v:load( t, jsonSource )
 		end
+		
+		-- tell everything is loaded
 		for k,v in pairs(creator.objects) do
-			if v.doLoadDone then v:doLoadDone() end
+			for k1,v1 in pairs(v.components) do
+				if v1.doLoadDone then v1:doLoadDone() end
+			end
 		end
 	end
 end

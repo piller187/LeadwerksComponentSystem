@@ -204,7 +204,7 @@ end
 	String "true" or "false"
 ]]
 function jboolToStr(j)
-	if j == "true" or j ~= "0" then return "true" 
+	if j == "true" or j == "1" then return "true" 
 	else return "false" end
 end
 

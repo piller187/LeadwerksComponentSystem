@@ -28,6 +28,7 @@ world:SetLightQuality((System:GetProperty("lightquality","1")))
 
 --Map
 LcsLoadMap("Maps/start.map","start.json")
+LcsLoad()
 
 showstats = false
 while	not window:KeyDown(Key.Escape) 
@@ -45,4 +46,3 @@ while	not window:KeyDown(Key.Escape)
 end
 
 LcsSave()
-LcsLoad()

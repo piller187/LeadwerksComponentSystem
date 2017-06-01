@@ -7,6 +7,10 @@
 			"poststart": "",
 			"persistent": "",
 			"folder": "",
+			"savepos": "false",
+			"saverot": "false",
+			"savescale": "false",
+			"savehidden": "false",
 			"values": 
 			[
 				{

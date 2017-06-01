@@ -40,7 +40,6 @@ JSON = nil -- GLOBAL JSON
 ]]
 function JsonSource:create()
 	local obj = {}
-    setmetatable(obj, self)
     self.__index = self
 	
 	-- one-time load of the routines
@@ -97,6 +96,38 @@ function JsonSource:getGameObjects()
 	return self.jsonTable.gameobjects
 end
 
+--[[
+	Function: getRoot()
+	
+	Return the Json Root
+
+	Returns:
+	
+	Json root
+]]
 function JsonSource:getRoot()
 	return self.jsonTable;
+end
+
+--[[
+	Function: getComponent(name)
+	
+	Return a named component
+	
+	Parameters: 
+	
+	component - the name of the component
+	
+	Returns: 
+	
+	The Component or nil if not found
+]]
+function JsonSource:getComponent(name)
+	for k1,v1 in pairs(self.jsonTable.gameobjects) do
+		for k2, v2 in pairs( v1.components ) do
+			if v2.name == name then
+				return v2
+			end
+		end
+	end
 end

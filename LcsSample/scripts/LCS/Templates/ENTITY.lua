@@ -38,7 +38,6 @@ onCollision - when entity collides with somethingh
 ]]
 
 function Script:ReceiveMessage(msg)
-	--self.onReceiveMessage:raise( msg )
 	self.gameobject:ReceiveMessage(msg)
 end 
 

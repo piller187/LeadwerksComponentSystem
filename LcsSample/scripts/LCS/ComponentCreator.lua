@@ -238,18 +238,7 @@ end
 
 function ComponentCreator:addSaveFunction( code, classname, values )
 	code = self:addLine(code, "function " .. classname .. ":doSave(args)" )
-	if values ~= nil then 
-		code = self:addLine( code, "\targs.Table."..classname.."={}")
-		for k,v in pairs(values) do
-			if 	v.name ~= nil 	and v.name ~= "" 
-			and v.value ~= nil 	and v.value ~= "" 
-			and v.type ~= nil 	and v.type ~= ""
-			and v.store ~= nil 	and v.store ~= "" and v.store == "true" 
-			then
-				code = self:addLine( code, "\targs.Table."..classname.."."..v.name.." = self." .. v.name ) 
-			end
-		end
-	end
+	code = self:addLine(code, "\t-- add your own saving here to args.Table" )
 	code = self:addLine(code, "end" )
 	
 	code = self:addLine(code, "" )
@@ -263,17 +252,7 @@ end
 
 function ComponentCreator:addLoadFunction( code, classname, values )
 	code = self:addLine(code, "function " .. classname .. ":doLoad(args)" )
-	if values ~= nil then 
-		for k,v in pairs(values) do
-			if 	v.name ~= nil 	and v.name ~= "" 
-			and v.value ~= nil 	and v.value ~= "" 
-			and v.type ~= nil 	and v.type ~= ""
-			and v.store ~= nil 	and v.store ~= "" and v.store == "true"
-			then
-				code = self:addLine( code, "\tself."..v.name.."=args.Table."..classname.."."..v.name)
-			end
-		end
-	end
+	code = self:addLine(code, "\t-- add your own loading here from args.Table" )
 	code = self:addLine(code, "end" )
 
 	code = self:addLine(code, "" )

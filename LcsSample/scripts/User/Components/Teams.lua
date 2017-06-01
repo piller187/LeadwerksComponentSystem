@@ -16,7 +16,6 @@ function Teams:init()
 	local obj = {}
 	self.__index = self
 
-
 	self.onPowerChange = EventManager:create()
 	self.onAddRedPower = EventManager:create()
 	self.onAddBluePower = EventManager:create()
@@ -30,15 +29,20 @@ end
 
 function Teams:attach(entity)
 	self.entity = entity
-	self.Team = { red = 1, blue = 2 }
-	self.power = {}
-
-	self.max = 10
-	self.power[self.Team.red] = 0
-	self.power[self.Team.blue] = 0
+	
+	self.redPower = 0
+	self.bluePower = 0
+	self.max = 0
+	self.first = true
+	
 end
 
 function Teams:update()
+	if self.first then
+		self:addPower(0,"blue")
+		self:addPower(0,"red" )
+		self.first = false
+	end
 end
 
 function Teams:updatePhysics()
@@ -63,32 +67,31 @@ end
 --- Actions
 ---
 function Teams:doAddRedPower(args)
-	self:addPower(args.Power,self.Team.red)
+	self:addPower(args.Power, "red" )
 end
 
 function Teams:doAddBluePower(args)
-	self:addPower(args.Power,self.Team.blue)
+	self:addPower(args.Power, "blue")
 end
 
 ---
 --- Private
 ---
-
 function Teams:addPower(power,team)
-	local old = self.power[team] 
-	self.power[team] = Math:Clamp(old+power,0,self.max)
-	local new = self.power[team]
-	
-	if new == self.max then
-		if team == self.Team.red then self.onMaxReached:raise({Message="max.red.power"}) 
-		else self.onMaxReached:raise({Message="max.blue.power"}) end 
-	end
-	
-	if new ~= old then 
-		if team == self.Team.red then
-			self.onPowerChange:raise( { Message="set.red.power", Power=new } )
-		else
-			self.onPowerChange:raise( { Message="set.blue.power", Power=new } )
-		end
+
+	local old = 0
+	local new = 0
+	if team == "blue" then 
+		old = self.bluePower
+		self.bluePower = Math:Clamp(old+power, 0, self.max)
+		new = self.bluePower
+		if new == self.max then self.onMaxReached:raise({Message="max.blue.power"})  end
+		self.onPowerChange:raise( { Message="set.blue.power", Power=new } ) 
+	elseif team == "red" then
+		old = self.redPower 
+		self.redPower = Math:Clamp(old+power, 0, self.max)
+		new = self.redPower 
+		if new == self.max then self.onMaxReached:raise({Message="max.red.power"})  end
+		self.onPowerChange:raise( { Message="set.red.power", Power=new } ) 
 	end
 end

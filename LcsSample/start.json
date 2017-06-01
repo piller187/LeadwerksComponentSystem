@@ -7,6 +7,10 @@
 			"poststart": "function(self) self.entity:SetShadowMode(0) self.entity:SetCollisionType(Collision.Character) self.entity:SetPickMode(0) local mat = Material:Load('Materials/Effects/Invisible.mat') self.entity:SetMaterial(mat) mat:Release() end",
 			"persistent": "true",
 			"folder": "",
+			"savepos": "true",
+			"saverot": "true",
+			"savescale": "false",
+			"savehidden": "false",
 			"values": 
 			[
 
@@ -204,6 +208,10 @@
 			"poststart": "",
 			"persistent": "false",
 			"folder": "",
+			"savepos": "false",
+			"saverot": "false",
+			"savescale": "false",
+			"savehidden": "false",
 			"values": 
 			[
 
@@ -245,6 +253,10 @@
 			"poststart": "",
 			"persistent": "false",
 			"folder": "",
+			"savepos": "false",
+			"saverot": "false",
+			"savescale": "false",
+			"savehidden": "false",
 			"values": 
 			[
 
@@ -286,6 +298,10 @@
 			"poststart": "",
 			"persistent": "true",
 			"folder": "",
+			"savepos": "false",
+			"saverot": "false",
+			"savescale": "false",
+			"savehidden": "false",
 			"values": 
 			[
 
@@ -345,6 +361,10 @@
 			"poststart": "",
 			"persistent": "true",
 			"folder": "",
+			"savepos": "false",
+			"saverot": "false",
+			"savescale": "false",
+			"savehidden": "false",
 			"values": 
 			[
 
@@ -404,6 +424,10 @@
 			"poststart": "",
 			"persistent": "false",
 			"folder": "",
+			"savepos": "false",
+			"saverot": "false",
+			"savescale": "false",
+			"savehidden": "false",
 			"values": 
 			[
 				{

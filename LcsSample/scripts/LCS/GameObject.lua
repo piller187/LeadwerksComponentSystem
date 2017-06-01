@@ -38,8 +38,13 @@ function GameObject:init()
     self.__index = self
 	self.name = ""
 	self.components = {}
-	
 	self.onReceiveMessage = EventManager:create()
+	
+	self.persistent = false
+	self.saverot = false
+	self.savepos = false
+	self.savescale = false
+	self.savehidden = false
 	
 	for k, v in pairs(GameObject) do
 		obj[k] = v
@@ -98,8 +103,12 @@ function GameObject:build(entity,gameobject)
 	
 	local name = self.entity:GetKeyValue("name")
 	local script = self.entity.script
-	script.gameobject.name = name
-	
+	self.name = name
+	self.saverot = jvalueToValue("bool", gameobject.saverot)
+	self.savepos = jvalueToValue("bool", gameobject.savepos)
+	self.savescale = jvalueToValue("bool", gameobject.savescale)
+	self.savehidden = jvalueToValue("bool", gameobject.savehidden)
+		
 	-- write values to entity keyvalues
 	if gameobject.values ~= nil and #gameobject.values > 0 then
 		for k,v in pairs(gameobject.values) do
@@ -154,9 +163,8 @@ function GameObject:build(entity,gameobject)
 				local instance =  _G[comp.name]
 				Debug:Assert(instance~=nil, "Failed to import " .. comp.name )
 				self.components[comp.name] = _G[comp.name]:init()
-				script[comp.name] = self.components[comp.name]
-				if script[comp.name].ReceiveMessage ~= nil then
-					self.onReceiveMessage:subscribe(script[comp.name],script[comp.name].ReceiveMessage)
+				if self.components[comp.name].ReceiveMessage ~= nil then
+					self.onReceiveMessage:subscribe(self.components[comp.name],self.components[comp.name].ReceiveMessage)
 				end
 			end
 		end
@@ -176,7 +184,7 @@ function GameObject:build(entity,gameobject)
 			if 	hooks.source == "self" or 
 				hooks.source == "" or 
 				hooks.source == nil  then
-				src = self.entity.script.gameobject
+				src = self
 			else
 				src = self.components[hooks.source]
 			end
@@ -186,7 +194,7 @@ function GameObject:build(entity,gameobject)
 			if 	hooks.destination == "self" or
 				hooks.destination == "" or 
 				hooks.destination == nil then 
-				dst = self.entity.script.gameobject
+				dst = self
 			else 
 				dst = self.components[hooks.destination] 
 			end
@@ -202,7 +210,6 @@ function GameObject:build(entity,gameobject)
 			
 			--System:Print( "@LCS: " ..
 			--	src.name .. ".".. ev .. ":subscribe(" .. dst.name ..", " .. dst.name.. "." .. ac ..")")
-			
 			
 			-- create hooks
 			if 	hooks.filter == nil 
@@ -233,15 +240,16 @@ function GameObject:build(entity,gameobject)
 
 	
 	-- persistent flag
-	self.entity.script.gameobject.persistent = strToBool(gameobject.persistent)
+	self.persistent = strToBool(gameobject.persistent)
 	
 	-- PostStart code
 	if	gameobject.poststart ~= nil 
 	and gameobject.poststart ~= "" then
 		-- add PostStart code
-		self.entity.script.gameobject.postStart = assert(loadstring("return " .. gameobject.poststart ))()
-		self.entity.script.gameobject:postStart(self)
+		self.postStart = assert(loadstring("return " .. gameobject.poststart ))()
+		self:postStart(self)
 	end
+	
 end
 
 --[[
@@ -299,18 +307,6 @@ function GameObject:SendMessage(arg) -- arg = {Dest, Source, Message} }
 	end
 end
 
-function GameObject:doSave(args)
-	for k,v in pairs(self.components) do
-		if v.doSave then v:doSave(args) end
-	end
-end
-
-function GameObject:doLoad(args)
-	for k,v in pairs(self.components) do
-		if v.doLoad then v:doLoad(args) end
-	end
-end
-
 function GameObject:doSaveDone()
 	for k,v in pairs(self.components) do
 		if v.doSaveDone then v:doSaveDone() end
@@ -320,5 +316,97 @@ end
 function GameObject:doLoadDone()
 	for k,v in pairs(self.components) do
 		if v.doLoadDone then v:doLoadDone(args) end
+	end
+end
+
+function GameObject:save(tab,jsonSource)
+	tab[self.name] = {}
+	local t = tab[self.name]
+	
+	-- save basic entity stuff
+	if self.savepos then 
+		local pos = self.entity:GetPosition(true)
+		t.pos = { x=pos.x, y=pos.y, z=pos.z }
+	end
+	
+	if self.saverot then 
+		local rot = self.entity:GetRotation(true)
+		t.rot = { x=rot.x, y=rot.y, z=rot.z}
+	end
+		
+	if self.savescale then 
+		local scale = self.entity:GetScale()
+		t.scale = {x=scale.x, y=scale.y, z=scale.z}
+	end
+		
+	if self.savehidden then 
+		t.hidden = self.entity:Hidden()
+	end
+
+	-- save each component values that are marked 'store:true'
+	t.components = {}
+	local comps = t.components
+	for k1,v1 in pairs(self.components) do
+		comps[v1.name] = {}
+		local comp = comps[v1.name]  
+		local jcomp = jsonSource:getComponent(v1.name)
+		if jcomp ~= nil and jcomp.values ~= nil then
+			for k2,v2 in pairs(jcomp.values) do
+				if v2.store ~= nil and v2.store == "true" then
+					comp[v2.name] = v1[v2.name]
+				end
+			end
+		end
+	end
+	
+	-- save any optinal component data set by user
+	for k,v in pairs(self.components) do
+		if v.doSave then v:doSave({Table=t.components[v.name]}) end
+	end
+end
+
+function GameObject:load(tab,jsonSource)
+	local t = tab[self.name]
+
+	-- load basic entity stuff
+	if self.savepos and t.pos ~= nil then
+		self.entity:SetPosition( t.pos.x, t.pos.y, t.pos.z, true )
+	end
+	
+	if self.saverot and t.rot ~= nil then
+		self.entity:SetRotation( t.rot.x, t.rot.y, t.rot.z, true )
+	end
+	
+	if self.savescale and t.scale ~= nil then
+		self.entity:SetScale( t.scale.x, t.scale.y, t.scale.z )
+	end
+	
+	if self.savehidden then 
+		if t.hidden then self.entity:Hide() 
+		else self.entity:Show() end
+	end
+	
+	-- load each component values that are marked 'store:true'
+	local comps = t.components
+	for k1,v1 in pairs(self.components) do
+		if comps[v1.name] ~= nil then 
+			if v1.name == "Teams" then
+				local x = 1
+			end
+			local comp = comps[v1.name]  
+			local jcomp = jsonSource:getComponent(v1.name)
+			if jcomp ~= nil and jcomp.values ~= nil then
+				for k2,v2 in pairs(jcomp.values) do
+					if v2.store ~= nil and v2.store == "true" then
+						v1[v2.name] = comp[v2.name] 
+					end
+				end
+			end
+		end
+	end
+	
+	-- load any optinal component data set by user
+	for k,v in pairs(self.components) do
+		if v.doLoad then v:doLoad({Table=t.components[v.name]}) end
 	end
 end
