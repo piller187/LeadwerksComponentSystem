@@ -34,5 +34,7 @@ function PowerMeterMessage:doGet()
 end
 
 function PowerMeterMessage:doSet(arg)
+
+	System:Print("PowerMeterMessage:doSet(arg) " .. arg.Power)
 	self.onSet:raise(arg)
 end

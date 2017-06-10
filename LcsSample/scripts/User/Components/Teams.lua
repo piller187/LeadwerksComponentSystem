@@ -32,7 +32,7 @@ function Teams:attach(entity)
 	
 	self.redPower = 0
 	self.bluePower = 0
-	self.max = 0
+	self.max = 10
 	self.first = true
 	
 end
@@ -78,6 +78,7 @@ end
 --- Private
 ---
 function Teams:addPower(power,team)
+	System:Print("Teams:addPower(power,team) " .. power .. " " .. self.max)
 
 	local old = 0
 	local new = 0

@@ -98,6 +98,7 @@ end
 
 function BlueMeter:doSet(args)
 
+	System:Print( "BlueMeter " .. args.Power )
 	local value = 1
 	if args.Power < self.power then value = -1 end
 	
