@@ -77,19 +77,20 @@ void main(void)
 #define VOLUMETRICLIGHTING 1
 
 uniform sampler2DMS texture0;
-uniform sampler2DMS texture4;
+
 uniform mat3 camerainversenormalmatrix;
 uniform sampler2DShadow texture5;//shadowmap
 uniform vec2 lightconeangles;
 uniform vec2 lightconeanglescos;
 uniform vec4 ambientlight;
 uniform vec2 buffersize;
+
 uniform vec3 lightposition;
 uniform vec3 lightdirection;
 uniform vec4 lightcolor;
 uniform vec4 lightspecular;
 uniform vec2 lightrange;
-uniform vec2 texcoordoffset;
+
 uniform vec2 camerarange;
 uniform float camerazoom;
 uniform float shadowmapsize;
@@ -145,10 +146,10 @@ void main(void)
 	//----------------------------------------------------------------------
 	//Calculate screen texcoord
 	//----------------------------------------------------------------------
-	vec2 coord = texcoordoffset + gl_FragCoord.xy / buffersize;
+	vec2 coord = gl_FragCoord.xy / buffersize;
 	if (isbackbuffer) coord.y = 1.0 - coord.y;
 	
-	ivec2 icoord = ivec2(texcoordoffset * buffersize + gl_FragCoord.xy);
+	ivec2 icoord = ivec2(gl_FragCoord.xy);
 	if (isbackbuffer) icoord.y = int(buffersize.y) - icoord.y;
 	icoord *= downsampling;
 
@@ -163,16 +164,9 @@ void main(void)
 	//----------------------------------------------------------------------
 	//Calculate screen position and vector
 	//----------------------------------------------------------------------
-#ifdef USEPOSITIONBUFFER
-		//VR Sheared mprojection
-		vec3 screencoord = texelFetch(texture4,icoord,0).xyz;
-		screencoord.y *= -1.0f;
-#else
-		vec3 screencoord = vec3(((gl_FragCoord.x/buffersize.x)-0.5) * 2.0 * (buffersize.x/buffersize.y),((-gl_FragCoord.y/buffersize.y)+0.5) * 2.0,depthToPosition(depth,camerarange));
-		screencoord.x *= screencoord.z / camerazoom;
-		screencoord.y *= -screencoord.z / camerazoom;
-#endif
-	
+	vec3 screencoord = vec3(((gl_FragCoord.x/buffersize.x)-0.5) * 2.0 * (buffersize.x/buffersize.y),((-gl_FragCoord.y/buffersize.y)+0.5) * 2.0,depthToPosition(depth,camerarange));
+	screencoord.x *= screencoord.z / camerazoom;
+	screencoord.y *= -screencoord.z / camerazoom;
 	vec3 screennormal = normalize(screencoord);
 	
 #if VOLUMETRICLIGHTING==1

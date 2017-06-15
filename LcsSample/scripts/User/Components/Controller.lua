@@ -14,9 +14,7 @@ Controller.name = "Controller"
 
 function Controller:init()
 	local obj = {}
-	setmetatable(obj, self)
 	self.__index = self
-
 	
 	self.onMove = EventManager:create()
 	
@@ -47,21 +45,6 @@ end
 function Controller:updatePhysics()
 	self.entity:SetInput( self.angle, self.move, 0, 0)
 	self.oldpos = self.entity:GetPosition(true)
-end
-
-function Controller:overlap(entity)
-end
-
-function Controller:draw()
-end
-
-function Controller:drawEach(camera)
-end
-
-function Controller:postRender(context)
-end
-
-function Controller:detach()
 end
 
 ---

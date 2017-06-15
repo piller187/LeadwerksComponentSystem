@@ -16,8 +16,6 @@ function Input:init()
 	local obj = {}
 	self.__index = self
 
-	
-	-- Init non-entity related things here
 	self.onReceiveMessage = EventManager:create()
 	self.onClick = EventManager:create()
 	self.onForward = EventManager:create()
@@ -52,24 +50,6 @@ function Input:update()
 		self.moving = false
 		self:doStop()
 	end
-end
-
-function Input:updatePhysics()
-end
-
-function Input:overlap(entity)
-end
-
-function Input:draw()
-end
-
-function Input:drawEach(camera)
-end
-
-function Input:postRender(context)
-end
-
-function Input:detach()
 end
 
 ---

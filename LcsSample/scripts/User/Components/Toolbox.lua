@@ -17,7 +17,6 @@ function Toolbox:init()
 	local obj = {}
 	self.__index = self
 
-	
 	self.entity = nil
 	
 	for k, v in pairs(Toolbox) do
@@ -33,18 +32,6 @@ function Toolbox:attach(entity)
 end
 
 function Toolbox:update()
-end
-
-function Toolbox:updatePhysics()
-end
-
-function Toolbox:overlap(entity)
-end
-
-function Toolbox:draw()
-end
-
-function Toolbox:drawEach(camera)
 end
 
 function Toolbox:postRender(context)

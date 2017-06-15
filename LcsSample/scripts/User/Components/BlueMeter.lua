@@ -7,11 +7,11 @@ import "Scripts/LCS/EventManager.lua"
 if BlueMeter ~= nil then return end
 BlueMeter = {}
 
+BlueMeter.name = "BlueMeter"
 
 ---
 --- Public
 ---
-BlueMeter.name = "BlueMeter"
 function BlueMeter:init()
 	local obj = {}
 	self.__index = self
@@ -41,24 +41,6 @@ function BlueMeter:attach(entity)
 	
 end
 
-function BlueMeter:update()
-end
-
-function BlueMeter:updatePhysics()
-end
-
-function BlueMeter:overlap(entity)
-end
-
-function BlueMeter:collision(entity, position, normal, speed)
-end
-
-function BlueMeter:draw()
-end
-
-function BlueMeter:drawEach(camera)
-end
-
 function BlueMeter:postRender(context)
 	if not self.disabled then
 	
@@ -86,26 +68,19 @@ function BlueMeter:postRender(context)
 	end
 end
 
-function BlueMeter:detach()
-end
-
-function BlueMeter:cleanup(context)
-end
-
 ---
 --- Actions
 ---
 
 function BlueMeter:doSet(args)
 
-	System:Print( "BlueMeter " .. args.Power )
 	local value = 1
 	if args.Power < self.power then value = -1 end
 	
 	local goal = Math:Round(Math:Clamp(args.Power, 0, self.max) * self.valueSize)
 	while self.pixelValue ~= goal do
 		self.pixelValue = self.pixelValue  + value
-		coroutine.yield()
+		if EventManager.useCoRoutines then coroutine.yield() end
 	end
 	self.power = args.Power
 end

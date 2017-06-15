@@ -12,55 +12,8 @@
 
 import "Scripts/LCS/LcsUtils.lua"
 
---[[ 
-
-Class: ComponentCreator
-
-Creates a component LUA file using GameObject information
-
-from the JSON project file. This Component will be generated with 
-
-folling features. All events given by the JSON GameObject will be 
-added as _"onSourceEvent"_ . 
-
-Follwing functions will be available
-
-
-- *init()*
-- *attach(entity)*
-- *update()*
-- *updatePhysics()*
-- *overlap(entity)*
-- *draw()*
-- *drawEach(camera)*
-- *postRender(context)*
-- *detach()*
-- *doCollision( arg )*
-
-There will also be a _"doEvent"_ function per defined event
-
-See Also:
-
-<ENTITY>
-
-<GameObject>
-
-]]
-
-
 if ComponentCreator ~= nil then return end
 ComponentCreator = {}
-
---[[
-
-Function: create()
-
-Creates an instance of the class
-
-Returns: 
-
-The created instance
-]]
 
 function ComponentCreator:create()
 	local obj = {}
@@ -72,24 +25,6 @@ function ComponentCreator:create()
 
     return obj
 end
-
-
---[[
-
-Function: createComponent( classname, hooks, path )
-
-Creates a component using the JSON GameObject Hooks
-The component will be create as file given by the path
-
-Parameters: 
-
-classname - Name of the component class to be created
-
-hooks - hookup part of a JSON GameObject
-
-path - Name of file to be created
-
-]]
 
 function ComponentCreator:createComponent( classname, hooks, values, path )
 	

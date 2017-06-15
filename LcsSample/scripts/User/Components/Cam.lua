@@ -86,32 +86,12 @@ function Cam:update()
 	end
 end
 
-function Cam:updatePhysics()
-end
-
-function Cam:overlap(entity)
-end
-
-function Cam:draw()
-end
-
-function Cam:drawEach(camera)
-end
-
-function Cam:postRender(context)
-end
-
-function Cam:detach()
-end
-
 ---
 --- Actions
 ---
 function Cam:doPick()
 	if self.pendingPick ~= nil then
-		self.onPick:raise( 
-		{ 	Dest=self.pendingPick, 
-			Source=self.entity } )
+		self.onPick:raise( { Dest=self.pendingPick, Source=self.entity } )
 	end
 end
 

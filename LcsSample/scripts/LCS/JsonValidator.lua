@@ -12,29 +12,6 @@
 
 import "Scripts/LCS/LcsUtils.lua"
 
---[[
-	Class: JsonValidator
-	
-	Validates a Json Source giving Asserts on 
-	errors found.
-	
-	Asserts:
-	
-	- *gameojects* are missing
-	- *gameojects* is empty
-	- *name* in a gameobject not defined"
-	- *persistent* must be *true* or *false* in *<objectname>*
-	- *hookups* must have at least one hookup defined in *<objectname>* 
-	- *name* not defined in *<objectname>.values*" 
-	- *value* not defined in *<objectname>.<valuename>*
-	- *type* not defined in *<objectname>.<valuename>*
-	-  illegal *type=<valuetype>* in *<objectname>.<valuename>*
-		Valid types are *bool, int, float, vec2, vec3, vec4, string, entity*
-	- *name* not defined in *<objectname>.messages*
-	- *path* not defined in *<objectname.message.name>*
-	- *name* not defined in *<objectname>.components*
-	- *path* not defined in *<objectname.component.name>*
-]]
 local Messages = {}
 
 if JsonValidator ~= nil then return end
@@ -44,11 +21,6 @@ JsonValidator = {}
 -- Public methods
 --
 
---[[
-	Function: create()
-	
-	Create an instance of the validator 
-]]
 function JsonValidator:create()
 	local obj = {}
     self.__index = self
@@ -58,21 +30,11 @@ function JsonValidator:create()
     return obj
 end
 
---[[
-	Function: validate( json )
-	
-	Validate the given JsonSource
-
-	Parameters:
-	
-	json - A JsonSource object
-]]
 function JsonValidator:validate( json )
 	
 	Debug:Assert( json.gameobjects ~= nil,	"*gameojects* are missing" )
 	Debug:Assert( #json.gameobjects > 0 ,	"*gameojects* is empty" )
-	Debug:Assert( 	json.name ~= nil 
-				and json.name ~= "", "*name* is empty or missing" )
+	Debug:Assert( isValidString(json.name), "*name* is empty or missing" )
 	
 	local gameobjects = json.gameobjects 
 	for k,v in pairs(gameobjects) do
@@ -82,8 +44,7 @@ end
 
 function JsonValidator:validate_gameobject( go )
 
-	Debug:Assert( 	go.name ~= nil and
-					go.name ~= "",  
+	Debug:Assert( 	isValidString(go.name),  
 					"*name* in a gameobject not defined" )
 	
 	local name = go.name
@@ -123,12 +84,10 @@ function JsonValidator:validate_gameobject( go )
 end
 
 function JsonValidator:validate_value( name, value )
-	Debug:Assert( 	value.name ~= nil and
-					value.name ~= "",
+	Debug:Assert( 	isValidString(value.name),
 					"*name* not defined in *" .. name .. ".values*" )
 
-	Debug:Assert( 	value.value  ~= nil and
-					value.value ~= "",
+	Debug:Assert( 	isValidString(value.value),
 					"*value* not defined in *" .. name .. "." .. value.name .. "*" )
 					
 	Debug:Assert( 	value.type ~= nil and
@@ -148,41 +107,29 @@ function JsonValidator:validate_value( name, value )
 end
 	
 function JsonValidator:validate_message( name, message )
-	Debug:Assert( 	message.name ~= nil and
-					message.name ~= "",
+	Debug:Assert( 	isValidString(message.name),
 					"*name* not defined in *" .. name .. ".messages*" )
 
-	Debug:Assert( 	message.path ~= nil and
-					message.path ~= "",
+	Debug:Assert( 	isValidString(message.path),
 					"*path* not defined in *" .. name .. "." .. message.name .. "*" )
 	
---	Debug:Assert(	FileSystem:GetFileSize(message.path) > 0, 
---					"*"..message.path.."* not found in " .. name .. "." .. message.name .. "*" )
-
 end
 
 function JsonValidator:validate_component( name, component )
-	Debug:Assert( 	component.name ~= nil and
-					component.name ~= "",
+	Debug:Assert( 	isValidString(component.name),
 					"*name* not defined in *" .. name .. ".components*" )
 
-	Debug:Assert( 	component.path ~= nil and
-					component.path ~= "",
+	Debug:Assert( 	isValidString(component.path),
 					"*path* not defined in *" .. name .. "." .. component.name .. "*" )
 	
---	Debug:Assert(	FileSystem:GetFileSize(component.path) > 0, 
---					"*"..component.path.."* not found in " .. name .. "." .. component.name .. "*" )
-
 end
 
 function JsonValidator:validate_hookup( name, hookup )
 
-	Debug:Assert( 	hookup.source_event ~= nil and
-					hookup.source_event ~= "",
+	Debug:Assert( 	isValidString(hookup.source_event),
 					"*name* not defined in *" .. name .. ".components*" )
 
-	Debug:Assert( 	hookup.destination_action ~= nil and
-					hookup.destination_action ~= "",
+	Debug:Assert( 	isValidString(hookup.destination_action),
 					"*name* not defined in *" .. name .. ".components*" )
 	
 end

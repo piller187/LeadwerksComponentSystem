@@ -9,7 +9,6 @@ uniform mat4 projectioncameramatrix;
 uniform mat4 camerainversematrix;
 uniform instancematrices { mat4 matrix[MAX_INSTANCES];} entity;
 uniform vec4 clipplane0 = vec4(0.0);
-uniform mat4 cameramatrix;
 
 //Attributes
 in vec3 vertex_position;
@@ -30,7 +29,6 @@ out vec3 ex_normal;
 out vec3 ex_tangent;
 out vec3 ex_binormal;
 out float clipdistance0;
-out vec4 fragPosition;
 
 void main()
 {
@@ -55,11 +53,7 @@ void main()
 	
 	ex_VertexCameraPosition = vec3(camerainversematrix * modelvertexposition);
 	gl_Position = projectioncameramatrix * modelvertexposition;
-	fragPosition = gl_Position;//camerainversematrix * modelvertexposition;
-	
-	//gl_Position.xyz /= gl_Position.w;
-	//gl_Position.w=1.0;
-	
+
 	//mat3 nmat = mat3(camerainversematrix[0].xyz,camerainversematrix[1].xyz,camerainversematrix[2].xyz);//39
 	//nmat = nmat * mat3(entitymatrix[0].xyz,entitymatrix[1].xyz,entitymatrix[2].xyz);//40
 	mat3 nmat = mat3(entitymatrix);
@@ -97,7 +91,6 @@ uniform mat4 projectioncameramatrix;
 uniform mat4 camerainversematrix;
 uniform instancematrices { mat4 matrix[MAX_INSTANCES];} entity;
 uniform vec4 clipplane0 = vec4(0.0);
-uniform mat4 cameramatrix;
 
 //Attributes
 in vec3 vertex_position;
@@ -118,7 +111,6 @@ out vec3 ex_normal;
 out vec3 ex_tangent;
 out vec3 ex_binormal;
 out float clipdistance0;
-out vec4 fragPosition;
 
 void main()
 {
@@ -143,11 +135,7 @@ void main()
 	
 	ex_VertexCameraPosition = vec3(camerainversematrix * modelvertexposition);
 	gl_Position = projectioncameramatrix * modelvertexposition;
-	fragPosition = gl_Position;//camerainversematrix * modelvertexposition;
-	
-	//gl_Position.xyz /= gl_Position.w;
-	//gl_Position.w=1.0;
-	
+
 	//mat3 nmat = mat3(camerainversematrix[0].xyz,camerainversematrix[1].xyz,camerainversematrix[2].xyz);//39
 	//nmat = nmat * mat3(entitymatrix[0].xyz,entitymatrix[1].xyz,entitymatrix[2].xyz);//40
 	mat3 nmat = mat3(entitymatrix);
@@ -197,7 +185,6 @@ in vec3 ex_normal;
 in vec3 ex_tangent;
 in vec3 ex_binormal;
 in float clipdistance0;
-in vec4 fragPosition;
 
 //Outputs
 out vec4 fragData0;
@@ -288,5 +275,4 @@ void main(void)
 	}
 	fragData1.a = materialflags/255.0;
 	fragData2 = vec4(0.0,0.0,0.0,specular);
-	fragData3 = vec4(ex_VertexCameraPosition,1.0f);
 }

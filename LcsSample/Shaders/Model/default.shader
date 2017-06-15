@@ -34,7 +34,6 @@ out vec3 vBinormal;
 out vec3 vTangent;
 out vec4 vColor;
 out float clipdistance0;
-out vec3 ex_VertexCameraPosition;
 
 void main()
 {
@@ -61,7 +60,6 @@ void main()
 	}	
 
 	vPosition = modelvertexposition;
-	ex_VertexCameraPosition = vec3(camerainversematrix * modelvertexposition);
 	gl_Position = projectioncameramatrix * vPosition;
 	
 	//ctrl_transformmatrix = projectioncameramatrix * entitymatrix_;
@@ -134,7 +132,6 @@ out vec3 vBinormal;
 out vec3 vTangent;
 out vec4 vColor;
 out float clipdistance0;
-out vec3 ex_VertexCameraPosition;
 
 void main()
 {
@@ -161,7 +158,6 @@ void main()
 	}	
 
 	vPosition = modelvertexposition;
-	ex_VertexCameraPosition = vec3(camerainversematrix * modelvertexposition);
 	gl_Position = projectioncameramatrix * vPosition;
 	
 	//ctrl_transformmatrix = projectioncameramatrix * entitymatrix_;
@@ -218,7 +214,6 @@ in vec3 vBinormal;
 in vec3 vTangent;
 in vec4 vColor;
 in float clipdistance0;
-in vec3 ex_VertexCameraPosition;
 
 //Outputs
 out vec4 fragData0;
@@ -266,5 +261,4 @@ void main(void)
 	}
 	fragData1.a = materialflags/255.0;
 	fragData2 = vec4(0.0,0.0,0.0,specular);
-	fragData3 = vec4(ex_VertexCameraPosition,1.0f);
 }

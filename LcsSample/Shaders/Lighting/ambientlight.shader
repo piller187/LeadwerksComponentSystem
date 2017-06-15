@@ -59,12 +59,10 @@ void main(void)
 	uniform sampler2DMS texture4;
 #endif
 
-uniform vec2 texcoordoffset;
 uniform vec4 ambientlight;
 uniform vec2 buffersize;
 uniform vec2 camerarange;
 uniform bool isbackbuffer;
-uniform mat4 cameramatrix;
 
 in vec2 vTexCoord;
 
@@ -80,10 +78,10 @@ void main(void)
 	//----------------------------------------------------------------------
 	//Calculate screen texcoord
 	//----------------------------------------------------------------------
-	vec2 coord = texcoordoffset + gl_FragCoord.xy / buffersize;	
+	vec2 coord = gl_FragCoord.xy / buffersize;	
 	if (isbackbuffer) coord.y = 1.0 - coord.y;
 	
-	ivec2 icoord = ivec2(texcoordoffset*buffersize + gl_FragCoord.xy);
+	ivec2 icoord = ivec2(gl_FragCoord.xy);
 	if (isbackbuffer) icoord.y = int(buffersize.y) - icoord.y;
 	
 	vec4 diffuse = vec4(0.0);
@@ -114,27 +112,14 @@ void main(void)
 		{
 			samplediffuse = (samplediffuse + vec4(1.0,0.0,0.0,0.0))/2.0;
 		}
-		
-		//Simple shading
-		if ((1 & materialflags)!=0) {
-			vec4 lightdir = vec4(-0.4,-0.45,0.5,1.0);
-			float intensity = abs(dot(normalize(samplenormal.xyz),lightdir.xyz))*0.5+0.75;
-			samplediffuse *= intensity;
-		}
-		
 		fragData0 += samplediffuse + emission;
 	}
 	
-	//fragData0 = vec4(10.0f);
-
 	//----------------------------------------------------------------------
 	//Calculate lighting
 	//----------------------------------------------------------------------	
 	fragData0 /= float(max(1,SAMPLES));
-	fragData0 = max(fragData0,0.0);
-	
-	//fragData0 = ambientlight;
-	
+	fragData0 = max(fragData0,0.0);	
 #if SAMPLES==0
 	gl_FragDepth = texture(texture0,coord).r;
 #else

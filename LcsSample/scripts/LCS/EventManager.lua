@@ -10,28 +10,13 @@
 -- Rick & Roland                       	
 -----------------------------------------------
 
---[[
-Class: EventManager
-
-
-]]
-
 local EventManagerID = 0
 
 if EventManager ~= nil then return end
 EventManager = {}
 EventManager.coroutines = {}
+EventManager.useCoRoutines = true
 
---[[
-Function: create()
-
-Create an instance of the EventManager
-
-Returns: 
-
-The instance
-
-]]
 function EventManager:create()
 	obj = {}
     self.__index = self
@@ -44,23 +29,6 @@ function EventManager:create()
     return obj
 end
 
---[[
-Function: subscribe(owner, method, arguments, filterFunction, postFunction)
-
-Subscribe to an event
-
-Parameters: 
-
-	owner - owner of the method
-	method - function/method to call on raise
-	arguments - table or string of arguments
-	filterFunction - function called for enable/disable the event
-	postFunction - callback 
-	
-Returns:
-
-	A number the identifies the event. Can be used to remove a subscribtion
-]]
 function EventManager:subscribe(owner, method, arguments, filterFunction, postFunction)
 	if method == nil then 
 		System:Print( debug.traceback() ) 
@@ -70,8 +38,6 @@ function EventManager:subscribe(owner, method, arguments, filterFunction, postFu
 	Debug:Assert( method ~= nil, "Calling EventManager:subscribe with Null-Method")
 	
 	EventManagerID = EventManagerID+1
-	
-	--System:Print( "@LCS: " ..EventManagerID .. " - " .. owner.name )
 	
 	local filter = nil 
 	if filterFunction ~= nil then 
@@ -85,10 +51,10 @@ function EventManager:subscribe(owner, method, arguments, filterFunction, postFu
 
 	local args = nil
 	if arguments ~= nil then 
-		if type(arguments) == "function" then
-			args = arguments
-		else
+		if string.sub(arguments,1,9) == "function(" then
 			args = assert(loadstring("return " .. arguments))()
+		else
+			args = arguments
 		end
 	end
 		
@@ -103,18 +69,6 @@ function EventManager:subscribe(owner, method, arguments, filterFunction, postFu
 	return EventManagerID
 end
 
---[[
-Function: unsubscribe(id)
-
-Unsubscribe an event
-
-Parameters: 
-
-	id - identification on the event
-	
-See Also:
-	<subscribe(owner, method, arguments, filterFunction, postFunction)>
-]]
 function EventManager:unsubscribe(id) -- the id returned when subscribing
 	for i = 1, #self.handlers do
 		if  self.handlers[i].Id == id then
@@ -124,55 +78,44 @@ function EventManager:unsubscribe(id) -- the id returned when subscribing
 	end
 end
 
---[[
-Function: raise(args)
-
-Raise an event which will be caught by all subscribers
-
-Parameters: 
-
-	args - argument send with the envent
-	
-See Also:
-	<subscribe(owner, method, arguments, filterFunction, postFunction)>
-	
-Argument: 
-	An argument MUST be a table
-	
-Example: 
-	>self.onEvent:raise( { Speed=10, Message="run" } ) -- arguments must be table
-
-]]
 function EventManager:raise(args)
-	for i = 1, #self.handlers do
-		local handler = self.handlers[i]
-		if handler ~= nil then
-			if	handler.Filter ~= nil 
-			and	handler.Filter ~= "" then 
-				if handler.Filter(args) then
+	if self.useCoRoutines then
+		for i = 1, #self.handlers do
+			local handler = self.handlers[i]
+			if handler ~= nil then
+				if	isValidString(handler.Filter) then 
+					if handler.Filter(args) then
+						local co = coroutine.create(handler.Method)
+						coroutine.resume(co, handler.Owner, self:createArguments(handler,args) )
+						if coroutine.status(co) ~= "dead" then
+							table.insert( EventManager.coroutines, co )
+						end
+					end
+				else
 					local co = coroutine.create(handler.Method)
 					coroutine.resume(co, handler.Owner, self:createArguments(handler,args) )
 					if coroutine.status(co) ~= "dead" then
 						table.insert( EventManager.coroutines, co )
 					end
 				end
-			else
-				local co = coroutine.create(handler.Method)
-				coroutine.resume(co, handler.Owner, self:createArguments(handler,args) )
-				if coroutine.status(co) ~= "dead" then
-					table.insert( EventManager.coroutines, co )
+			end
+		end
+	else
+		for i = 1, #self.handlers do
+			local handler = self.handlers[i]
+			if handler ~= nil then
+				if	isValidString(handler.Filter) then 
+					if handler.Filter(args) then
+						handler.Method( handler.Owner, self:createArguments(handler,args) )
+					end
+				else
+					handler.Method( handler.Owner, self:createArguments(handler,args) )
 				end
 			end
 		end
 	end
 end
 
---[[
-Function: update()
-
-Updates the EventManager
-
-]]
 function EventManager:update()
 	for i = #EventManager.coroutines, 1, -1 do
 		local co = EventManager.coroutines[i]
@@ -192,15 +135,18 @@ function EventManager:createArguments(handler, args)
 		end
 		
 		-- merge with handler args if any
-		if 	handler.Arguments ~= nil
-		and handler.Arguments ~= "" then
-			mergeTo(arguments, handler.Arguments(args) )
+		if  isValidString(handler.Arguments) then
+			local tp = type(handler.Arguments) 
+			if tp ==  "table" then
+				mergeTo(arguments, handler.Arguments(args,handler.Owner) )
+			elseif tp == "function" then
+				handler.Arguments(args,handler.Owner)
+			end
 		end
 		
 		-- merge with handler post if any
-		if 	handler.PostFunction ~= nil
-		and handler.PostFunction ~= "" then
-			mergeTo(arguments, handler.PostFunction(args) )
+		if 	isValidString(handler.PostFunction) then
+			mergeTo(arguments, handler.PostFunction(args,handler.Owner) )
 		end		
 		
 		return arguments

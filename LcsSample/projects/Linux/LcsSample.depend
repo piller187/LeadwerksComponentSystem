@@ -1,8 +1,8 @@
 # depslib dependency file v1.0
-1383031163 source:C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\lcs\projects/LcsSample/Source/App.cpp
+1383031163 source:D:/Leadwerks/LeadwerksComponentSystem/Source/App.cpp
 	"App.h"
 
-1381173566 C:\Users\rolan\Documents\Leadwerks\LeadwerksComponentSystem\lcs\projects/LcsSample/Source/App.h
+1381173566 D:/Leadwerks/LeadwerksComponentSystem/Source/App.h
 	"Leadwerks.h"
 
 1381173566 .h"

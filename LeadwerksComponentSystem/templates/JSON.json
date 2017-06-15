@@ -1,5 +1,17 @@
 {
-	"name":"",
+	"messagegroups": 
+	[
+		{
+			"name": "",
+			"gameobjects": 
+			[
+				{
+					"name": ""
+				}
+			]
+		}
+	],
+	"name": "",
 	"gameobjects": 
 	[
 		{
@@ -19,13 +31,6 @@
 					"type": ""
 				}
 			],
-			"messages": 
-			[
-				{
-					"name": "",
-					"path": ""
-				}
-			],
 			"components": 
 			[
 				{
@@ -36,7 +41,7 @@
 						{
 							"name": "",
 							"value": "",
-							"type": ""
+							"type": "",
 							"store": ""
 						}
 					]
@@ -50,7 +55,7 @@
 					"destination": "",
 					"destination_action": "",
 					"arguments": "",
-					"func": "",
+					"filter": "",
 					"post": ""
 				}
 			]

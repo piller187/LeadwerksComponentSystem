@@ -224,5 +224,4 @@ void main(void)
 	}
 	fragData1.a = materialflags / 255.0;
 	fragData2 = vec4(outcolor.rgb,0.0);
-	fragData3 = vec4(ex_VertexCameraPosition,1.0f);
 }

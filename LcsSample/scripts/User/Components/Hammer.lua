@@ -18,7 +18,6 @@ function Hammer:init()
 
 	self.onPicked = EventManager:create()
 
-
 	for k, v in pairs(Hammer) do
 		obj[k] = v
 	end
@@ -27,27 +26,6 @@ end
 
 function Hammer:attach(entity)
 	self.entity = entity
-end
-
-function Hammer:update()
-end
-
-function Hammer:updatePhysics()
-end
-
-function Hammer:overlap(entity)
-end
-
-function Hammer:draw()
-end
-
-function Hammer:drawEach(camera)
-end
-
-function Hammer:postRender(context)
-end
-
-function Hammer:detach()
 end
 
 ---
@@ -59,17 +37,6 @@ function Hammer:doPicked(args)
 end
 
 
-
--- Handle subscribed collision 
--- arg = { Owner:entity, Entity:entity, Distance:number, Pos:Vec3, Normal:Vec3, Speed=number}
---[[
-function Hammer:doCollision( arg )
-end
-]]
-
 ---
 --- Private
 ---
-
-
---- EOF ---

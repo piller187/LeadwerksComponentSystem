@@ -8,7 +8,6 @@ SHADER version 1
 uniform mat4 entitymatrix;
 uniform vec4 materialcolordiffuse;
 uniform mat4 projectioncameramatrix;
-uniform mat4 projectionmatrix;
 uniform mat4 camerainversematrix;
 uniform bonematrices { mat4 matrix[MAX_BONES];} bone;
 uniform vec4 clipplane0 = vec4(0.0);
@@ -71,10 +70,7 @@ void main()
 	
 	ex_VertexCameraPosition = vec3(camerainversematrix * modelvertexposition);
 	gl_Position = projectioncameramatrix * modelvertexposition;
-	
-	//gl_Position = inverse(projectionmatrix) * gl_Position;
-	//gl_Position = projectionmatrix * gl_Position;
-	
+		
 	//mat3 nmat = mat3(camerainversematrix[0].xyz,camerainversematrix[1].xyz,camerainversematrix[2].xyz);//39
 	//nmat = nmat * mat3(entitymatrix_[0].xyz,entitymatrix_[1].xyz,entitymatrix_[2].xyz);//40
 	
@@ -111,7 +107,6 @@ void main()
 uniform mat4 entitymatrix;
 uniform vec4 materialcolordiffuse;
 uniform mat4 projectioncameramatrix;
-uniform mat4 projectionmatrix;
 uniform mat4 camerainversematrix;
 uniform bonematrices { mat4 matrix[MAX_BONES];} bone;
 uniform vec4 clipplane0 = vec4(0.0);
@@ -174,10 +169,7 @@ void main()
 	
 	ex_VertexCameraPosition = vec3(camerainversematrix * modelvertexposition);
 	gl_Position = projectioncameramatrix * modelvertexposition;
-	
-	//gl_Position = inverse(projectionmatrix) * gl_Position;
-	//gl_Position = projectionmatrix * gl_Position;
-	
+		
 	//mat3 nmat = mat3(camerainversematrix[0].xyz,camerainversematrix[1].xyz,camerainversematrix[2].xyz);//39
 	//nmat = nmat * mat3(entitymatrix_[0].xyz,entitymatrix_[1].xyz,entitymatrix_[2].xyz);//40
 	
@@ -301,5 +293,4 @@ void main(void)
 	}
 	fragData1.a = materialflags/255.0;
 	fragData2 = vec4(0.0,0.0,0.0,specular);
-	fragData3 = vec4(ex_VertexCameraPosition,1.0f);
 }

@@ -98,6 +98,7 @@ int main(int argc,const char *argv[])
 		//Save settings
 		delete app;
 		if (!System::SaveSettings(settingsfile)) System::Print("Error: Failed to save settings file \"" + settingsfile + "\".");
+		System::Shutdown();
 		return 0;
 	}
 	else

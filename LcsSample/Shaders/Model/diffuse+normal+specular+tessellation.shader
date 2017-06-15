@@ -27,7 +27,6 @@ out vec3 vTangent;
 out vec3 vBinormal;
 out float vSelectionState;
 out float clipdistance0;
-out vec3 ex_VertexCameraPosition;
 
 void main()
 {
@@ -234,7 +233,6 @@ out vec3 vTangent;
 out vec3 vBinormal;
 out float vSelectionState;
 out float clipdistance0;
-out vec3 ex_VertexCameraPosition;
 
 void main()
 {
@@ -444,7 +442,6 @@ in vec3 vNormal;
 in vec3 vTangent;
 in vec3 vBinormal;
 in float clipdistance0;
-in vec3 ex_VertexCameraPosition;
 
 out vec4 fragData0;
 out vec4 fragData1;
@@ -506,5 +503,4 @@ void main(void)
 	}
 	fragData1.a = materialflags/255.0;
 	fragData2 = vec4(0.0,0.0,0.0,specular);
-	fragData3 = vec4(ex_VertexCameraPosition,1.0f);
 }

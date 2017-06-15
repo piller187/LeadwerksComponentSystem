@@ -12,14 +12,6 @@
 
 import "Scripts/LCS/LcsUtils.lua"
 import "Scripts/LCS/ComponentCreator.lua"
-import "Scripts/LCS/MessageCreator.lua"
-
---[[
-	Class: GameObject
-	
-	The GameObject which attached to the entity script Script.gameobject
-]]
-local Messages = {}
 
 if GameObject ~= nil then return end
 GameObject = {}
@@ -28,11 +20,6 @@ GameObject.onReceiveMessage = nil
 --
 -- Public methods
 --
---[[
-	Function: init()
-	
-	Create and instance of the GameObject. 
-]]
 function GameObject:init()
 	local obj = {}
     self.__index = self
@@ -53,17 +40,6 @@ function GameObject:init()
     return obj
 end
 
-
---[[
-	Function: attach(entity)
-	
-	Attach the GameObject to an entity as 
-	Script.gameobject.
-	
-	Parameters:
-	
-	entity - the entity where the gameobject will be attached
-]]
 function GameObject:attach(entity)
 		
 	self.entity = entity
@@ -78,25 +54,9 @@ function GameObject:attach(entity)
 	end
 end
 	
---[[
-	Function: build(entity,gameobject)
-	
-	Builds the GameObject
-	
-	Parameters:
-	
-	entity - the entity where the gameobject will be attached
-	
-	gameobject - A JsonSource table with the gameobject 
-	
-	See Also:
-	
-	<JsonSource>
-]]
 function GameObject:build(entity,gameobject)
 
 	local compcreator = ComponentCreator:create()
-	local msgcreator = MessageCreator:create()
 	
 	self.entity = entity
 	self.entity.script.gameobject = self
@@ -112,46 +72,18 @@ function GameObject:build(entity,gameobject)
 	-- write values to entity keyvalues
 	if gameobject.values ~= nil and #gameobject.values > 0 then
 		for k,v in pairs(gameobject.values) do
-			if 	v.name ~= nil and v.name ~= "" 
-			and v.value ~= nil and v.value ~= "" 
-			and v.type ~= nil and v.type ~= "" then
+			if 	isValidString(v.name)
+			and isValidString(v.value) 
+			and isValidString(v.type) then
 				self.entity:SetKeyValue( v.name, jvalueToStr(v.type,v.value) )
 			end
 		end
 	end
 
-	-- add messages
-	if 	gameobject.messages ~= nil 
-	and #gameobject.messages >  0 then
-		
-		for k,v in pairs(gameobject.messages) do
-
-			if 	v.name ~= nil 
-			and v.name ~= "" then
-
-				-- create the message file if it doesn't exist
-				if FileSystem:GetFileType(v.path) ~= FileSystem.File then
-					msgcreator:createComponent( v.name, gameobject.hookups, v.path )
-				end
-				
-				-- needs creation?
-				if Messages[v.name] == nil then
-					import(v.path)
-					Messages[v.name] = _G[v.name]:init()
-				end
-				-- add to components
-				self.components[v.name] = Messages[v.name]
-				-- add as member
-				script[v.name] = self.components[v.name] 
-			end
-		end
-	end
-	
 	-- add components
 	if gameobject.components ~= nil and #gameobject.components >  0 then
 		for k,comp in pairs(gameobject.components) do
-			if 	comp.name ~= nil 
-			and comp.name ~= "" then
+			if 	isValidString(comp.name) then
 				
 				-- create the component file if it doesn't exist
 				if FileSystem:GetFileType(comp.path) ~= FileSystem.File then
@@ -170,81 +102,11 @@ function GameObject:build(entity,gameobject)
 		end
 	end
 	
-	-- hookups
-	if 	gameobject.hookups ~= nil 
-	and #gameobject.hookups > 0 then 
-	
-		for k,hooks in pairs(gameobject.hookups) do
-			
-			if hooks.source == "Controller" then
-				local x = 1
-			end
-			-- get and verify source
-			local src = ""
-			if 	hooks.source == "self" or 
-				hooks.source == "" or 
-				hooks.source == nil  then
-				src = self
-			else
-				src = self.components[hooks.source]
-			end
-			
-			-- get and verify destiation
-			local dst = ""
-			if 	hooks.destination == "self" or
-				hooks.destination == "" or 
-				hooks.destination == nil then 
-				dst = self
-			else 
-				dst = self.components[hooks.destination] 
-			end
-			
-			-- get and verify events and actions
-			local ev = "on"..hooks.source_event
-			local ac = ""
-			if 	hooks.destination_action ~= "SendMessage"
-			and hooks.destination_action ~= "ReceiveMessage" then
-				ac = ac .. "do"
-			end
-			ac = ac..hooks.destination_action
-			
-			--System:Print( "@LCS: " ..
-			--	src.name .. ".".. ev .. ":subscribe(" .. dst.name ..", " .. dst.name.. "." .. ac ..")")
-			
-			-- create hooks
-			if 	hooks.filter == nil 
-			or  hooks.filter == "" then
-				if 	hooks.arguments == nil
-				or	hooks.arguments == "" then
-					src[ev]:subscribe( dst, dst[ac])
-				elseif 	hooks.post ~= nil
-				and		hooks.post ~= "" then
-					src[ev]:subscribe( dst, dst[ac], hooks.arguments, nil, hooks.post )
-				else
-					src[ev]:subscribe( dst, dst[ac], hooks.arguments, nil, nil )
-				end
-			else
-				if 	hooks.arguments == nil
-				or	hooks.arguments == "" then
-					src[ev]:subscribe( dst, dst[ac], nil, hooks.filter, nil )
-				elseif 	hooks.post ~= nil
-				or		hooks.post ~= "" then
-					src[ev]:subscribe( dst, dst[ac], hooks.arguments, hooks.filter, nil )
-				else
-					src[ev]:subscribe( dst, dst[ac], hooks.arguments, hooks.filter, hooks.post )
-				end
-			end
-			
-		end
-	end
-
-	
 	-- persistent flag
 	self.persistent = strToBool(gameobject.persistent)
 	
 	-- PostStart code
-	if	gameobject.poststart ~= nil 
-	and gameobject.poststart ~= "" then
+	if	isValidString(gameobject.poststart)then
 		-- add PostStart code
 		self.postStart = assert(loadstring("return " .. gameobject.poststart ))()
 		self:postStart(self)
@@ -252,57 +114,19 @@ function GameObject:build(entity,gameobject)
 	
 end
 
---[[
-	Function: ReceiveMessage(arg)
-	
-	Called to raise the onReceiveMessage event
-
-	Parameters:
-	
-	arg - event arguments
-]]
-function GameObject:ReceiveMessage(arg)
+function GameObject:ReceiveMessage(args)
 	if self.onReceiveMessage ~= nil then
-		self.onReceiveMessage:raise(arg)
+		self.onReceiveMessage:raise(args)
 	end
 end
 
-
---[[
-	Function: SendMessage(arg)
+function GameObject:SendMessage(args) -- arg = {Dest, Source, Message} }
 	
-	Send a message to an entity
-
-	Parameters:
-	
-	arg - message argument
-	
-	Argument:
-	
-	The argument must be table like this
-	{
-		Dest
-		Source
-		Message
-	}
-	where
-	
-	Dest - entity that will receive the message
-	Source - entity that sent the message
-	Message - a text describing the message
-	
-	Example:
-	
-	>self:SendMessage( {Dest=pickedEntity, Source=self.entity, Message="pick" })
-	
-]]
-function GameObject:SendMessage(arg) -- arg = {Dest, Source, Message} }
-	
-	if type(arg.Dest) ~= "table" then
-		arg.Dest.script:ReceiveMessage( arg )
+	if type(args.Dest) ~= "table" then
+		args.Dest.script:ReceiveMessage( args )
 	else
-		for k,v in pairs(arg.Dest) do 
-			v.script:ReceiveMessage( arg )
+		for k,v in pairs(args.Dest) do 
+			v.script:ReceiveMessage( args )
 		end
 	end
 end
@@ -408,5 +232,51 @@ function GameObject:load(tab,jsonSource)
 	-- load any optinal component data set by user
 	for k,v in pairs(self.components) do
 		if v.doLoad then v:doLoad({Table=t.components[v.name]}) end
+	end
+end
+
+
+function GameObject:addHookups(jsonSource)
+
+	-- get json gameobject
+	local gameobject = jsonSource:getGameObject(self.name)
+
+	for k,hooks in pairs(gameobject.hookups) do
+		
+		-- get and verify source
+		local src = ""
+		if 	hooks.source == "self" or not isValidString(hooks.source) then
+			src = self
+		elseif string.sub(hooks.source,1,5) == "self." then
+			src = self[string.sub(hooks.source,6)]
+		else
+			src = self.components[hooks.source]
+		end
+		
+		-- get and verify destiation
+		local dst = ""
+		if 	hooks.destination == "self" or not isValidString(hooks.destination) then
+			dst = self
+		elseif string.sub(hooks.destination,1,5) == "self." then
+			dst = self[string.sub(hooks.destination,6)]
+		else
+			dst = self.components[hooks.destination] 
+		end
+		
+		-- get and verify events and actions
+		local ev = ""
+		if 	hooks.source_event ~= "SendMessage" then
+			ev = ev .. "on"
+		end
+		ev = ev..hooks.source_event
+		
+		local ac = ""
+		if 	hooks.destination_action ~= "SendMessage" then
+			ac = ac .. "do"
+		end
+		ac = ac..hooks.destination_action
+		
+		-- create hook
+		src[ev]:subscribe( dst, dst[ac], hooks.arguments, hooks.filter, hooks.post )
 	end
 end

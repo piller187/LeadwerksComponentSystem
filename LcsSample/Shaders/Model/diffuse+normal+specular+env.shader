@@ -30,7 +30,6 @@ out vec3 ex_normal;
 out vec3 ex_tangent;
 out vec3 ex_binormal;
 out float clipdistance0;
-out vec3 ex_VertexCameraPosition;
 
 void main()
 {
@@ -53,7 +52,6 @@ void main()
 		clipdistance0 = 0.0;
 	}		
 	
-	ex_VertexCameraPosition = vec3(camerainversematrix * ex_vertexposition);
 	gl_Position = projectioncameramatrix * ex_vertexposition;
 	
 	ex_texcoords0 = vertex_texcoords0;
@@ -112,7 +110,6 @@ out vec3 ex_normal;
 out vec3 ex_tangent;
 out vec3 ex_binormal;
 out float clipdistance0;
-out vec3 ex_VertexCameraPosition;
 
 void main()
 {
@@ -135,7 +132,6 @@ void main()
 		clipdistance0 = 0.0;
 	}		
 	
-	ex_VertexCameraPosition = vec3(camerainversematrix * ex_vertexposition);
 	gl_Position = projectioncameramatrix * ex_vertexposition;
 	
 	ex_texcoords0 = vertex_texcoords0;
@@ -192,7 +188,6 @@ in vec3 ex_normal;
 in vec3 ex_tangent;
 in vec3 ex_binormal;
 in float clipdistance0;
-in vec3 ex_VertexCameraPosition;
 
 out vec4 fragData0;
 out vec4 fragData1;
@@ -256,5 +251,4 @@ void main(void)
 	}
 	fragData1.a = materialflags/255.0;
 	fragData2 = vec4(emission.rgb,specular);
-	fragData3 = vec4(ex_VertexCameraPosition,1.0f);
 }

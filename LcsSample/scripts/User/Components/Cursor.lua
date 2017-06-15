@@ -7,15 +7,15 @@ import "Scripts/LCS/EventManager.lua"
 if Cursor ~= nil then return end
 Cursor = {}
 
+Cursor.name = "Cursor"
+
 ---
 --- Public
 ---
-Cursor.name = "Cursor"
 
 function Cursor:init()
 	local obj = {}
 	self.__index = self
-
 
 	for k, v in pairs(Cursor) do
 		obj[k] = v
@@ -30,24 +30,6 @@ function Cursor:attach(entity)
 	self.size = 48
 	self.cursor = Texture:Load(self.cursorImage)
 	Debug:Assert(self.cursor ~= nil, "Failed to load cursor " .. self.cursorImage )
-end
-
-function Cursor:update()
-end
-
-function Cursor:updatePhysics()
-end
-
-function Cursor:overlap(entity)
-end
-
-function Cursor:collision(entity, position, normal, speed)
-end
-
-function Cursor:draw()
-end
-
-function Cursor:drawEach(camera)
 end
 
 function Cursor:postRender(context)
@@ -65,9 +47,6 @@ function Cursor:detach()
 		self.cursor:Release()
 		self.cursor = nil
 	end
-end
-
-function Cursor:cleanup(context)
 end
 
 ---

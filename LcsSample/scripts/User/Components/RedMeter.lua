@@ -41,24 +41,6 @@ function RedMeter:attach(entity)
 	
 end
 
-function RedMeter:update()
-end
-
-function RedMeter:updatePhysics()
-end
-
-function RedMeter:overlap(entity)
-end
-
-function RedMeter:collision(entity, position, normal, speed)
-end
-
-function RedMeter:draw()
-end
-
-function RedMeter:drawEach(camera)
-end
-
 function RedMeter:postRender(context)
 	if not self.disabled then
 	
@@ -86,12 +68,6 @@ function RedMeter:postRender(context)
 	end
 end
 
-function RedMeter:detach()
-end
-
-function RedMeter:cleanup(context)
-end
-
 ---
 --- Actions
 ---
@@ -104,7 +80,7 @@ function RedMeter:doSet(args)
 	local goal = Math:Round(Math:Clamp(args.Power, 0, self.max) * self.valueSize)
 	while self.pixelValue ~= goal do
 		self.pixelValue = self.pixelValue  + value
-		coroutine.yield()
+		if EventManager.useCoRoutines then coroutine.yield() end
 	end
 	self.power = args.Power
 end

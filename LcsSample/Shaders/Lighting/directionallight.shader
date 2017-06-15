@@ -98,7 +98,6 @@ uniform vec3[SHADOWSTAGES] lightposition;
 uniform float[SHADOWSTAGES] shadowstagearea;
 uniform float[SHADOWSTAGES] shadowstagerange;
 uniform bool isbackbuffer;
-uniform vec2 texcoordoffset;
 
 out vec4 fragData0;
 
@@ -142,10 +141,10 @@ void main(void)
 	//----------------------------------------------------------------------
 	//Calculate screen texcoord
 	//----------------------------------------------------------------------
-	vec2 coord = texcoordoffset + gl_FragCoord.xy / buffersize;
+	vec2 coord = gl_FragCoord.xy / buffersize;
 	if (isbackbuffer) coord.y = 1.0 - coord.y;
 	
-	ivec2 icoord = ivec2(texcoordoffset * buffersize + gl_FragCoord.xy);
+	ivec2 icoord = ivec2(gl_FragCoord.xy);
 	if (isbackbuffer) icoord.y = int(buffersize.y) - icoord.y;
 	
 	float depth;
@@ -207,16 +206,9 @@ void main(void)
 		//----------------------------------------------------------------------
 		//Calculate screen position and vector
 		//----------------------------------------------------------------------
-#ifdef USEPOSITIONBUFFER
-		//VR Sheared mprojection
-		vec3 screencoord = texelFetch(texture4,icoord,i).xyz;
-		screencoord.y *= -1.0f;
-#else
-		vec3 screencoord = vec3(((gl_FragCoord.x/buffersize.x)-0.5) * 2.0 * (buffersize.x/buffersize.y),((-gl_FragCoord.y/buffersize.y)+0.5) * 2.0,depthToPosition(depth,camerarange));
+		screencoord = vec3(((gl_FragCoord.x/buffersize.x)-0.5) * 2.0 * (buffersize.x/buffersize.y),((-gl_FragCoord.y/buffersize.y)+0.5) * 2.0,depthToPosition(depth,camerarange));
 		screencoord.x *= screencoord.z / camerazoom;
 		screencoord.y *= -screencoord.z / camerazoom;
-#endif
-		
 		screennormal = normalize(screencoord);
 		if (!isbackbuffer) screencoord.y *= -1.0;
 		
@@ -325,19 +317,11 @@ void main(void)
 				}
 			}
 #endif			
-			vec4 ambience = ambientlight;
-			
-			//Simple shading
-			if ((1 & materialflags)!=0) {
-				vec4 lightdir = vec4(-0.4,-0.45,0.5,1.0);
-				float intensity = abs(dot(normalize(normaldata.xyz),lightdir.xyz))*0.5+0.75;
-				ambience *= intensity;
-			}
 
 			//----------------------------------------------------------------------
 			//Final light calculation
 			//----------------------------------------------------------------------
-			sampleoutput = (diffuse * lightcolor + specular) * attenuation + emission + diffuse * ambience;
+			sampleoutput = (diffuse * lightcolor + specular) * attenuation + emission + diffuse * ambientlight;
 			//sampleoutput = (sampleoutput + stagecolor) / 2.0;
 		}
 		//Blend with red if selected

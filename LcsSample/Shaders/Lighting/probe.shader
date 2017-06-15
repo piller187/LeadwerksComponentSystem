@@ -267,19 +267,9 @@ void main(void)
 			//----------------------------------------------------------------------
 			//Calculate screen position and vector
 			//----------------------------------------------------------------------
-			//vec3 screencoord = vec3((((gl_FragCoord.x+0.5)/buffersize.x)-0.5) * 2.0 * (buffersize.x/buffersize.y),((-(gl_FragCoord.y+0.5)/buffersize.y)+0.5) * 2.0,depthToPosition(depth,camerarange));
-			//screencoord.x *= screencoord.z / camerazoom;
-			//screencoord.y *= -screencoord.z / camerazoom;
-#ifdef USEPOSITIONBUFFER
-			//VR Sheared mprojection
-			vec3 screencoord = texelFetch(texture4,icoord,i).xyz;
-			screencoord.y *= -1.0f;
-#else
-			vec3 screencoord = vec3(((gl_FragCoord.x/buffersize.x)-0.5) * 2.0 * (buffersize.x/buffersize.y),((-gl_FragCoord.y/buffersize.y)+0.5) * 2.0,depthToPosition(depth,camerarange));
+			vec3 screencoord = vec3((((gl_FragCoord.x+0.5)/buffersize.x)-0.5) * 2.0 * (buffersize.x/buffersize.y),((-(gl_FragCoord.y+0.5)/buffersize.y)+0.5) * 2.0,depthToPosition(depth,camerarange));
 			screencoord.x *= screencoord.z / camerazoom;
 			screencoord.y *= -screencoord.z / camerazoom;
-#endif
-
 			vec3 screennormal = normalize(screencoord);
 			
 			//get vertex positions for local correction

@@ -1,5 +1,23 @@
 {
 	"name": "LcsSample",
+	"messagegroups": 
+	[
+		{
+			"name": "PowerMeters",
+			"gameobjects": 
+			[
+				{
+					"name": "Player"
+				},
+				{
+					"name": "RedMeter"
+				},
+				{
+					"name": "BlueMeter"
+				}
+			]
+		}
+	],
 	"gameobjects": 
 	[
 		{
@@ -14,13 +32,6 @@
 			"values": 
 			[
 
-			],
-			"messages": 
-			[
-				{
-					"name": "PowerMeterMessage",
-					"path": "Scripts/User/Messages/PowerMeterMessage.lua"
-				}
 			],
 			"components": 
 			[
@@ -96,13 +107,13 @@
 						},
 						{
 							"name": "redPower",
-							"value": "10",
+							"value": "0",
 							"type": "int",
 							"store": "true"
 						},
 						{
 							"name": "bluePower",
-							"value": "10",
+							"value": "0",
 							"type": "int",
 							"store": "true"
 						}
@@ -112,12 +123,48 @@
 			"hookups": 
 			[
 				{
-					"source": "Teams",
-					"source_event": "PowerChange",
-					"destination": "PowerMeterMessage",
-					"destination_action": "Set",
-					"arguments": "",
+					"source": "Cam",
+					"source_event": "Pick",
+					"destination": "self",
+					"destination_action": "SendMessage",
+					"arguments": "function(args) args.Message='pick' end",
 					"filter": "",
+					"post": ""
+				},
+				{
+					"source": "Teams",
+					"source_event": "RedPowerChange",
+					"destination": "PowerMeters",
+					"destination_action": "SendMessage",
+					"arguments": "function(args) args.Message='set.red.power' end",
+					"filter": "",
+					"post": ""
+				},
+				{
+					"source": "Teams",
+					"source_event": "BluePowerChange",
+					"destination": "PowerMeters",
+					"destination_action": "SendMessage",
+					"arguments": "function(args) args.Message='set.blue.power' end",
+					"filter": "",
+					"post": ""
+				},
+				{
+					"source": "self",
+					"source_event": "ReceiveMessage",
+					"destination": "Teams",
+					"destination_action": "AddRedPower",
+					"arguments": "",
+					"filter": "function(args) if args.Message=='add.red.power' then return true else return false end end ",
+					"post": ""
+				},
+				{
+					"source": "self",
+					"source_event": "ReceiveMessage",
+					"destination": "Teams",
+					"destination_action": "AddBluePower",
+					"arguments": "",
+					"filter": "function(args) if args.Message=='add.blue.power' then return true else return false end end ",
 					"post": ""
 				},
 				{
@@ -173,33 +220,6 @@
 					"arguments": "",
 					"filter": "",
 					"post": ""
-				},
-				{
-					"source": "self",
-					"source_event": "ReceiveMessage",
-					"destination": "Teams",
-					"destination_action": "AddRedPower",
-					"arguments": "function(args) return { Message='add.red.power' } end",
-					"filter": "function(args) if args.Message == 'add.red.power' then return true else return false end end",
-					"post": ""
-				},
-				{
-					"source": "",
-					"source_event": "ReceiveMessage",
-					"destination": "Teams",
-					"destination_action": "AddBluePower",
-					"arguments": "function(args) return { Message=\"add.blue.power\" } end",
-					"filter": "function(args) if args.Message == \"add.blue.power\" then return true else return false end end",
-					"post": ""
-				},
-				{
-					"source": "Cam",
-					"source_event": "Pick",
-					"destination": "",
-					"destination_action": "SendMessage",
-					"arguments": "function(args) return { Message=\"pick\" } end",
-					"filter": "",
-					"post": ""
 				}
 			]
 		},
@@ -213,10 +233,6 @@
 			"savescale": "false",
 			"savehidden": "false",
 			"values": 
-			[
-
-			],
-			"messages": 
 			[
 
 			],
@@ -238,11 +254,11 @@
 			"hookups": 
 			[
 				{
-					"source": "",
+					"source": "self",
 					"source_event": "ReceiveMessage",
 					"destination": "BluePower",
 					"destination_action": "Picked",
-					"arguments": "",
+					"arguments": "function(args) args.Message='add.blue.power' end",
 					"filter": "",
 					"post": ""
 				}
@@ -258,10 +274,6 @@
 			"savescale": "false",
 			"savehidden": "false",
 			"values": 
-			[
-
-			],
-			"messages": 
 			[
 
 			],
@@ -283,11 +295,11 @@
 			"hookups": 
 			[
 				{
-					"source": "",
+					"source": "self",
 					"source_event": "ReceiveMessage",
 					"destination": "RedPower",
 					"destination_action": "Picked",
-					"arguments": "",
+					"arguments": "function(args) args.Message='add.red.power' end",
 					"filter": "",
 					"post": ""
 				}
@@ -305,13 +317,6 @@
 			"values": 
 			[
 
-			],
-			"messages": 
-			[
-				{
-					"name": "PowerMeterMessage",
-					"path": "Scripts/User/Messages/PowerMeterMessage.lua"
-				}
 			],
 			"components": 
 			[
@@ -346,8 +351,8 @@
 			"hookups": 
 			[
 				{
-					"source": "PowerMeterMessage",
-					"source_event": "Set",
+					"source": "self",
+					"source_event": "ReceiveMessage",
 					"destination": "RedMeter",
 					"destination_action": "Set",
 					"arguments": "",
@@ -368,13 +373,6 @@
 			"values": 
 			[
 
-			],
-			"messages": 
-			[
-				{
-					"name": "PowerMeterMessage",
-					"path": "Scripts/User/Messages/PowerMeterMessage.lua"
-				}
 			],
 			"components": 
 			[
@@ -409,8 +407,8 @@
 			"hookups": 
 			[
 				{
-					"source": "PowerMeterMessage",
-					"source_event": "Set",
+					"source": "self",
+					"source_event": "ReceiveMessage",
 					"destination": "BlueMeter",
 					"destination_action": "Set",
 					"arguments": "",
@@ -436,10 +434,6 @@
 					"type": "string"
 				}
 			],
-			"messages": 
-			[
-
-			],
 			"components": 
 			[
 				{
@@ -449,15 +443,6 @@
 			],
 			"hookups": 
 			[
-				{
-					"source": "",
-					"source_event": "ReceiveMessage",
-					"destination": "Hammer",
-					"destination_action": "Picked",
-					"arguments": "",
-					"filter": "",
-					"post": ""
-				},
 				{
 					"source": "Hammer",
 					"source_event": "Picked",

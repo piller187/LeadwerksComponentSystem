@@ -30,7 +30,6 @@
 					<Add library="Xrender" />
 					<Add library="Xft" />
 					<Add library="pthread" />
-					<Add library="$(LeadwerksPath)/Library/Linux/libopenvr_api.so" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -55,8 +54,7 @@
 					<Add library="Xext" />
 					<Add library="Xrender" />
 					<Add library="Xft" />					
-					<Add library="pthread" />
-					<Add library="$(LeadwerksPath)/Library/Linux/libopenvr_api.so" />					
+					<Add library="pthread" />					
 				</Linker>
 			</Target>
 			<Environment>

@@ -41,7 +41,6 @@ out mat3 nmat;
 out float clipdistance0;
 flat out int ex_instanceID;
 out vec4 ex_position;
-out vec3 ex_VertexCameraPosition;
 
 vec4 GetVertexPosition(in vec2 pos, in float terrainheight)
 {
@@ -129,7 +128,6 @@ void main()
 
 	vertexposminuscamerapos = modelvertexposition.xyz - cameraposition;
 	
-	ex_VertexCameraPosition = (camerainversematrix * modelvertexposition).xyz;
 	gl_Position = projectioncameramatrix * modelvertexposition;
 	
 	//nmat = mat3(camerainversematrix[0].xyz,camerainversematrix[1].xyz,camerainversematrix[2].xyz);//39
@@ -186,7 +184,6 @@ out mat3 nmat;
 out float clipdistance0;
 flat out int ex_instanceID;
 out vec4 ex_position;
-out vec3 ex_VertexCameraPosition;
 
 vec4 GetVertexPosition(in vec2 pos, in float terrainheight)
 {
@@ -274,7 +271,6 @@ void main()
 
 	vertexposminuscamerapos = modelvertexposition.xyz - cameraposition;
 	
-	ex_VertexCameraPosition = (camerainversematrix * modelvertexposition).xyz;
 	gl_Position = projectioncameramatrix * modelvertexposition;
 	
 	//nmat = mat3(camerainversematrix[0].xyz,camerainversematrix[1].xyz,camerainversematrix[2].xyz);//39
@@ -305,7 +301,6 @@ in vec2 ex_texcoords6;
 //in vec2 ex_texcoords7;
 in mat3 nmat;
 in float clipdistance0;
-in vec3 ex_VertexCameraPosition;
 
 //Uniforms
 uniform vec4 ambientlight;
@@ -435,5 +430,4 @@ void main(void)
 	
 	fragData1 = vec4(normal * 0.5 + 0.5, materialflags / 255.0 );
 	fragData2 = vec4(0.0,0.0,0.0,0.0);
-	fragData3 = vec4(ex_VertexCameraPosition,1.0f);
 }

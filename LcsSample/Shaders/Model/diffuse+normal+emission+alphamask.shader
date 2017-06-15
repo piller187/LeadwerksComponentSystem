@@ -258,5 +258,4 @@ void main(void)
 	}
 	fragData1.a = materialflags/255.0;
 	fragData2 = vec4(texture(texture4,ex_texcoords0).rgb,specular);
-	fragData3 = vec4(ex_VertexCameraPosition,1.0f);
 }

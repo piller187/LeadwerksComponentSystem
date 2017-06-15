@@ -101,11 +101,12 @@
     </ClCompile>
     <Link>
       <AdditionalOptions>/NODEFAULTLIB:MSVCRT.lib /NODEFAULTLIB:MSVCRTD.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>libcryptoMT.lib;libsslMT.lib;Rpcrt4.lib;crypt32.lib;libcurl.lib;msimg32.lib;lua51.lib;steam_api.lib;ws2_32.lib;Glu32.lib;libovrd.lib;OpenGL32.lib;winmm.lib;Psapi.lib;OpenAL32.lib;Leadwerks.lib;newton_d.lib;dCustomJoints_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libcryptoMT.lib;libsslMT.lib;Rpcrt4.lib;crypt32.lib;libcurl.lib;msimg32.lib;lua51.lib;steam_api.lib;ws2_32.lib;Glu32.lib;libovrd.lib;OpenGL32.lib;winmm.lib;Psapi.lib;OpenAL32.lib;Leadwerks.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(LeadwerksLibPath)\Windows\x86\Debug;$(LeadwerksLibPath)\Windows\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-	  <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
       <TargetMachine>MachineX86</TargetMachine>
       <OutputFile>$(OutDir)\$(ProjectName).debug.exe</OutputFile>
     </Link>
@@ -134,7 +135,8 @@
       <AdditionalLibraryDirectories>$(LeadwerksLibPath)\Windows\x64\Debug;$(LeadwerksLibPath)\Windows\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
       <OutputFile>$(OutDir)\$(ProjectName).debug.exe</OutputFile>
     </Link>
     <PostBuildEvent>
@@ -162,11 +164,10 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libcryptoMT.lib;libsslMT.lib;Rpcrt4.lib;crypt32.lib;libcurl.lib;Leadwerks.lib;msimg32.lib;lua51.lib;steam_api.lib;OpenAL32.lib;ws2_32.lib;libovr.lib;newton.lib;dCustomJoints.lib;OpenGL32.lib;Glu32.lib;winmm.lib;Psapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libcryptoMT.lib;libsslMT.lib;Rpcrt4.lib;crypt32.lib;libcurl.lib;Leadwerks.lib;msimg32.lib;lua51.lib;steam_api.lib;OpenAL32.lib;ws2_32.lib;libovr.lib;OpenGL32.lib;Glu32.lib;winmm.lib;Psapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(LeadwerksLibPath)\Windows\x86;$(LeadwerksLibPath)\Windows\x86\Release;C:/Leadwerks\Engine\Source\Libraries\OpenAL/libs/Win32/EFX-Util_MT;C:/Leadwerks\Engine\Source\Libraries\OpenAL/libs/Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <SubSystem>Windows</SubSystem>
-	  <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
@@ -199,8 +200,7 @@
       <AdditionalDependencies>libcryptoMT.lib;libsslMT.lib;Rpcrt4.lib;crypt32.lib;libcurl.lib;lua51.lib;msimg32.lib;steam_api.lib;Leadwerks.lib;ws2_32.lib;OpenGL32.lib;libovr.lib;Glu32.lib;winmm.lib;Psapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:/Leadwerks\Engine\Source\Libraries\NewtonDynamics\packages\Win32\debugDll;C:/Leadwerks\Engine\Source\Libraries\OpenAL/libs/Win32/EFX-Util_MT;C:/Leadwerks\Engine\Source\Libraries\OpenAL/libs/Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <SubSystem>Windows</SubSystem>
-	  <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <AdditionalOptions>/NODEFAULTLIB:MSVCRT.lib %(AdditionalOptions)</AdditionalOptions>

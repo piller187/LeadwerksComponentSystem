@@ -106,9 +106,6 @@ uniform mat3 lightnormalmatrix;
 uniform vec2 lightshadowmapoffset;
 uniform float shadowsoftness;
 uniform bool isbackbuffer;
-uniform vec2 texcoordoffset;
-uniform mat4 projectionmatrix;
-uniform mat4 projectioncameramatrix;
 
 in vec4 vertexposition;
 
@@ -150,10 +147,10 @@ void main(void)
 	//----------------------------------------------------------------------
 	//Calculate screen texcoord
 	//----------------------------------------------------------------------
-	vec2 coord = texcoordoffset + gl_FragCoord.xy / buffersize;
+	vec2 coord = gl_FragCoord.xy / buffersize;
 	if (isbackbuffer) coord.y = 1.0 - coord.y;
 	
-	ivec2 icoord = ivec2(texcoordoffset * buffersize + gl_FragCoord.xy);
+	ivec2 icoord = ivec2(gl_FragCoord.xy);
 	if (isbackbuffer) icoord.y = int(buffersize.y) - icoord.y;
 	
 	fragData0 = vec4(0.0);
@@ -190,19 +187,11 @@ void main(void)
 		//----------------------------------------------------------------------
 		//Calculate screen position and vector
 		//----------------------------------------------------------------------
-		
-#ifdef USEPOSITIONBUFFER
-		//VR Sheared mprojection
-		vec3 screencoord = texelFetch(texture4,icoord,i).xyz;
-		screencoord.y *= -1.0f;
-#else
 		vec3 screencoord = vec3(((gl_FragCoord.x/buffersize.x)-0.5) * 2.0 * (buffersize.x/buffersize.y),((-gl_FragCoord.y/buffersize.y)+0.5) * 2.0,depthToPosition(depth,camerarange));
 		screencoord.x *= screencoord.z / camerazoom;
 		screencoord.y *= -screencoord.z / camerazoom;
-#endif
-		
 		vec3 screennormal = normalize(screencoord);
-		
+
 		//Calculate gloss
 		float gloss=70.0;
 		if ((32 & materialflags)!=0) gloss -= 40;
@@ -271,13 +260,11 @@ void main(void)
 		decalcoord.y += 0.5;
 		attenuation *= texture(texture6,decalcoord.xy).r;
 	#endif
-		
+
 		//----------------------------------------------------------------------
 		//Final light calculation
 		//----------------------------------------------------------------------
 		fragData0 += attenuation * (diffuse * lightcolor + specular);
-		
-		//fragData0.xyz = screencoord;
 	}
 	
 	//----------------------------------------------------------------------

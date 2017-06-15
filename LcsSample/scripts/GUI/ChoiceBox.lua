@@ -13,7 +13,7 @@ function Script:Draw(x,y,width,height)
 	gui:SetColor(1,1,1,1)
 	
 	--if self.pushed then
-		gui:SetColor(0.1)
+		gui:SetColor(0.15)
 	--else
 	--	if self.hovered then
 	--		gui:SetColor(0.3,0.3,0.3)

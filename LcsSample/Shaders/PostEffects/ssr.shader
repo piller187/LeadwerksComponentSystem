@@ -41,7 +41,6 @@ uniform sampler2DMS texture0;
 uniform sampler2D texture1;
 uniform sampler2DMS texture2;
 uniform sampler2DMS texture3;
-uniform sampler2DMS texture4;
 
 uniform bool isbackbuffer;
 uniform vec2 buffersize;
@@ -62,19 +61,13 @@ out vec4 fragData0;
 
 vec4 getPosition(in vec2 texCoord, out float z)
 {
-        /*float x = texCoord.s * 2.0f - 1.0f;
+        float x = texCoord.s * 2.0f - 1.0f;
         float y = texCoord.t * 2.0f - 1.0f;
         z = texelFetch(texture0, ivec2(texCoord*buffersize),0).r;
         vec4 posProj = vec4(x,y,z,1.0f);
         vec4 posView = inverse(projectioncameramatrix) * posProj;
         posView /= posView.w;
         return posView;
-		*/
-		
-		//VR Sheared mprojection
-		vec4 screencoord = texelFetch(texture4,ivec2(texCoord*buffersize),0);
-		screencoord.y *= -1.0f;
-		return screencoord;
 }
 
 float LinePointDistance(in vec3 v, in vec3 w, in vec3 p)

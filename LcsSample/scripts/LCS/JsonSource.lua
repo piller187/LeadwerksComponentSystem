@@ -10,34 +10,16 @@
 -- Rick & Roland                       	
 -----------------------------------------------
 
---[[
-	Class: JsonSource
-	
-	Reads a Json Source file and converts it 
-	to LUA tables
-]]
-
 if JsonSource ~= nil then return end
 JsonSource = {}
 
---
--- Variables used
---
 JsonSource.jsonTable = {}
-
 JSON = nil -- GLOBAL JSON
 
 
 --
--- Public methods
+-- Public 
 --
-
---[[
-	Function: create()
-	
-	Create an instance of the class
-	and initalizes the Global JSON object 
-]]
 function JsonSource:create()
 	local obj = {}
     self.__index = self
@@ -54,16 +36,6 @@ function JsonSource:create()
     return obj
 end
 
---[[
-	Function: process(file)
-	
-	Process the JSON file and convert it 
-	into tables
-	
-	Parameters:
-	
-	file - The JSON file to process
-]]
 function JsonSource:process(file)
 	
 	local stream = assert(io.open(file, "r"))
@@ -83,45 +55,25 @@ function JsonSource:process(file)
 				or  #self.jsonTable.gameobjects == 0 , "game_objects are missing in " .. file )
 end
 
---[[
-	Function: getGameObjects()
-	
-	Return the table of GameObjects
-
-	Returns:
-	
-	Table of GameObjects
-]]
 function JsonSource:getGameObjects()
 	return self.jsonTable.gameobjects
 end
 
---[[
-	Function: getRoot()
-	
-	Return the Json Root
+function JsonSource:getGameObject(name)
+	for k,v in ipairs(self.jsonTable.gameobjects) do
+		if v.name == name then return v end
+	end
+	return nil
+end
 
-	Returns:
-	
-	Json root
-]]
+function JsonSource:getMessageGroups()
+	return self.jsonTable.messagegroups
+end
+
 function JsonSource:getRoot()
 	return self.jsonTable;
 end
 
---[[
-	Function: getComponent(name)
-	
-	Return a named component
-	
-	Parameters: 
-	
-	component - the name of the component
-	
-	Returns: 
-	
-	The Component or nil if not found
-]]
 function JsonSource:getComponent(name)
 	for k1,v1 in pairs(self.jsonTable.gameobjects) do
 		for k2, v2 in pairs( v1.components ) do
